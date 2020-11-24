@@ -1,0 +1,4 @@
+Bundle-Name: liferay-devcon-appointment-test
+Bundle-SymbolicName: com.liferay.appointments.test
+Bundle-Version: 1.0.0
+-includeresource: com.liferay.appointments.client.jar=../liferay-devcon-appointment-client/build/libs/com.liferay.appointments.client-1.0.0.jar;lib:=true

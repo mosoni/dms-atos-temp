@@ -1,0 +1,136 @@
+components:
+  schemas:
+    Appointment:
+      description: Represents an appointment.
+      properties:
+        date:
+          format: date-time
+          type: string
+        id:
+          format: int64
+          type: integer
+        title:
+          type: string
+      type: object
+    SiteDocument:
+      description: Represents an uploaded document.
+      properties:
+        id:
+          format: int64
+          type: integer
+        name:
+          type: string
+        mimeType:
+          type: string
+        folderName:
+          type: string
+      type: object
+info:
+  description: ""
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+  title: "Appointments"
+  version: v1.0
+openapi: 3.0.1
+paths:
+  "/sites/{siteId}/appointments":
+    get:
+      operationId: getSiteAppointmentsPage
+      parameters:
+        - in: path
+          name: siteId
+          required: true
+          schema:
+            format: int64
+            type: integer
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Appointment"
+                type: array
+            application/xml:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Appointment"
+                type: array
+          description: "Get appointments"
+      tags: ["Appointment"]
+    post:
+      description: ""
+      operationId: postSiteAppointment
+      parameters:
+        - in: path
+          name: siteId
+          required: true
+          schema:
+            format: int64
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Appointment"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Appointment"
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Appointment"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Appointment"
+          description: ""
+      tags: ["Appointment"]
+  "/sites/{siteId}/appointments/document":
+    post:
+      description: ""
+      operationId: postSiteAppointmentDocument
+      parameters:
+        - in: path
+          name: siteId
+          required: true
+          schema:
+            format: int64
+            type: integer
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                document:
+                  $ref: "#/components/schemas/SiteDocument"
+                file:
+                  format: binary
+                  type: string
+              type: object
+#      requestBody:
+#        content:
+#          multipart/form-data:
+#            schema:
+#              $ref: "#/components/schemas/MultipartBody"
+#      requestBody:
+#        content:
+#          application/json:
+#            schema:
+#              $ref: "#/components/schemas/SiteDocument"
+#          application/xml:
+#            schema:
+#              $ref: "#/components/schemas/SiteDocument"
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SiteDocument"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/SiteDocument"
+          description: ""
+      tags: ["Appointment"]

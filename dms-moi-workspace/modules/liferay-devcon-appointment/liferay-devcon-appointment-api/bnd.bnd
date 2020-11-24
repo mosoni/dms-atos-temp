@@ -1,0 +1,6 @@
+Bundle-Name: liferay-devcon-appointment-api
+Bundle-SymbolicName: com.liferay.appointments.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.liferay.appointments.dto.v1_0,\
+	com.liferay.appointments.resource.v1_0

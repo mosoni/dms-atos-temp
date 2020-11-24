@@ -1,0 +1,48 @@
+components:
+  schemas:
+    MosipDocumentHandler:
+      description: Represents Document handled for Mosip.
+      properties:
+        date:
+          format: date-time
+          type: string
+        id:
+          format: int64
+          type: integer
+        title:
+          type: string
+      type: object
+info:
+    description: "MoiDocumentHandler REST API"
+    license:
+        name: "Apache 2.0"
+        url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+    title: "MoiDocumentHandler"
+    version: v1.0
+openapi: 3.0.1
+paths:
+  "/mosip/{siteId}/fetch-document":
+    get:
+      operationId: getSiteAppointmentsPage
+      parameters:
+        - in: path
+          name: siteId
+          required: true
+          schema:
+            format: int64
+            type: integer      
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/MosipDocumentHandler"
+                type: array
+            application/xml:
+              schema:
+                items:
+                  $ref: "#/components/schemas/MosipDocumentHandler"
+                type: array
+          description: "Get Document"
+      tags: ["MosipDocumentHandler"]

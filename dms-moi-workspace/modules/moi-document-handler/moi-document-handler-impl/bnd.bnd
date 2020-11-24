@@ -1,0 +1,3 @@
+Bundle-Name: moi-document-handler-impl
+Bundle-SymbolicName: com.moi.dms.document.handler.impl
+Bundle-Version: 1.0.0

@@ -1,0 +1,6 @@
+Bundle-Name: moi-document-handler-api
+Bundle-SymbolicName: com.moi.dms.document.handler.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.moi.dms.document.handler.dto.v1_0,\
+	com.moi.dms.document.handler.resource.v1_0

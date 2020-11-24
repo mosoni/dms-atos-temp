@@ -1,0 +1,9 @@
+apiDir: "../moi-document-handler-api/src/main/java"
+apiPackagePath: "com.moi.dms.document.handler"
+application:
+    baseURI: "/moi-document-handler"
+    className: "MoiDocumentHandlerApplication"
+    name: "MoiDocumentHandler"
+author: "Mohit"
+clientDir: "../moi-document-handler-client/src/main/java"
+testDir: "../moi-document-handler-test/src/testIntegration/java"

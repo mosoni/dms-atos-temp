@@ -1,0 +1,3 @@
+Bundle-Name: liferay-devcon-appointment-impl
+Bundle-SymbolicName: com.liferay.appointments.impl
+Bundle-Version: 1.0.0

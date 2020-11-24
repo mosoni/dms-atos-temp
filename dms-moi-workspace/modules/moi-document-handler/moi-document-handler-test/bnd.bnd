@@ -1,0 +1,4 @@
+Bundle-Name: moi-document-handler-test
+Bundle-SymbolicName: com.moi.dms.document.handler.test
+Bundle-Version: 1.0.0
+-includeresource: com.moi.dms.document.handler.client.jar=../moi-document-handler-client/build/libs/com.moi.dms.document.handler.client-1.0.0.jar;lib:=true

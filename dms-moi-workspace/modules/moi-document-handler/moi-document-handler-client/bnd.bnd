@@ -1,0 +1,3 @@
+Bundle-Name: moi-document-handler-client
+Bundle-SymbolicName: com.moi.dms.document.handler.client
+Bundle-Version: 1.0.0
