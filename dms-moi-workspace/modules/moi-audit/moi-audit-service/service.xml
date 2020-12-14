@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_2_0.dtd">
+
+<service-builder dependency-injector="ds" package-path="com.moi.dms.audit">
+	<namespace>moiaudit</namespace>
+	<!--<entity data-source="sampleDataSource" local-service="true" name="Foo" remote-service="false" session-factory="sampleSessionFactory" table="foo" tx-manager="sampleTransactionManager uuid="true"">-->
+    <entity name="MOIAudit" local-service="true" remote-service="true" table="moi_audit">
+        <column name="auditId" type="long" primary="true"></column>
+        <column name="actionPerformedBy" type="String"></column>
+        <column name="actionPerformedDate" type="Date"></column>
+        <column name="actionStatus" type="String"></column>
+        <column name="actionDescription" type="String"></column>
+        <column name="actionConsumer" type="String"></column>
+        
+        <order by="asc">
+			<order-column name="auditId" />
+		</order>
+
+		<finder name="AuditId" return-type="Collection">
+			<finder-column name="auditId"></finder-column>
+		</finder>
+		<finder name="ActionPerformedBy" return-type="Collection">
+			<finder-column name="actionPerformedBy"></finder-column>
+		</finder>
+		<finder name="AtionPerformedDate" return-type="Collection">
+			<finder-column name="actionPerformedDate"></finder-column>
+		</finder>
+		<finder name="ActionStatus" return-type="Collection">
+			<finder-column name="actionStatus"></finder-column>
+		</finder>
+		<finder name="ActionDescription" return-type="Collection">
+			<finder-column name="actionDescription"></finder-column>
+		</finder>
+		<finder name="ActionConsumer" return-type="Collection">
+			<finder-column name="actionConsumer"></finder-column>
+		</finder>
+    </entity>
+    <exceptions>
+        <exception>MOIAuditValidation</exception>
+    </exceptions>
+</service-builder>

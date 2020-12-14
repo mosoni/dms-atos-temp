@@ -1,0 +1,7 @@
+Bundle-Name: moi-audit-control-panel
+Bundle-SymbolicName: com.moi.dms.audit.control.panel
+Bundle-Version: 1.0.0
+Import-Package: \
+*;resolution:=optional
+Include-Resource: @poi-4.1.2.jar, @poi-ooxml-4.1.2.jar, @poi-ooxml-schemas-4.1.2.jar, @xmlbeans-3.1.0.jar, @commons-collections4-4.4.jar, @commons-compress-1.19.jar
+Export-Package: com.moi.dms.audit.control.panel.constants

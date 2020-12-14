@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.moi.dms.audit.model.MOIAudit">
+		<field name="auditId" type="long" />
+		<field name="actionPerformedBy" type="String" />
+		<field name="actionPerformedDate" type="Date" />
+		<field name="actionStatus" type="String" />
+		<field name="actionDescription" type="String" />
+		<field name="actionConsumer" type="String" />
+	</model>
+</model-hints>

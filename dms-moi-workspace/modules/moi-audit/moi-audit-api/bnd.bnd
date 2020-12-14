@@ -1,0 +1,10 @@
+Bundle-Name: moi-audit-api
+Bundle-SymbolicName: com.moi.dms.audit.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.moi.dms.audit.exception,\
+	com.moi.dms.audit.model,\
+	com.moi.dms.audit.service,\
+	com.moi.dms.audit.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../moi-audit-service/service.xml
