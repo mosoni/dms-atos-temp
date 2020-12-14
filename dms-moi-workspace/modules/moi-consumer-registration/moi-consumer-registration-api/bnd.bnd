@@ -1,0 +1,11 @@
+Bundle-Name: moi-consumer-registration-api
+Bundle-SymbolicName: com.moi.dms.consumer.registration.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.moi.dms.consumer.registration.exception,\
+	com.moi.dms.consumer.registration.model,\
+	com.moi.dms.consumer.registration.service,\
+	com.moi.dms.consumer.registration.service.persistence,\
+	com.moi.dms.consumer.registration.validator
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../moi-consumer-registration-service/service.xml

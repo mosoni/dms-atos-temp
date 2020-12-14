@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.moi.dms.consumer.registration.model.ConsumerRegistration">
+		<field name="registrationId" type="long" />
+		<field name="consumerId" type="String" />
+		<field name="consumerName" type="String" />
+		<field localized="true" name="consumerDescription" type="String" />
+		<field name="supportedDocumentType" type="String" />
+		<field name="consumerStatus" type="String" />
+	</model>
+</model-hints>

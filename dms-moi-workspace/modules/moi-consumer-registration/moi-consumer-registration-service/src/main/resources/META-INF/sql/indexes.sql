@@ -1,0 +1,4 @@
+create index IX_FE234AD8 on dms_consumer_registration (consumerId[$COLUMN_LENGTH:75$]);
+create index IX_AF97588 on dms_consumer_registration (consumerName[$COLUMN_LENGTH:75$]);
+create index IX_136B166F on dms_consumer_registration (consumerStatus[$COLUMN_LENGTH:75$]);
+create index IX_96B139E0 on dms_consumer_registration (supportedDocumentType[$COLUMN_LENGTH:75$]);
