@@ -1,0 +1,4 @@
+Bundle-Name: moi-consumer-registration-control-panel
+Bundle-SymbolicName: com.moi.dms.consumer.registration.web
+Bundle-Version: 1.0.0
+Export-Package: com.moi.dms.consumer.registration.web.constants

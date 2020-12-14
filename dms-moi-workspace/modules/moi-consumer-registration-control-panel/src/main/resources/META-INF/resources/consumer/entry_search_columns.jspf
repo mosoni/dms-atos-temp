@@ -1,0 +1,19 @@
+<%-- Generate consumer view  URL. --%>
+
+<portlet:renderURL var="viewConsumerURL">
+	<portlet:param name="mvcRenderCommandName"
+		value="<%=MVCCommandNames.VIEW_CONSUMER%>" />
+	<portlet:param name="redirect" value="${currentURL}" />
+	<portlet:param name="registrationId" value="${entry.registrationId}" />
+</portlet:renderURL>
+
+<liferay-ui:search-container-column-text name="consumer-id"
+	value="${entry.consumerId}" />
+<liferay-ui:search-container-column-text name="consumer-name"
+	value="${entry.consumerName}" />
+<liferay-ui:search-container-column-text name="supported-document-type"
+	value="${entry.supportedDocumentType}" />
+<liferay-ui:search-container-column-text name="consumer-status"
+	value="${entry.consumerStatus}" />
+<liferay-ui:search-container-column-jsp name="actions"
+	path="/consumer/entry_actions.jsp" />
