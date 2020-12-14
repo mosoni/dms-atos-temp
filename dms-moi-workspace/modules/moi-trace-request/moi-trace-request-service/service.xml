@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_2_0.dtd">
+
+<service-builder dependency-injector="ds"
+	package-path="com.moi.dms.trace.request">
+	<namespace>moitr</namespace>
+	<entity name="MOITraceRequest" local-service="true"
+		table="moi_tracerequest">
+		<column name="requestId" type="long" primary="true"></column>
+		<column name="requestedBy" type="String"></column>
+		<column name="requestIncomingDate" type="Date"></column>
+		<column name="requestedConsumerCode" type="String"></column>
+		<column name="requestedConsumerName" type="String"></column>
+		<column name="requestedOperation" type="String"></column>
+		<column name="requestedDocumentType" type="String"></column>
+		<column name="requestValid" type="boolean"></column>
+		<column name="requestResult" type="String"></column>
+		<column name="requestResultDate" type="Date"></column>
+		<order by="asc">
+			<order-column name="requestId"></order-column>
+		</order>
+
+		<finder name="RequestId" return-type="Collection">
+			<finder-column name="requestId"></finder-column>
+		</finder>
+		<finder name="RequestedBy" return-type="Collection">
+			<finder-column name="requestedBy"></finder-column>
+		</finder>
+		<finder name="RequestIncomingDate" return-type="Collection">
+			<finder-column name="requestIncomingDate"></finder-column>
+		</finder>
+		<finder name="RequestedConsumerCode" return-type="Collection">
+			<finder-column name="requestedConsumerCode"></finder-column>
+		</finder>
+		<finder name="RequestedConsumerName" return-type="Collection">
+			<finder-column name="requestedConsumerName"></finder-column>
+		</finder>
+		<finder name="RequestedOperation" return-type="Collection">
+			<finder-column name="requestedOperation"></finder-column>
+		</finder>
+		<finder name="RequestResult" return-type="Collection">
+			<finder-column name="requestResult"></finder-column>
+		</finder>
+		<finder name="RequestResultDate" return-type="Collection">
+			<finder-column name="requestResultDate"></finder-column>
+		</finder>
+	</entity>
+
+	<exceptions>
+		<exception>MOITraceRequestException</exception>
+	</exceptions>
+</service-builder>

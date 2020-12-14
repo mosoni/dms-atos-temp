@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.moi.dms.trace.request.model.MOITraceRequest">
+		<field name="requestId" type="long" />
+		<field name="requestedBy" type="String" />
+		<field name="requestIncomingDate" type="Date" />
+		<field name="requestedConsumerCode" type="String" />
+		<field name="requestedConsumerName" type="String" />
+		<field name="requestedOperation" type="String" />
+		<field name="requestedDocumentType" type="String" />
+		<field name="requestValid" type="boolean" />
+		<field name="requestResult" type="String" />
+		<field name="requestResultDate" type="Date" />
+	</model>
+</model-hints>

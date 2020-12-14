@@ -1,0 +1,10 @@
+Bundle-Name: moi-trace-request-api
+Bundle-SymbolicName: com.moi.dms.trace.request.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.moi.dms.trace.request.exception,\
+	com.moi.dms.trace.request.model,\
+	com.moi.dms.trace.request.service,\
+	com.moi.dms.trace.request.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../moi-trace-request-service/service.xml

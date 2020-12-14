@@ -1,0 +1,19 @@
+dependencies {
+	cssBuilder group: "com.liferay", name: "com.liferay.css.builder", version: "3.0.2"
+	
+	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel"
+	compileOnly group: "com.liferay.portal", name: "com.liferay.util.taglib"
+	compileOnly group: "com.liferay", name: "com.liferay.petra.function"
+	compileOnly group: "com.liferay", name: "com.liferay.frontend.taglib.clay"
+	compileOnly group: "com.liferay", name: "com.liferay.application.list.api"
+	compileOnly group: "javax.portlet", name: "portlet-api"
+	compileOnly group: "javax.servlet", name: "javax.servlet-api"
+	compileOnly group: "jstl", name: "jstl"
+	compileOnly group: "org.osgi", name: "org.osgi.service.component.annotations"
+
+	compileOnly group: 'org.apache.poi', name: 'poi', version: '3.10-FINAL'
+	compileOnly group: 'org.apache.poi', name: 'poi-ooxml', version: '3.10-FINAL'
+	compileOnly group: 'org.apache.poi', name: 'poi-ooxml-schemas', version: '3.10-FINAL'
+
+	compileOnly project(":modules:moi-trace-request:moi-trace-request-api")
+}
