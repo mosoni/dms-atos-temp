@@ -1,0 +1,6 @@
+Bundle-Name: moi-id-mapper-service
+Bundle-SymbolicName: com.moi.dms.id.mapper.service
+Bundle-Version: 1.0.0
+Liferay-Require-SchemaVersion: 1.0.0
+Liferay-Service: true
+-dsannotations-options: inherit

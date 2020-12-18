@@ -132,7 +132,7 @@ public class MOITraceRequestLocalServiceImpl
 			Boolean requestValid, String requestResult, Date requestResultDate)
 			throws PortalException {
 
-		// Get the Consumer Registration by id.
+		// Get the MOI Trace Request by id.
 		MOITraceRequest traceRequest = getMOITraceRequest(requestId);
 
 		// Set updated fields and modification date.
@@ -146,7 +146,7 @@ public class MOITraceRequestLocalServiceImpl
 		traceRequest.setRequestResult(requestResult);
 		traceRequest.setRequestResultDate(requestResultDate);
 
-		// Persist Consumer Registration to database.
+		// Persist MOI Trace Request to database.
 		return super.updateMOITraceRequest(traceRequest);
 	}
 
@@ -284,22 +284,22 @@ public class MOITraceRequestLocalServiceImpl
 	/**
 	 * Method overridden as this method is not supported.
 	 * 
-	 * @param consumerRegistration
+	 * @param moiTraceRequest
 	 */
 	@Override
 	public MOITraceRequest addMOITraceRequest(
-			MOITraceRequest consumerRegistration) {
+			MOITraceRequest moiTraceRequest) {
 		throw new UnsupportedOperationException("Method not supported.");
 	}
 
 	/**
 	 * Method overridden as this method is not supported.
 	 * 
-	 * @param consumerRegistration
+	 * @param moiTraceRequest
 	 */
 	@Override
 	public MOITraceRequest updateMOITraceRequest(
-			MOITraceRequest consumerRegistration) {
+			MOITraceRequest moiTraceRequest) {
 		throw new UnsupportedOperationException("Method not supported.");
 	}
 }

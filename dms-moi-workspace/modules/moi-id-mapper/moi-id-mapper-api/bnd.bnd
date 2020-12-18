@@ -1,0 +1,10 @@
+Bundle-Name: moi-id-mapper-api
+Bundle-SymbolicName: com.moi.dms.id.mapper.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.moi.dms.id.mapper.exception,\
+	com.moi.dms.id.mapper.model,\
+	com.moi.dms.id.mapper.service,\
+	com.moi.dms.id.mapper.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../moi-id-mapper-service/service.xml

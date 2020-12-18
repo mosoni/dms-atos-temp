@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_2_0.dtd">
+
+<service-builder dependency-injector="ds"
+	package-path="com.moi.dms.id.mapper">
+	<namespace>moiidm</namespace>
+	<entity local-service="true" table="moi_idmapper"
+		name="MOIIdMapper">
+		<column name="mapperId" type="long" primary="true"></column>
+		<column name="groupId" type="long"></column>
+		<column name="companyId" type="long"></column>
+		<column name="mosipCurrentState" type="String"></column>
+		<column name="mosipDocumentType" type="String"></column>
+		<column name="registrationId" type="String"></column>
+		<column name="resourceId" type="long"></column>
+		<column name="documentTitle" type="String"></column>
+		<column name="activeState" type="int"></column>
+		<column name="fileEntryId" type="String"></column>
+		<column name="updateDate" type="Date"></column>
+		<column name="updatedBy" type="String"></column>
+
+		<order by="asc">
+			<order-column name="mapperId" />
+		</order>
+
+		<finder name="MapperId" return-type="Collection">
+			<finder-column name="mapperId"></finder-column>
+		</finder>
+		<finder name="MosipCurrentState" return-type="Collection">
+			<finder-column name="mosipCurrentState"></finder-column>
+		</finder>
+		<finder name="MosipDocumentType" return-type="Collection">
+			<finder-column name="mosipDocumentType"></finder-column>
+		</finder>
+		<finder name="RegistrationId" return-type="Collection">
+			<finder-column name="registrationId"></finder-column>
+		</finder>
+		<finder name="ResourceId" return-type="Collection">
+			<finder-column name="resourceId"></finder-column>
+		</finder>
+		<finder name="DocumentTitle" return-type="Collection">
+			<finder-column name="documentTitle"></finder-column>
+		</finder>
+		<finder name="FileEntryId" return-type="Collection">
+			<finder-column name="fileEntryId"></finder-column>
+		</finder>
+		<finder name="UpdateDate" return-type="Collection">
+			<finder-column name="updateDate"></finder-column>
+		</finder>
+		<finder name="UpdatedBy" return-type="Collection">
+			<finder-column name="updatedBy"></finder-column>
+		</finder>
+	</entity>
+
+	<exceptions>
+		<exception>MOIIdMapperException</exception>
+	</exceptions>
+</service-builder>

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.moi.dms.id.mapper.model.MOIIdMapper">
+		<field name="mapperId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="mosipCurrentState" type="String" />
+		<field name="mosipDocumentType" type="String" />
+		<field name="registrationId" type="String" />
+		<field name="resourceId" type="long" />
+		<field name="documentTitle" type="String" />
+		<field name="activeState" type="int" />
+		<field name="fileEntryId" type="String" />
+		<field name="updateDate" type="Date" />
+		<field name="updatedBy" type="String" />
+	</model>
+</model-hints>
