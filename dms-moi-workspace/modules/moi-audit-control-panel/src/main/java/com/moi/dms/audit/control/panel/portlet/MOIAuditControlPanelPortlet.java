@@ -23,7 +23,8 @@ import org.osgi.service.component.annotations.Component;
 		"javax.portlet.name=" + MOIAuditControlPanelPortletKeys.MOIAUDITCONTROLPANEL,
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user",
-		"javax.portlet.version=3.0"
+		"javax.portlet.version=3.0",
+		"com.liferay.portlet.header-portlet-css=/css/main.css"
 	},
 	service = Portlet.class
 )

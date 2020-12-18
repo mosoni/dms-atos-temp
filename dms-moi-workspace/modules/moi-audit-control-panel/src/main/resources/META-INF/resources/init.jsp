@@ -15,7 +15,6 @@
 <%@ page import="com.liferay.portal.kernel.util.GetterUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.Validator" %>
 <%@ page import="com.liferay.portal.kernel.util.PortalUtil" %>
-
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.HashMap" %>

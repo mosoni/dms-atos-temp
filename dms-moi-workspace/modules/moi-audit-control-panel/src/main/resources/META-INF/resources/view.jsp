@@ -1,3 +1,9 @@
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.LinkedHashMap"%>
+<%@page import="java.util.Iterator"%>
+<%@page import="com.liferay.portal.kernel.json.JSONArray"%>
+<%@page import="com.liferay.portal.kernel.json.JSONObject"%>
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.moi.dms.audit.control.panel.util.MOIAuditHelper"%>
 <%@page import="com.moi.dms.audit.control.panel.search.container.MOIAuditDisplayTerms"%>
 <%@page import="com.moi.dms.audit.control.panel.search.container.MOIAuditSearchContainer"%>
@@ -12,6 +18,8 @@
 <%@page import="com.moi.dms.audit.service.MOIAuditLocalServiceUtil"%>
 <%@page import="com.moi.dms.audit.model.MOIAudit"%>
 <%@page import="java.util.List"%>
+<liferay-theme:defineObjects />
+<portlet:defineObjects />
 
 <%
 	PortletURL portletURL = renderResponse.createRenderURL();
@@ -20,8 +28,7 @@
 			renderRequest, portletURL);
 	MOIAuditDisplayTerms displayTerms = (MOIAuditDisplayTerms) moiAuditSearchContainer
 			.getDisplayTerms();
-	System.out.println("START =============>- "+moiAuditSearchContainer.getStart());
-	System.out.println("END ============> "+moiAuditSearchContainer.getEnd());
+	SimpleDateFormat sdf = new SimpleDateFormat(MVCCommandNames.DATE_FORMAT);
 %>
 <style>
 .exportBtn {
@@ -32,7 +39,7 @@
 }
 </style>
 <div class="container-fluid-1280">
-	<aui:form action="<%=portletURLString%>" method="post" name="fm">
+	<aui:form action="<%=portletURLString%>" method="post" name="fm" id="oForm">
 		<liferay-ui:search-container
 			searchContainer="<%=moiAuditSearchContainer%>"
 			emptyResultsMessage="no-audit-requests" id="auditEntries"
@@ -48,7 +55,15 @@
 							displayTerms,
 							moiAuditSearchContainer.getStart(),
 							moiAuditSearchContainer.getEnd())%>" />
-							
+				
+			<portlet:renderURL var="viewActionDescURL">
+				<portlet:param name="mvcPath" value="/view_actiondescription.jsp" />
+			</portlet:renderURL>
+			
+			<portlet:renderURL var="viewURL">
+        		<portlet:param name="mvcPath" value="/view_actiondescription.jsp" />
+			</portlet:renderURL>
+						
 			<portlet:resourceURL var="exportURL" id="<%=MVCCommandNames.EXPORT_MOI_AUDIT%>">
 					<portlet:param name="<%=MVCCommandNames.FROM_DATE%>"
 						value="<%=displayTerms.getFromDate()%>" />
@@ -85,11 +100,17 @@
 					name="Action Status"
 					value="${entry.actionStatus}" />
 				<liferay-ui:search-container-column-text
-					name="Action Description"
-					value="${entry.actionDescription}" />
-				<liferay-ui:search-container-column-text
 					name="Action Consumer"
 					value="${entry.actionConsumer}" />
+			<liferay-ui:search-container-column-text name="Action Description" >		
+					
+					<portlet:renderURL var="actionDescriptionURL" windowState="<%=LiferayWindowState.POP_UP.toString()%>">
+						<portlet:param name="mvcPath" value="/view_actiondescription.jsp"/>
+						<portlet:param name="actionDescription" value="${entry.actionDescription}"/>
+					</portlet:renderURL>
+				<liferay-ui:success key="success" message="Your Action Completed Successfully..."/>
+				<aui:button href="${actionDescriptionURL}" useDialog="true" value="View" />
+			</liferay-ui:search-container-column-text>		
 			</liferay-ui:search-container-row>
 
 			<liferay-ui:search-iterator displayStyle="list" markupView="lexicon" />
