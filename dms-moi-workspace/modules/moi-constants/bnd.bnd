@@ -1,0 +1,4 @@
+Bundle-Name: moi-constants
+Bundle-SymbolicName: com.moi.dms.constants
+Bundle-Version: 1.0.0
+Export-Package: com.moi.dms.constants.constants

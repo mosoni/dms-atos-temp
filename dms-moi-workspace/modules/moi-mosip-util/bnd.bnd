@@ -1,0 +1,4 @@
+Bundle-Name: moi-mosip-util
+Bundle-SymbolicName: com.moi.mosip.util
+Bundle-Version: 1.0.0
+Export-Package: com.moi.mosip.util.constants
