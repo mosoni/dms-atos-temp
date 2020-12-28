@@ -1,0 +1,9 @@
+apiDir: "../moi-api-handler-api/src/main/java"
+apiPackagePath: "com.moi.api.handler"
+application:
+    baseURI: "/moi-api-handler"
+    className: "MoiApiHandlerApplication"
+    name: "MoiApiHandler"
+author: "Mohit"
+clientDir: "../moi-api-handler-client/src/main/java"
+testDir: "../moi-api-handler-test/src/testIntegration/java"

@@ -1,0 +1,3 @@
+Bundle-Name: moi-api-handler-client
+Bundle-SymbolicName: com.moi.api.handler.client
+Bundle-Version: 1.0.0

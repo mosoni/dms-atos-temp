@@ -1,0 +1,99 @@
+components:
+  schemas:
+    MosipAPIHandler:
+      description: Represents Document handled for Mosip.
+      properties:
+        date:
+          format: date-time
+          type: string
+        id:
+          format: int64
+          type: integer
+        title:
+          type: string
+      type: object
+    DocumentResult:
+      description: Represents an uploaded document.
+      properties:
+        id:
+          format: int64
+          type: integer
+        name:
+          type: string
+        mimeType:
+          type: string
+        folderName:
+          type: string
+      type: object
+info:
+  description: ""
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+  title: "Appointments"
+  version: v1.0
+openapi: 3.0.1
+paths:
+  "/sites/{siteId}/fetchDocument":
+    get:
+      operationId: getSiteAppointmentsPage
+      parameters:
+        - in: path
+          name: siteId
+          required: true
+          schema:
+            format: int64
+            type: integer
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/DocumentResult"
+                type: array
+            application/xml:
+              schema:
+                items:
+                  $ref: "#/components/schemas/DocumentResult"
+                type: array
+          description: "Get appointments"
+      tags: ["DocumentResult"]
+    "/mosip/upload-document":
+    post:
+      operationId: uploadMosipDocument
+      parameters:
+        - in: query
+          name: consumerCode
+          schema:
+            type: string
+        - in: query
+          name: documentType
+          schema:
+            type: string
+      requestBody:
+                content:
+                    multipart/form-data:
+                        schema:
+                            properties:
+                                document:
+                                    $ref: "#/components/schemas/DocumentResult"
+                                file:
+                                    format: binary
+                                    type: string
+                            type: object             
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/DocumentResult"
+                type: array
+            application/xml:
+              schema:
+                items:
+                  $ref: "#/components/schemas/DocumentResult"
+                type: array
+          description: "Get Document"
+      tags: ["DocumentResult"]  

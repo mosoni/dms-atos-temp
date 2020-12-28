@@ -1,0 +1,4 @@
+Bundle-Name: moi-api-handler-test
+Bundle-SymbolicName: com.moi.api.handler.test
+Bundle-Version: 1.0.0
+-includeresource: com.moi.api.handler.client.jar=../moi-api-handler-client/build/libs/com.moi.api.handler.client-1.0.0.jar;lib:=true

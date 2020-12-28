@@ -1,0 +1,6 @@
+Bundle-Name: moi-api-handler-api
+Bundle-SymbolicName: com.moi.api.handler.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.moi.api.handler.dto.v1_0,\
+	com.moi.api.handler.resource.v1_0
