@@ -181,71 +181,7 @@ public abstract class BaseDocumentResultResourceTestCase {
 	}
 
 	@Test
-	public void testGetSiteAppointmentsPage() throws Exception {
-		Page<DocumentResult> page =
-			documentResultResource.getSiteAppointmentsPage(
-				testGetSiteAppointmentsPage_getSiteId());
-
-		Assert.assertEquals(0, page.getTotalCount());
-
-		Long siteId = testGetSiteAppointmentsPage_getSiteId();
-		Long irrelevantSiteId =
-			testGetSiteAppointmentsPage_getIrrelevantSiteId();
-
-		if ((irrelevantSiteId != null)) {
-			DocumentResult irrelevantDocumentResult =
-				testGetSiteAppointmentsPage_addDocumentResult(
-					irrelevantSiteId, randomIrrelevantDocumentResult());
-
-			page = documentResultResource.getSiteAppointmentsPage(
-				irrelevantSiteId);
-
-			Assert.assertEquals(1, page.getTotalCount());
-
-			assertEquals(
-				Arrays.asList(irrelevantDocumentResult),
-				(List<DocumentResult>)page.getItems());
-			assertValid(page);
-		}
-
-		DocumentResult documentResult1 =
-			testGetSiteAppointmentsPage_addDocumentResult(
-				siteId, randomDocumentResult());
-
-		DocumentResult documentResult2 =
-			testGetSiteAppointmentsPage_addDocumentResult(
-				siteId, randomDocumentResult());
-
-		page = documentResultResource.getSiteAppointmentsPage(siteId);
-
-		Assert.assertEquals(2, page.getTotalCount());
-
-		assertEqualsIgnoringOrder(
-			Arrays.asList(documentResult1, documentResult2),
-			(List<DocumentResult>)page.getItems());
-		assertValid(page);
-	}
-
-	protected DocumentResult testGetSiteAppointmentsPage_addDocumentResult(
-			Long siteId, DocumentResult documentResult)
-		throws Exception {
-
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
-	}
-
-	protected Long testGetSiteAppointmentsPage_getSiteId() throws Exception {
-		return testGroup.getGroupId();
-	}
-
-	protected Long testGetSiteAppointmentsPage_getIrrelevantSiteId()
-		throws Exception {
-
-		return irrelevantGroup.getGroupId();
-	}
-
-	@Test
-	public void testUploadMosipDocument() throws Exception {
+	public void testUploadJiraDocument() throws Exception {
 		Assert.assertTrue(false);
 	}
 

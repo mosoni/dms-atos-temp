@@ -4,7 +4,7 @@ import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
 import com.liferay.portal.vulcan.multipart.MultipartBody;
 import com.liferay.portal.vulcan.pagination.Page;
 
-import com.moi.api.handler.dto.v1_0.DocumentResult;
+import com.moi.api.handler.dto.v1_0.JiraAPIHandler;
 
 import java.util.Locale;
 
@@ -33,12 +33,9 @@ public interface DocumentResultResource {
 		return FactoryHolder.factory.create();
 	}
 
-	public Page<DocumentResult> getSiteAppointmentsPage(Long siteId)
-		throws Exception;
-
-	public Page<DocumentResult> uploadMosipDocument(
-			String consumerCode, String documentType,
-			MultipartBody multipartBody)
+	public Page<JiraAPIHandler> uploadJiraDocument(
+			String consumerCode, String ticketNumber, String documentTitle,
+			String metadata, MultipartBody multipartBody)
 		throws Exception;
 
 	public default void setContextAcceptLanguage(

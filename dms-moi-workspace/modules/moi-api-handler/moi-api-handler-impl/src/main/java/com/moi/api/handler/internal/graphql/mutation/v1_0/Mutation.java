@@ -9,7 +9,7 @@ import com.liferay.portal.vulcan.graphql.annotation.GraphQLName;
 import com.liferay.portal.vulcan.multipart.MultipartBody;
 import com.liferay.portal.vulcan.pagination.Page;
 
-import com.moi.api.handler.dto.v1_0.DocumentResult;
+import com.moi.api.handler.dto.v1_0.JiraAPIHandler;
 import com.moi.api.handler.resource.v1_0.DocumentResultResource;
 
 import java.util.function.BiFunction;
@@ -40,12 +40,14 @@ public class Mutation {
 
 	@GraphQLField
 	@GraphQLName(
-		value = "uploadMosipDocumentConsumerCodeDocumentTypeMultipartBody",
+		value = "uploadJiraDocumentConsumerCodeTicketNumberDocumentTitleMetadataMultipartBody",
 		description = "null"
 	)
-	public java.util.Collection<DocumentResult> uploadMosipDocument(
+	public java.util.Collection<JiraAPIHandler> uploadJiraDocument(
 			@GraphQLName("consumerCode") String consumerCode,
-			@GraphQLName("documentType") String documentType,
+			@GraphQLName("ticketNumber") String ticketNumber,
+			@GraphQLName("documentTitle") String documentTitle,
+			@GraphQLName("metadata") String metadata,
 			@GraphQLName("multipartBody") MultipartBody multipartBody)
 		throws Exception {
 
@@ -53,9 +55,9 @@ public class Mutation {
 			_documentResultResourceComponentServiceObjects,
 			this::_populateResourceContext,
 			documentResultResource -> {
-				Page paginationPage =
-					documentResultResource.uploadMosipDocument(
-						consumerCode, documentType, multipartBody);
+				Page paginationPage = documentResultResource.uploadJiraDocument(
+					consumerCode, ticketNumber, documentTitle, metadata,
+					multipartBody);
 
 				return paginationPage.getItems();
 			});

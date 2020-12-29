@@ -21,6 +21,7 @@ import com.liferay.portal.vulcan.util.ActionUtil;
 import com.liferay.portal.vulcan.util.TransformUtil;
 
 import com.moi.api.handler.dto.v1_0.DocumentResult;
+import com.moi.api.handler.dto.v1_0.JiraAPIHandler;
 import com.moi.api.handler.resource.v1_0.DocumentResultResource;
 
 import io.swagger.v3.oas.annotations.Parameter;
@@ -41,13 +42,9 @@ import javax.annotation.Generated;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import javax.validation.constraints.NotNull;
-
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MultivaluedHashMap;
@@ -67,25 +64,7 @@ public abstract class BaseDocumentResultResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'GET' 'http://localhost:8080/o/moi-api-handler/v1.0/sites/{siteId}/fetchDocument'  -u 'test@liferay.com:test'
-	 */
-	@Override
-	@GET
-	@Parameters(value = {@Parameter(in = ParameterIn.PATH, name = "siteId")})
-	@Path("/sites/{siteId}/fetchDocument")
-	@Produces({"application/json", "application/xml"})
-	@Tags(value = {@Tag(name = "DocumentResult")})
-	public Page<DocumentResult> getSiteAppointmentsPage(
-			@NotNull @Parameter(hidden = true) @PathParam("siteId") Long siteId)
-		throws Exception {
-
-		return Page.of(Collections.emptyList());
-	}
-
-	/**
-	 * Invoke this method with the command line:
-	 *
-	 * curl -X 'POST' 'http://localhost:8080/o/moi-api-handler/v1.0/sites/{siteId}/fetchDocument'  -u 'test@liferay.com:test'
+	 * curl -X 'POST' 'http://localhost:8080/o/moi-api-handler/v1.0/uploadJiraDocument'  -u 'test@liferay.com:test'
 	 */
 	@Override
 	@Consumes("multipart/form-data")
@@ -93,17 +72,22 @@ public abstract class BaseDocumentResultResourceImpl
 	@Parameters(
 		value = {
 			@Parameter(in = ParameterIn.QUERY, name = "consumerCode"),
-			@Parameter(in = ParameterIn.QUERY, name = "documentType")
+			@Parameter(in = ParameterIn.QUERY, name = "ticketNumber"),
+			@Parameter(in = ParameterIn.QUERY, name = "documentTitle"),
+			@Parameter(in = ParameterIn.QUERY, name = "metadata")
 		}
 	)
-	@Path("/sites/{siteId}/fetchDocument")
+	@Path("/uploadJiraDocument")
 	@Produces({"application/json", "application/xml"})
 	@Tags(value = {@Tag(name = "DocumentResult")})
-	public Page<DocumentResult> uploadMosipDocument(
+	public Page<JiraAPIHandler> uploadJiraDocument(
 			@Parameter(hidden = true) @QueryParam("consumerCode") String
 				consumerCode,
-			@Parameter(hidden = true) @QueryParam("documentType") String
-				documentType,
+			@Parameter(hidden = true) @QueryParam("ticketNumber") String
+				ticketNumber,
+			@Parameter(hidden = true) @QueryParam("documentTitle") String
+				documentTitle,
+			@Parameter(hidden = true) @QueryParam("metadata") String metadata,
 			MultipartBody multipartBody)
 		throws Exception {
 

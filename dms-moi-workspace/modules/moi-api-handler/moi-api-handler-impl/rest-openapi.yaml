@@ -25,6 +25,20 @@ components:
         folderName:
           type: string
       type: object
+    JiraAPIHandler:
+      description: Represents Document handled for JIRA.
+      properties:
+        date:
+          format: date-time
+          type: string
+        id:
+          format: int64
+          type: integer
+        title:
+          type: string
+        ticketNumber:
+          type: string
+      type: object
 info:
   description: ""
   license:
@@ -34,41 +48,24 @@ info:
   version: v1.0
 openapi: 3.0.1
 paths:
-  "/sites/{siteId}/fetchDocument":
-    get:
-      operationId: getSiteAppointmentsPage
-      parameters:
-        - in: path
-          name: siteId
-          required: true
-          schema:
-            format: int64
-            type: integer
-      responses:
-        200:
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: "#/components/schemas/DocumentResult"
-                type: array
-            application/xml:
-              schema:
-                items:
-                  $ref: "#/components/schemas/DocumentResult"
-                type: array
-          description: "Get appointments"
-      tags: ["DocumentResult"]
-    "/mosip/upload-document":
+  "/uploadJiraDocument":
     post:
-      operationId: uploadMosipDocument
+      operationId: uploadJiraDocument
       parameters:
         - in: query
           name: consumerCode
           schema:
             type: string
         - in: query
-          name: documentType
+          name: ticketNumber
+          schema:
+            type: string
+        - in: query
+          name: documentTitle
+          schema:
+            type: string
+        - in: query
+          name: metadata
           schema:
             type: string
       requestBody:
@@ -81,19 +78,19 @@ paths:
                                 file:
                                     format: binary
                                     type: string
-                            type: object             
+                            type: object
       responses:
         200:
           content:
             application/json:
               schema:
                 items:
-                  $ref: "#/components/schemas/DocumentResult"
+                  $ref: "#/components/schemas/JiraAPIHandler"
                 type: array
             application/xml:
               schema:
                 items:
-                  $ref: "#/components/schemas/DocumentResult"
+                  $ref: "#/components/schemas/JiraAPIHandler"
                 type: array
-          description: "Get Document"
-      tags: ["DocumentResult"]  
+          description: "Upload Jira Documents"
+      tags: ["DocumentResult"]

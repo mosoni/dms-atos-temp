@@ -27,9 +27,6 @@ public class ServletDataImpl implements ServletData {
 	public void activate(BundleContext bundleContext) {
 		Mutation.setDocumentResultResourceComponentServiceObjects(
 			_documentResultResourceComponentServiceObjects);
-
-		Query.setDocumentResultResourceComponentServiceObjects(
-			_documentResultResourceComponentServiceObjects);
 	}
 
 	@Override
