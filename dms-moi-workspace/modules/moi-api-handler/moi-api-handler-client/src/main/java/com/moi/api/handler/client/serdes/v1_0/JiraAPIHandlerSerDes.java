@@ -3,9 +3,6 @@ package com.moi.api.handler.client.serdes.v1_0;
 import com.moi.api.handler.client.dto.v1_0.JiraAPIHandler;
 import com.moi.api.handler.client.json.BaseJSONParser;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
@@ -44,19 +41,16 @@ public class JiraAPIHandlerSerDes {
 
 		sb.append("{");
 
-		DateFormat liferayToJSONDateFormat = new SimpleDateFormat(
-			"yyyy-MM-dd'T'HH:mm:ss'Z'");
-
-		if (jiraAPIHandler.getDate() != null) {
+		if (jiraAPIHandler.getFolderName() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
-			sb.append("\"date\": ");
+			sb.append("\"folderName\": ");
 
 			sb.append("\"");
 
-			sb.append(liferayToJSONDateFormat.format(jiraAPIHandler.getDate()));
+			sb.append(_escape(jiraAPIHandler.getFolderName()));
 
 			sb.append("\"");
 		}
@@ -71,30 +65,30 @@ public class JiraAPIHandlerSerDes {
 			sb.append(jiraAPIHandler.getId());
 		}
 
-		if (jiraAPIHandler.getTicketNumber() != null) {
+		if (jiraAPIHandler.getMimeType() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
-			sb.append("\"ticketNumber\": ");
+			sb.append("\"mimeType\": ");
 
 			sb.append("\"");
 
-			sb.append(_escape(jiraAPIHandler.getTicketNumber()));
+			sb.append(_escape(jiraAPIHandler.getMimeType()));
 
 			sb.append("\"");
 		}
 
-		if (jiraAPIHandler.getTitle() != null) {
+		if (jiraAPIHandler.getName() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
-			sb.append("\"title\": ");
+			sb.append("\"name\": ");
 
 			sb.append("\"");
 
-			sb.append(_escape(jiraAPIHandler.getTitle()));
+			sb.append(_escape(jiraAPIHandler.getName()));
 
 			sb.append("\"");
 		}
@@ -118,16 +112,12 @@ public class JiraAPIHandlerSerDes {
 
 		Map<String, String> map = new TreeMap<>();
 
-		DateFormat liferayToJSONDateFormat = new SimpleDateFormat(
-			"yyyy-MM-dd'T'HH:mm:ss'Z'");
-
-		if (jiraAPIHandler.getDate() == null) {
-			map.put("date", null);
+		if (jiraAPIHandler.getFolderName() == null) {
+			map.put("folderName", null);
 		}
 		else {
 			map.put(
-				"date",
-				liferayToJSONDateFormat.format(jiraAPIHandler.getDate()));
+				"folderName", String.valueOf(jiraAPIHandler.getFolderName()));
 		}
 
 		if (jiraAPIHandler.getId() == null) {
@@ -137,20 +127,18 @@ public class JiraAPIHandlerSerDes {
 			map.put("id", String.valueOf(jiraAPIHandler.getId()));
 		}
 
-		if (jiraAPIHandler.getTicketNumber() == null) {
-			map.put("ticketNumber", null);
+		if (jiraAPIHandler.getMimeType() == null) {
+			map.put("mimeType", null);
 		}
 		else {
-			map.put(
-				"ticketNumber",
-				String.valueOf(jiraAPIHandler.getTicketNumber()));
+			map.put("mimeType", String.valueOf(jiraAPIHandler.getMimeType()));
 		}
 
-		if (jiraAPIHandler.getTitle() == null) {
-			map.put("title", null);
+		if (jiraAPIHandler.getName() == null) {
+			map.put("name", null);
 		}
 		else {
-			map.put("title", String.valueOf(jiraAPIHandler.getTitle()));
+			map.put("name", String.valueOf(jiraAPIHandler.getName()));
 		}
 
 		return map;
@@ -174,10 +162,9 @@ public class JiraAPIHandlerSerDes {
 			JiraAPIHandler jiraAPIHandler, String jsonParserFieldName,
 			Object jsonParserFieldValue) {
 
-			if (Objects.equals(jsonParserFieldName, "date")) {
+			if (Objects.equals(jsonParserFieldName, "folderName")) {
 				if (jsonParserFieldValue != null) {
-					jiraAPIHandler.setDate(
-						toDate((String)jsonParserFieldValue));
+					jiraAPIHandler.setFolderName((String)jsonParserFieldValue);
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "id")) {
@@ -186,15 +173,14 @@ public class JiraAPIHandlerSerDes {
 						Long.valueOf((String)jsonParserFieldValue));
 				}
 			}
-			else if (Objects.equals(jsonParserFieldName, "ticketNumber")) {
+			else if (Objects.equals(jsonParserFieldName, "mimeType")) {
 				if (jsonParserFieldValue != null) {
-					jiraAPIHandler.setTicketNumber(
-						(String)jsonParserFieldValue);
+					jiraAPIHandler.setMimeType((String)jsonParserFieldValue);
 				}
 			}
-			else if (Objects.equals(jsonParserFieldName, "title")) {
+			else if (Objects.equals(jsonParserFieldName, "name")) {
 				if (jsonParserFieldValue != null) {
-					jiraAPIHandler.setTitle((String)jsonParserFieldValue);
+					jiraAPIHandler.setName((String)jsonParserFieldValue);
 				}
 			}
 			else {

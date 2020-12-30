@@ -4,7 +4,8 @@ import com.liferay.portal.vulcan.graphql.servlet.ServletData;
 
 import com.moi.api.handler.internal.graphql.mutation.v1_0.Mutation;
 import com.moi.api.handler.internal.graphql.query.v1_0.Query;
-import com.moi.api.handler.resource.v1_0.DocumentResultResource;
+import com.moi.api.handler.resource.v1_0.JiraAPIHandlerResource;
+import com.moi.api.handler.resource.v1_0.MosipAPIHandlerResource;
 
 import javax.annotation.Generated;
 
@@ -25,8 +26,10 @@ public class ServletDataImpl implements ServletData {
 
 	@Activate
 	public void activate(BundleContext bundleContext) {
-		Mutation.setDocumentResultResourceComponentServiceObjects(
-			_documentResultResourceComponentServiceObjects);
+		Mutation.setJiraAPIHandlerResourceComponentServiceObjects(
+			_jiraAPIHandlerResourceComponentServiceObjects);
+		Mutation.setMosipAPIHandlerResourceComponentServiceObjects(
+			_mosipAPIHandlerResourceComponentServiceObjects);
 	}
 
 	@Override
@@ -45,7 +48,11 @@ public class ServletDataImpl implements ServletData {
 	}
 
 	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
-	private ComponentServiceObjects<DocumentResultResource>
-		_documentResultResourceComponentServiceObjects;
+	private ComponentServiceObjects<JiraAPIHandlerResource>
+		_jiraAPIHandlerResourceComponentServiceObjects;
+
+	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
+	private ComponentServiceObjects<MosipAPIHandlerResource>
+		_mosipAPIHandlerResourceComponentServiceObjects;
 
 }

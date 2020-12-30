@@ -12,10 +12,6 @@ import com.liferay.portal.vulcan.util.ObjectMapperUtil;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
@@ -40,18 +36,20 @@ public class JiraAPIHandler {
 	}
 
 	@Schema
-	public Date getDate() {
-		return date;
+	public String getFolderName() {
+		return folderName;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setFolderName(String folderName) {
+		this.folderName = folderName;
 	}
 
 	@JsonIgnore
-	public void setDate(UnsafeSupplier<Date, Exception> dateUnsafeSupplier) {
+	public void setFolderName(
+		UnsafeSupplier<String, Exception> folderNameUnsafeSupplier) {
+
 		try {
-			date = dateUnsafeSupplier.get();
+			folderName = folderNameUnsafeSupplier.get();
 		}
 		catch (RuntimeException re) {
 			throw re;
@@ -63,7 +61,7 @@ public class JiraAPIHandler {
 
 	@GraphQLField
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected Date date;
+	protected String folderName;
 
 	@Schema
 	public Long getId() {
@@ -92,20 +90,20 @@ public class JiraAPIHandler {
 	protected Long id;
 
 	@Schema
-	public String getTicketNumber() {
-		return ticketNumber;
+	public String getMimeType() {
+		return mimeType;
 	}
 
-	public void setTicketNumber(String ticketNumber) {
-		this.ticketNumber = ticketNumber;
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
 	}
 
 	@JsonIgnore
-	public void setTicketNumber(
-		UnsafeSupplier<String, Exception> ticketNumberUnsafeSupplier) {
+	public void setMimeType(
+		UnsafeSupplier<String, Exception> mimeTypeUnsafeSupplier) {
 
 		try {
-			ticketNumber = ticketNumberUnsafeSupplier.get();
+			mimeType = mimeTypeUnsafeSupplier.get();
 		}
 		catch (RuntimeException re) {
 			throw re;
@@ -117,23 +115,21 @@ public class JiraAPIHandler {
 
 	@GraphQLField
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected String ticketNumber;
+	protected String mimeType;
 
 	@Schema
-	public String getTitle() {
-		return title;
+	public String getName() {
+		return name;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@JsonIgnore
-	public void setTitle(
-		UnsafeSupplier<String, Exception> titleUnsafeSupplier) {
-
+	public void setName(UnsafeSupplier<String, Exception> nameUnsafeSupplier) {
 		try {
-			title = titleUnsafeSupplier.get();
+			name = nameUnsafeSupplier.get();
 		}
 		catch (RuntimeException re) {
 			throw re;
@@ -145,7 +141,7 @@ public class JiraAPIHandler {
 
 	@GraphQLField
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected String title;
+	protected String name;
 
 	@Override
 	public boolean equals(Object object) {
@@ -174,19 +170,16 @@ public class JiraAPIHandler {
 
 		sb.append("{");
 
-		DateFormat liferayToJSONDateFormat = new SimpleDateFormat(
-			"yyyy-MM-dd'T'HH:mm:ss'Z'");
-
-		if (date != null) {
+		if (folderName != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
-			sb.append("\"date\": ");
+			sb.append("\"folderName\": ");
 
 			sb.append("\"");
 
-			sb.append(liferayToJSONDateFormat.format(date));
+			sb.append(_escape(folderName));
 
 			sb.append("\"");
 		}
@@ -201,30 +194,30 @@ public class JiraAPIHandler {
 			sb.append(id);
 		}
 
-		if (ticketNumber != null) {
+		if (mimeType != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
-			sb.append("\"ticketNumber\": ");
+			sb.append("\"mimeType\": ");
 
 			sb.append("\"");
 
-			sb.append(_escape(ticketNumber));
+			sb.append(_escape(mimeType));
 
 			sb.append("\"");
 		}
 
-		if (title != null) {
+		if (name != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
-			sb.append("\"title\": ");
+			sb.append("\"name\": ");
 
 			sb.append("\"");
 
-			sb.append(_escape(title));
+			sb.append(_escape(name));
 
 			sb.append("\"");
 		}

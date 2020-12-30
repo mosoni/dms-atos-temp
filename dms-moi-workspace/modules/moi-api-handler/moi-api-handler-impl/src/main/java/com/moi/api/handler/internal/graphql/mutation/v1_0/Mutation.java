@@ -9,8 +9,9 @@ import com.liferay.portal.vulcan.graphql.annotation.GraphQLName;
 import com.liferay.portal.vulcan.multipart.MultipartBody;
 import com.liferay.portal.vulcan.pagination.Page;
 
-import com.moi.api.handler.dto.v1_0.JiraAPIHandler;
-import com.moi.api.handler.resource.v1_0.DocumentResultResource;
+import com.moi.api.handler.dto.v1_0.DocumentResult;
+import com.moi.api.handler.resource.v1_0.JiraAPIHandlerResource;
+import com.moi.api.handler.resource.v1_0.MosipAPIHandlerResource;
 
 import java.util.function.BiFunction;
 
@@ -30,12 +31,80 @@ import org.osgi.service.component.ComponentServiceObjects;
 @Generated("")
 public class Mutation {
 
-	public static void setDocumentResultResourceComponentServiceObjects(
-		ComponentServiceObjects<DocumentResultResource>
-			documentResultResourceComponentServiceObjects) {
+	public static void setJiraAPIHandlerResourceComponentServiceObjects(
+		ComponentServiceObjects<JiraAPIHandlerResource>
+			jiraAPIHandlerResourceComponentServiceObjects) {
 
-		_documentResultResourceComponentServiceObjects =
-			documentResultResourceComponentServiceObjects;
+		_jiraAPIHandlerResourceComponentServiceObjects =
+			jiraAPIHandlerResourceComponentServiceObjects;
+	}
+
+	public static void setMosipAPIHandlerResourceComponentServiceObjects(
+		ComponentServiceObjects<MosipAPIHandlerResource>
+			mosipAPIHandlerResourceComponentServiceObjects) {
+
+		_mosipAPIHandlerResourceComponentServiceObjects =
+			mosipAPIHandlerResourceComponentServiceObjects;
+	}
+
+	@GraphQLField
+	@GraphQLName(
+		value = "uploadMosipDocumentModuleTypeConsumerCodeDocumentTypeIdentifierNumberMetadataPreviousModuleTypePreviousIdentifierMultipartBody",
+		description = "null"
+	)
+	public java.util.Collection<DocumentResult> uploadMosipDocument(
+			@GraphQLName("ModuleType") String ModuleType,
+			@GraphQLName("ConsumerCode") String ConsumerCode,
+			@GraphQLName("DocumentType") String DocumentType,
+			@GraphQLName("IdentifierNumber") String IdentifierNumber,
+			@GraphQLName("Metadata") String Metadata,
+			@GraphQLName("PreviousModuleType") String PreviousModuleType,
+			@GraphQLName("PreviousIdentifier") String PreviousIdentifier,
+			@GraphQLName("multipartBody") MultipartBody multipartBody)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_mosipAPIHandlerResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			mosipAPIHandlerResource -> {
+				Page paginationPage =
+					mosipAPIHandlerResource.uploadMosipDocument(
+						ModuleType, ConsumerCode, DocumentType,
+						IdentifierNumber, Metadata, PreviousModuleType,
+						PreviousIdentifier, multipartBody);
+
+				return paginationPage.getItems();
+			});
+	}
+
+	@GraphQLField
+	@GraphQLName(
+		value = "updateMosipDocumentModuleTypeConsumerCodeDocumentTypeIdentifierNumberMetadataPreviousModuleTypePreviousIdentifierMultipartBody",
+		description = "null"
+	)
+	public java.util.Collection<DocumentResult> updateMosipDocument(
+			@GraphQLName("ModuleType") String ModuleType,
+			@GraphQLName("ConsumerCode") String ConsumerCode,
+			@GraphQLName("DocumentType") String DocumentType,
+			@GraphQLName("IdentifierNumber") String IdentifierNumber,
+			@GraphQLName("Metadata") String Metadata,
+			@GraphQLName("PreviousModuleType") String PreviousModuleType,
+			@GraphQLName("PreviousIdentifier") String PreviousIdentifier,
+			@GraphQLName("multipartBody") MultipartBody multipartBody)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_mosipAPIHandlerResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			mosipAPIHandlerResource -> {
+				Page paginationPage =
+					mosipAPIHandlerResource.updateMosipDocument(
+						ModuleType, ConsumerCode, DocumentType,
+						IdentifierNumber, Metadata, PreviousModuleType,
+						PreviousIdentifier, multipartBody);
+
+				return paginationPage.getItems();
+			});
 	}
 
 	@GraphQLField
@@ -43,7 +112,7 @@ public class Mutation {
 		value = "uploadJiraDocumentConsumerCodeTicketNumberDocumentTitleMetadataMultipartBody",
 		description = "null"
 	)
-	public java.util.Collection<JiraAPIHandler> uploadJiraDocument(
+	public java.util.Collection<DocumentResult> uploadJiraDocument(
 			@GraphQLName("consumerCode") String consumerCode,
 			@GraphQLName("ticketNumber") String ticketNumber,
 			@GraphQLName("documentTitle") String documentTitle,
@@ -52,10 +121,10 @@ public class Mutation {
 		throws Exception {
 
 		return _applyComponentServiceObjects(
-			_documentResultResourceComponentServiceObjects,
+			_jiraAPIHandlerResourceComponentServiceObjects,
 			this::_populateResourceContext,
-			documentResultResource -> {
-				Page paginationPage = documentResultResource.uploadJiraDocument(
+			jiraAPIHandlerResource -> {
+				Page paginationPage = jiraAPIHandlerResource.uploadJiraDocument(
 					consumerCode, ticketNumber, documentTitle, metadata,
 					multipartBody);
 
@@ -102,21 +171,37 @@ public class Mutation {
 	}
 
 	private void _populateResourceContext(
-			DocumentResultResource documentResultResource)
+			JiraAPIHandlerResource jiraAPIHandlerResource)
 		throws Exception {
 
-		documentResultResource.setContextAcceptLanguage(_acceptLanguage);
-		documentResultResource.setContextCompany(_company);
-		documentResultResource.setContextHttpServletRequest(
+		jiraAPIHandlerResource.setContextAcceptLanguage(_acceptLanguage);
+		jiraAPIHandlerResource.setContextCompany(_company);
+		jiraAPIHandlerResource.setContextHttpServletRequest(
 			_httpServletRequest);
-		documentResultResource.setContextHttpServletResponse(
+		jiraAPIHandlerResource.setContextHttpServletResponse(
 			_httpServletResponse);
-		documentResultResource.setContextUriInfo(_uriInfo);
-		documentResultResource.setContextUser(_user);
+		jiraAPIHandlerResource.setContextUriInfo(_uriInfo);
+		jiraAPIHandlerResource.setContextUser(_user);
 	}
 
-	private static ComponentServiceObjects<DocumentResultResource>
-		_documentResultResourceComponentServiceObjects;
+	private void _populateResourceContext(
+			MosipAPIHandlerResource mosipAPIHandlerResource)
+		throws Exception {
+
+		mosipAPIHandlerResource.setContextAcceptLanguage(_acceptLanguage);
+		mosipAPIHandlerResource.setContextCompany(_company);
+		mosipAPIHandlerResource.setContextHttpServletRequest(
+			_httpServletRequest);
+		mosipAPIHandlerResource.setContextHttpServletResponse(
+			_httpServletResponse);
+		mosipAPIHandlerResource.setContextUriInfo(_uriInfo);
+		mosipAPIHandlerResource.setContextUser(_user);
+	}
+
+	private static ComponentServiceObjects<JiraAPIHandlerResource>
+		_jiraAPIHandlerResourceComponentServiceObjects;
+	private static ComponentServiceObjects<MosipAPIHandlerResource>
+		_mosipAPIHandlerResourceComponentServiceObjects;
 
 	private AcceptLanguage _acceptLanguage;
 	private com.liferay.portal.kernel.model.Company _company;

@@ -66,7 +66,9 @@ public class OpenAPIResourceImpl {
 
 	private final Set<Class<?>> _resourceClasses = new HashSet<Class<?>>() {
 		{
-			add(DocumentResultResourceImpl.class);
+			add(MosipAPIHandlerResourceImpl.class);
+
+			add(JiraAPIHandlerResourceImpl.class);
 
 			add(OpenAPIResourceImpl.class);
 		}

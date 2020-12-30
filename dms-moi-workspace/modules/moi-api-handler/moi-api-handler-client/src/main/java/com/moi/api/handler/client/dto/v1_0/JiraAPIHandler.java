@@ -3,7 +3,6 @@ package com.moi.api.handler.client.dto.v1_0;
 import com.moi.api.handler.client.function.UnsafeSupplier;
 import com.moi.api.handler.client.serdes.v1_0.JiraAPIHandlerSerDes;
 
-import java.util.Date;
 import java.util.Objects;
 
 import javax.annotation.Generated;
@@ -19,24 +18,26 @@ public class JiraAPIHandler implements Cloneable {
 		return JiraAPIHandlerSerDes.toDTO(json);
 	}
 
-	public Date getDate() {
-		return date;
+	public String getFolderName() {
+		return folderName;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setFolderName(String folderName) {
+		this.folderName = folderName;
 	}
 
-	public void setDate(UnsafeSupplier<Date, Exception> dateUnsafeSupplier) {
+	public void setFolderName(
+		UnsafeSupplier<String, Exception> folderNameUnsafeSupplier) {
+
 		try {
-			date = dateUnsafeSupplier.get();
+			folderName = folderNameUnsafeSupplier.get();
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	protected Date date;
+	protected String folderName;
 
 	public Long getId() {
 		return id;
@@ -57,47 +58,45 @@ public class JiraAPIHandler implements Cloneable {
 
 	protected Long id;
 
-	public String getTicketNumber() {
-		return ticketNumber;
+	public String getMimeType() {
+		return mimeType;
 	}
 
-	public void setTicketNumber(String ticketNumber) {
-		this.ticketNumber = ticketNumber;
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
 	}
 
-	public void setTicketNumber(
-		UnsafeSupplier<String, Exception> ticketNumberUnsafeSupplier) {
+	public void setMimeType(
+		UnsafeSupplier<String, Exception> mimeTypeUnsafeSupplier) {
 
 		try {
-			ticketNumber = ticketNumberUnsafeSupplier.get();
+			mimeType = mimeTypeUnsafeSupplier.get();
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	protected String ticketNumber;
+	protected String mimeType;
 
-	public String getTitle() {
-		return title;
+	public String getName() {
+		return name;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public void setTitle(
-		UnsafeSupplier<String, Exception> titleUnsafeSupplier) {
-
+	public void setName(UnsafeSupplier<String, Exception> nameUnsafeSupplier) {
 		try {
-			title = titleUnsafeSupplier.get();
+			name = nameUnsafeSupplier.get();
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	protected String title;
+	protected String name;
 
 	@Override
 	public JiraAPIHandler clone() throws CloneNotSupportedException {
