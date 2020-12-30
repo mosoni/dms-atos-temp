@@ -1,15 +1,15 @@
 /**
  * 
  */
-package com.moi.dms.constants;
+package com.moi.dms.mosip.constants;
 
 /**
- * The purpose of this class is to manage all constants related to Mosip
+ * The purpose of this class is to manage Error constants for Mosip
  * 
- * @author Mohit
+ * @author Mohit Soni
  *
  */
-public class MosipConstants {
+public class MosipErrorConstants {
 
 	/**
 	 * Message to be displayed when Mosip Authorization is failed
@@ -26,5 +26,4 @@ public class MosipConstants {
 	 */
 	public static final String MOSIP_INVALID_DOCUMENT_TYPE="Document Type is invalid";
 
-	
 }

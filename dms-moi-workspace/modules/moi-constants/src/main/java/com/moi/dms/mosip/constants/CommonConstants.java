@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.moi.dms.constants;
+package com.moi.dms.mosip.constants;
 
 
 /**

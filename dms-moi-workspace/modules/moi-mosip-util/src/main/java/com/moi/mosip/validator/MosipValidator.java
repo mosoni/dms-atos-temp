@@ -1,6 +1,15 @@
 package com.moi.mosip.validator;
 
-import com.moi.dms.constants.MosipConstants;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.Validator;
+import com.moi.dms.mosip.constants.MosipErrorConstants;
+import com.moi.dms.trace.request.model.MOITraceRequest;
+import com.moi.dms.trace.request.service.MOITraceRequestLocalServiceUtil;
+
+import java.io.File;
+import java.util.Date;
 
 /**
  * The purpose of this class is to trace and validate Mosip Request
@@ -18,27 +27,66 @@ public class MosipValidator {
 	 * 
 	 * @return null if request is valid else returns message
 	 */
-	public static String validateRequest(String consumerCode, String documentType) {
+	public static String validateRequest(String phase,String action,String moduleType,
+			String consumerCode, String documentType, String identifierNumber,
+			String metadata, String previousModuleType,
+			String previousIdentifier, long userId, String requestedOperation,
+			File file) {
 
 		/*
 		 * Entry Point : Trace the request
 		 */
+		MOITraceRequest moiTraceRequest = null;
+		try {
+			moiTraceRequest = MOITraceRequestLocalServiceUtil
+					.addMOITraceRequest(String.valueOf(userId), new Date(),
+							consumerCode, null, requestedOperation,
+							documentType, false, null, null);
+		} catch (PortalException e) {
+			_log.error(e);
+		}
 
 		/* Validating Authority */
-		if (!MosipAuthorizationValidator.isRequestAuthorized()) {
+		if (!MosipAuthorizationValidator.isRequestAuthorized(phase, action)) {
 			/* Update Trace Request */
-			return MosipConstants.MOSIP_AUTHORIZATION_LEVEL_MESSAGE;
+			updateTraceRequest(
+					MosipErrorConstants.MOSIP_AUTHORIZATION_LEVEL_MESSAGE,
+					moiTraceRequest);
+			return MosipErrorConstants.MOSIP_AUTHORIZATION_LEVEL_MESSAGE;
 		}
 		if (!ConsumerCodeValidator.isConsumerCodeValid(consumerCode)) {
 			/* Update Trace Request */
-			return MosipConstants.MOSIP_INVALID_CONSUMER_CODE;
+			updateTraceRequest(MosipErrorConstants.MOSIP_INVALID_CONSUMER_CODE,
+					moiTraceRequest);
+			return MosipErrorConstants.MOSIP_INVALID_CONSUMER_CODE;
 		}
 		if (!DocumentTypeValidator.isDocumentTypeValid(documentType)) {
 			/* Update Trace Request */
-			return MosipConstants.MOSIP_INVALID_DOCUMENT_TYPE;
+			updateTraceRequest(MosipErrorConstants.MOSIP_INVALID_DOCUMENT_TYPE,
+					moiTraceRequest);
+			return MosipErrorConstants.MOSIP_INVALID_DOCUMENT_TYPE;
 		}
 
 		return null;
 	}
 
+	/**
+	 * This method is used to Update trace request with result and date
+	 *
+	 * @param result
+	 * @param moiTraceRequest :
+	 */
+	private static void updateTraceRequest(String result,
+			MOITraceRequest moiTraceRequest) {
+
+		if (Validator.isNotNull(moiTraceRequest)) {
+			moiTraceRequest.setRequestResult(result);
+			moiTraceRequest.setRequestResultDate(new Date());
+			MOITraceRequestLocalServiceUtil
+					.updateMOITraceRequest(moiTraceRequest);
+		}
+	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+			MosipValidator.class);
 }
