@@ -187,6 +187,61 @@ public interface ConsumerRegistrationPersistence
 	public int countByConsumerId(String consumerId);
 
 	/**
+	 * Returns the consumer registration where consumerId = &#63; and supportedDocumentType = &#63; or throws a <code>NoSuchConsumerRegistrationException</code> if it could not be found.
+	 *
+	 * @param consumerId the consumer ID
+	 * @param supportedDocumentType the supported document type
+	 * @return the matching consumer registration
+	 * @throws NoSuchConsumerRegistrationException if a matching consumer registration could not be found
+	 */
+	public ConsumerRegistration findByConsumerIdSupportedDocumentType(
+			String consumerId, String supportedDocumentType)
+		throws NoSuchConsumerRegistrationException;
+
+	/**
+	 * Returns the consumer registration where consumerId = &#63; and supportedDocumentType = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param consumerId the consumer ID
+	 * @param supportedDocumentType the supported document type
+	 * @return the matching consumer registration, or <code>null</code> if a matching consumer registration could not be found
+	 */
+	public ConsumerRegistration fetchByConsumerIdSupportedDocumentType(
+		String consumerId, String supportedDocumentType);
+
+	/**
+	 * Returns the consumer registration where consumerId = &#63; and supportedDocumentType = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param consumerId the consumer ID
+	 * @param supportedDocumentType the supported document type
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching consumer registration, or <code>null</code> if a matching consumer registration could not be found
+	 */
+	public ConsumerRegistration fetchByConsumerIdSupportedDocumentType(
+		String consumerId, String supportedDocumentType,
+		boolean useFinderCache);
+
+	/**
+	 * Removes the consumer registration where consumerId = &#63; and supportedDocumentType = &#63; from the database.
+	 *
+	 * @param consumerId the consumer ID
+	 * @param supportedDocumentType the supported document type
+	 * @return the consumer registration that was removed
+	 */
+	public ConsumerRegistration removeByConsumerIdSupportedDocumentType(
+			String consumerId, String supportedDocumentType)
+		throws NoSuchConsumerRegistrationException;
+
+	/**
+	 * Returns the number of consumer registrations where consumerId = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * @param consumerId the consumer ID
+	 * @param supportedDocumentType the supported document type
+	 * @return the number of matching consumer registrations
+	 */
+	public int countByConsumerIdSupportedDocumentType(
+		String consumerId, String supportedDocumentType);
+
+	/**
 	 * Returns all the consumer registrations where consumerName = &#63;.
 	 *
 	 * @param consumerName the consumer name

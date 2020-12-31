@@ -80,6 +80,21 @@ public class ConsumerRegistrationLocalServiceUtil {
 	}
 
 	/**
+	 * This method returns count with respect to ConsumerId/Consumer Code
+	 * and Document Type
+	 *
+	 * @param consumerId
+	 * @param documentType
+	 * @return : count
+	 */
+	public static long countByConsumerIdDocumentType(
+		String consumerId, String documentType) {
+
+		return getService().countByConsumerIdDocumentType(
+			consumerId, documentType);
+	}
+
+	/**
 	 * Creates a new consumer registration with the primary key. Does not add the consumer registration to the database.
 	 *
 	 * @param registrationId the primary key for the new consumer registration
@@ -235,6 +250,12 @@ public class ConsumerRegistrationLocalServiceUtil {
 		return getService().getActionableDynamicQuery();
 	}
 
+	/**
+	 * Returns all the consumer registrations
+	 *
+	 * @param consumerId
+	 * @return List<ConsumerRegistration>
+	 */
 	public static java.util.List
 		<com.moi.dms.consumer.registration.model.ConsumerRegistration>
 			getAllConsumerRegistrations() {
@@ -256,6 +277,12 @@ public class ConsumerRegistrationLocalServiceUtil {
 		return getService().getConsumerRegistration(registrationId);
 	}
 
+	/**
+	 * Returns the consumer registration with the Consumer Id.
+	 *
+	 * @param consumerId
+	 * @return List<ConsumerRegistration>
+	 */
 	public static java.util.List
 		<com.moi.dms.consumer.registration.model.ConsumerRegistration>
 			getConsumerRegistrationByConsumerId(String consumerId) {
@@ -263,6 +290,14 @@ public class ConsumerRegistrationLocalServiceUtil {
 		return getService().getConsumerRegistrationByConsumerId(consumerId);
 	}
 
+	/**
+	 * Returns the consumer registration with the Consumer Id.
+	 *
+	 * @param consumerId
+	 * @param start
+	 * @param end
+	 * @return the consumer registration
+	 */
 	public static java.util.List
 		<com.moi.dms.consumer.registration.model.ConsumerRegistration>
 			getConsumerRegistrationByConsumerId(
@@ -272,6 +307,15 @@ public class ConsumerRegistrationLocalServiceUtil {
 			consumerId, start, end);
 	}
 
+	/**
+	 * Returns the consumer registration with the Consumer Id.
+	 *
+	 * @param consumerId
+	 * @param start
+	 * @param end
+	 * @param orderByComparator
+	 * @return List<ConsumerRegistration>
+	 */
 	public static java.util.List
 		<com.moi.dms.consumer.registration.model.ConsumerRegistration>
 			getConsumerRegistrationByConsumerId(
@@ -284,6 +328,15 @@ public class ConsumerRegistrationLocalServiceUtil {
 			consumerId, start, end, orderByComparator);
 	}
 
+	/**
+	 * Returns the consumer registrations with keywords.
+	 *
+	 * @param keywords
+	 * @param start
+	 * @param end
+	 * @param orderByComparator
+	 * @return List<ConsumerRegistration>
+	 */
 	public static java.util.List
 		<com.moi.dms.consumer.registration.model.ConsumerRegistration>
 			getConsumerRegistrationByKeywords(
@@ -296,6 +349,12 @@ public class ConsumerRegistrationLocalServiceUtil {
 			keywords, start, end, orderByComparator);
 	}
 
+	/**
+	 * Returns the consumer registrations with keywords.
+	 *
+	 * @param keywords
+	 * @return long
+	 */
 	public static long getConsumerRegistrationCountByKeywords(String keywords) {
 		return getService().getConsumerRegistrationCountByKeywords(keywords);
 	}

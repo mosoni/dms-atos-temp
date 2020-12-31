@@ -39,7 +39,7 @@ public class ConsumerRegistrationServiceUtil {
 	 */
 
 	/**
-	 * Remote service method to add new consumer registration.
+	 * Remote service to add new consumer registration.
 	 *
 	 * @param consumerName
 	 * @param consumerId
@@ -61,6 +61,13 @@ public class ConsumerRegistrationServiceUtil {
 			consumerStatus);
 	}
 
+	/**
+	 * Delete the consumer registration with the primary key.
+	 *
+	 * @param registrationId the primary key of the consumer registration
+	 * @return the consumer registration
+	 * @throws PortalException if a consumer registration with the primary key could not be found
+	 */
 	public static com.moi.dms.consumer.registration.model.ConsumerRegistration
 			deleteConsumerRegistration(long registrationId)
 		throws com.liferay.portal.kernel.exception.PortalException {
@@ -68,6 +75,13 @@ public class ConsumerRegistrationServiceUtil {
 		return getService().deleteConsumerRegistration(registrationId);
 	}
 
+	/**
+	 * Returns all the consumer registrations
+	 *
+	 * @param consumerId
+	 * @return the consumer registration
+	 * @throws PortalException
+	 */
 	public static java.util.List
 		<com.moi.dms.consumer.registration.model.ConsumerRegistration>
 			getAllConsumerRegistrations() {
@@ -75,6 +89,13 @@ public class ConsumerRegistrationServiceUtil {
 		return getService().getAllConsumerRegistrations();
 	}
 
+	/**
+	 * Returns the consumer registration with the primary key.
+	 *
+	 * @param registrationId the primary key of the consumer registration
+	 * @return the consumer registration
+	 * @throws PortalException if a consumer registration with the primary key could not be found
+	 */
 	public static com.moi.dms.consumer.registration.model.ConsumerRegistration
 			getConsumerRegistration(long registrationId)
 		throws com.liferay.portal.kernel.exception.PortalException {
@@ -82,6 +103,13 @@ public class ConsumerRegistrationServiceUtil {
 		return getService().getConsumerRegistration(registrationId);
 	}
 
+	/**
+	 * Returns the consumer registration with the Consumer Id.
+	 *
+	 * @param consumerId
+	 * @return the consumer registration
+	 * @throws PortalException
+	 */
 	public static java.util.List
 		<com.moi.dms.consumer.registration.model.ConsumerRegistration>
 			getConsumerRegistrationByConsumerId(String consumerId) {
@@ -89,6 +117,15 @@ public class ConsumerRegistrationServiceUtil {
 		return getService().getConsumerRegistrationByConsumerId(consumerId);
 	}
 
+	/**
+	 * Returns the consumer registrations with keywords.
+	 *
+	 * @param keywords
+	 * @param start
+	 * @param end
+	 * @param orderByComparator
+	 * @return List<ConsumerRegistration>
+	 */
 	public static java.util.List
 		<com.moi.dms.consumer.registration.model.ConsumerRegistration>
 			getConsumerRegistrationByKeywords(
@@ -101,6 +138,12 @@ public class ConsumerRegistrationServiceUtil {
 			keywords, start, end, orderByComparator);
 	}
 
+	/**
+	 * Returns the consumer registrations count with keywords.
+	 *
+	 * @param keywords
+	 * @return long
+	 */
 	public static long getConsumerRegistrationCountByKeywords(String keywords) {
 		return getService().getConsumerRegistrationCountByKeywords(keywords);
 	}

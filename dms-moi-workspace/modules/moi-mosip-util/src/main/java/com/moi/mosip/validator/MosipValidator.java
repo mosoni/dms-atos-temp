@@ -4,6 +4,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.moi.dms.consumer.registration.service.ConsumerRegistrationLocalServiceUtil;
 import com.moi.dms.mosip.constants.MosipErrorConstants;
 import com.moi.dms.trace.request.model.MOITraceRequest;
 import com.moi.dms.trace.request.service.MOITraceRequestLocalServiceUtil;
@@ -54,17 +55,12 @@ public class MosipValidator {
 					moiTraceRequest);
 			return MosipErrorConstants.MOSIP_AUTHORIZATION_LEVEL_MESSAGE;
 		}
-		if (!ConsumerCodeValidator.isConsumerCodeValid(consumerCode)) {
+		if (!isConsumerCodeValid(consumerCode, documentType)) {
 			/* Update Trace Request */
-			updateTraceRequest(MosipErrorConstants.MOSIP_INVALID_CONSUMER_CODE,
+			updateTraceRequest(
+					MosipErrorConstants.MOSIP_INVALID_CONSUMER_CODE_OR_DOCUMENT_TYPE,
 					moiTraceRequest);
-			return MosipErrorConstants.MOSIP_INVALID_CONSUMER_CODE;
-		}
-		if (!DocumentTypeValidator.isDocumentTypeValid(documentType)) {
-			/* Update Trace Request */
-			updateTraceRequest(MosipErrorConstants.MOSIP_INVALID_DOCUMENT_TYPE,
-					moiTraceRequest);
-			return MosipErrorConstants.MOSIP_INVALID_DOCUMENT_TYPE;
+			return MosipErrorConstants.MOSIP_INVALID_CONSUMER_CODE_OR_DOCUMENT_TYPE;
 		}
 
 		return null;
@@ -87,6 +83,20 @@ public class MosipValidator {
 		}
 	}
 
+	
+	/**
+	 * This method validates Consumer Code with Document Type.
+	 * 
+	 * @return true if Consumer Code and Document Type is valid
+	 */
+	private static boolean isConsumerCodeValid(String consumerCode,
+			String documentType) {
+
+		long count = ConsumerRegistrationLocalServiceUtil
+				.countByConsumerIdDocumentType(consumerCode, documentType);
+
+		return (count >= 1) ? true : false;
+	}
 	private static final Log _log = LogFactoryUtil.getLog(
 			MosipValidator.class);
 }

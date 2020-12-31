@@ -67,7 +67,7 @@ import java.util.Map;
 public class ConsumerRegistrationServiceSoap {
 
 	/**
-	 * Remote service method to add new consumer registration.
+	 * Remote service to add new consumer registration.
 	 *
 	 * @param consumerName
 	 * @param consumerId
@@ -149,6 +149,13 @@ public class ConsumerRegistrationServiceSoap {
 		}
 	}
 
+	/**
+	 * Delete the consumer registration with the primary key.
+	 *
+	 * @param registrationId the primary key of the consumer registration
+	 * @return the consumer registration
+	 * @throws PortalException if a consumer registration with the primary key could not be found
+	 */
 	public static
 		com.moi.dms.consumer.registration.model.ConsumerRegistrationSoap
 				deleteConsumerRegistration(long registrationId)
@@ -170,6 +177,13 @@ public class ConsumerRegistrationServiceSoap {
 		}
 	}
 
+	/**
+	 * Returns the consumer registration with the primary key.
+	 *
+	 * @param registrationId the primary key of the consumer registration
+	 * @return the consumer registration
+	 * @throws PortalException if a consumer registration with the primary key could not be found
+	 */
 	public static
 		com.moi.dms.consumer.registration.model.ConsumerRegistrationSoap
 				getConsumerRegistration(long registrationId)
@@ -191,6 +205,13 @@ public class ConsumerRegistrationServiceSoap {
 		}
 	}
 
+	/**
+	 * Returns the consumer registration with the Consumer Id.
+	 *
+	 * @param consumerId
+	 * @return the consumer registration
+	 * @throws PortalException
+	 */
 	public static
 		com.moi.dms.consumer.registration.model.ConsumerRegistrationSoap[]
 				getConsumerRegistrationByConsumerId(String consumerId)
@@ -213,6 +234,13 @@ public class ConsumerRegistrationServiceSoap {
 		}
 	}
 
+	/**
+	 * Returns all the consumer registrations
+	 *
+	 * @param consumerId
+	 * @return the consumer registration
+	 * @throws PortalException
+	 */
 	public static
 		com.moi.dms.consumer.registration.model.ConsumerRegistrationSoap[]
 				getAllConsumerRegistrations()
@@ -235,6 +263,15 @@ public class ConsumerRegistrationServiceSoap {
 		}
 	}
 
+	/**
+	 * Returns the consumer registrations with keywords.
+	 *
+	 * @param keywords
+	 * @param start
+	 * @param end
+	 * @param orderByComparator
+	 * @return List<ConsumerRegistration>
+	 */
 	public static
 		com.moi.dms.consumer.registration.model.ConsumerRegistrationSoap[]
 				getConsumerRegistrationByKeywords(
@@ -262,6 +299,12 @@ public class ConsumerRegistrationServiceSoap {
 		}
 	}
 
+	/**
+	 * Returns the consumer registrations count with keywords.
+	 *
+	 * @param keywords
+	 * @return long
+	 */
 	public static long getConsumerRegistrationCountByKeywords(String keywords)
 		throws RemoteException {
 

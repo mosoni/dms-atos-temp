@@ -246,6 +246,20 @@ public class ConsumerRegistrationLocalServiceImpl
 		return dynamicQuery;
 	}
 
+	/**
+	 * This method returns count with respect to ConsumerId/Consumer Code
+	 * and Document Type
+	 *
+	 * @param consumerId
+	 * @param documentType
+	 * @return : count
+	 */
+	public long countByConsumerIdDocumentType(String consumerId,
+			String documentType) {
+		return consumerRegistrationPersistence.countByConsumerIdSupportedDocumentType(
+				consumerId, documentType);
+
+	}
 	@Override
 	public ConsumerRegistration addConsumerRegistration(
 			ConsumerRegistration consumerRegistration) {

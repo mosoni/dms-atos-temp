@@ -14,16 +14,11 @@ public class MosipErrorConstants {
 	/**
 	 * Message to be displayed when Mosip Authorization is failed
 	 */
-	public static final String MOSIP_AUTHORIZATION_LEVEL_MESSAGE="Authorization level Access Denied";
+	public static final String MOSIP_AUTHORIZATION_LEVEL_MESSAGE="Access Denied ! {phase} does not have access to {action} the {documentType}";
 	
 	/**
 	 * Message to be displayed when Mosip Consumer Code is invalid
 	 */
-	public static final String MOSIP_INVALID_CONSUMER_CODE="Consumer Code is invalid";
-	
-	/**
-	 * Message to be displayed when Mosip Document Type is invalid
-	 */
-	public static final String MOSIP_INVALID_DOCUMENT_TYPE="Document Type is invalid";
+	public static final String MOSIP_INVALID_CONSUMER_CODE_OR_DOCUMENT_TYPE="Consumer Code/Document Type is invalid";
 
 }

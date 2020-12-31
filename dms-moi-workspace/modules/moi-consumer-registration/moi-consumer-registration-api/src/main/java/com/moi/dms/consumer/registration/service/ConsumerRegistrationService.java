@@ -57,7 +57,7 @@ public interface ConsumerRegistrationService extends BaseService {
 	 */
 
 	/**
-	 * Remote service method to add new consumer registration.
+	 * Remote service to add new consumer registration.
 	 *
 	 * @param consumerName
 	 * @param consumerId
@@ -73,25 +73,68 @@ public interface ConsumerRegistrationService extends BaseService {
 			String consumerStatus)
 		throws PortalException;
 
+	/**
+	 * Delete the consumer registration with the primary key.
+	 *
+	 * @param registrationId the primary key of the consumer registration
+	 * @return the consumer registration
+	 * @throws PortalException if a consumer registration with the primary key could not be found
+	 */
 	public ConsumerRegistration deleteConsumerRegistration(long registrationId)
 		throws PortalException;
 
+	/**
+	 * Returns all the consumer registrations
+	 *
+	 * @param consumerId
+	 * @return the consumer registration
+	 * @throws PortalException
+	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<ConsumerRegistration> getAllConsumerRegistrations();
 
+	/**
+	 * Returns the consumer registration with the primary key.
+	 *
+	 * @param registrationId the primary key of the consumer registration
+	 * @return the consumer registration
+	 * @throws PortalException if a consumer registration with the primary key could not be found
+	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ConsumerRegistration getConsumerRegistration(long registrationId)
 		throws PortalException;
 
+	/**
+	 * Returns the consumer registration with the Consumer Id.
+	 *
+	 * @param consumerId
+	 * @return the consumer registration
+	 * @throws PortalException
+	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<ConsumerRegistration> getConsumerRegistrationByConsumerId(
 		String consumerId);
 
+	/**
+	 * Returns the consumer registrations with keywords.
+	 *
+	 * @param keywords
+	 * @param start
+	 * @param end
+	 * @param orderByComparator
+	 * @return List<ConsumerRegistration>
+	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<ConsumerRegistration> getConsumerRegistrationByKeywords(
 		String keywords, int start, int end,
 		OrderByComparator<ConsumerRegistration> orderByComparator);
 
+	/**
+	 * Returns the consumer registrations count with keywords.
+	 *
+	 * @param keywords
+	 * @return long
+	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public long getConsumerRegistrationCountByKeywords(String keywords);
 

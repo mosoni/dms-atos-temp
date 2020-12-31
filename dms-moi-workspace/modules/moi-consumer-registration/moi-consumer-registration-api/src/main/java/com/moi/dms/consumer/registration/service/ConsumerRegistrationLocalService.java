@@ -96,6 +96,17 @@ public interface ConsumerRegistrationLocalService
 		throws PortalException;
 
 	/**
+	 * This method returns count with respect to ConsumerId/Consumer Code
+	 * and Document Type
+	 *
+	 * @param consumerId
+	 * @param documentType
+	 * @return : count
+	 */
+	public long countByConsumerIdDocumentType(
+		String consumerId, String documentType);
+
+	/**
 	 * Creates a new consumer registration with the primary key. Does not add the consumer registration to the database.
 	 *
 	 * @param registrationId the primary key for the new consumer registration
@@ -212,6 +223,12 @@ public interface ConsumerRegistrationLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
 
+	/**
+	 * Returns all the consumer registrations
+	 *
+	 * @param consumerId
+	 * @return List<ConsumerRegistration>
+	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<ConsumerRegistration> getAllConsumerRegistrations();
 
@@ -226,24 +243,62 @@ public interface ConsumerRegistrationLocalService
 	public ConsumerRegistration getConsumerRegistration(long registrationId)
 		throws PortalException;
 
+	/**
+	 * Returns the consumer registration with the Consumer Id.
+	 *
+	 * @param consumerId
+	 * @return List<ConsumerRegistration>
+	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<ConsumerRegistration> getConsumerRegistrationByConsumerId(
 		String consumerId);
 
+	/**
+	 * Returns the consumer registration with the Consumer Id.
+	 *
+	 * @param consumerId
+	 * @param start
+	 * @param end
+	 * @return the consumer registration
+	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<ConsumerRegistration> getConsumerRegistrationByConsumerId(
 		String consumerId, int start, int end);
 
+	/**
+	 * Returns the consumer registration with the Consumer Id.
+	 *
+	 * @param consumerId
+	 * @param start
+	 * @param end
+	 * @param orderByComparator
+	 * @return List<ConsumerRegistration>
+	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<ConsumerRegistration> getConsumerRegistrationByConsumerId(
 		String consumerId, int start, int end,
 		OrderByComparator<ConsumerRegistration> orderByComparator);
 
+	/**
+	 * Returns the consumer registrations with keywords.
+	 *
+	 * @param keywords
+	 * @param start
+	 * @param end
+	 * @param orderByComparator
+	 * @return List<ConsumerRegistration>
+	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<ConsumerRegistration> getConsumerRegistrationByKeywords(
 		String keywords, int start, int end,
 		OrderByComparator<ConsumerRegistration> orderByComparator);
 
+	/**
+	 * Returns the consumer registrations with keywords.
+	 *
+	 * @param keywords
+	 * @return long
+	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public long getConsumerRegistrationCountByKeywords(String keywords);
 
