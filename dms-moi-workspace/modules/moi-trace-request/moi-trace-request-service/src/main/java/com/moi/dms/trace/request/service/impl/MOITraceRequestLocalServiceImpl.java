@@ -244,9 +244,8 @@ public class MOITraceRequestLocalServiceImpl
 			String keywords, String fromDate, String toDate, int start, int end,
 			OrderByComparator<MOITraceRequest> orderByComparator) {
 
-		return moiTraceRequestLocalService.dynamicQuery(
-				getSearchDynamicQuery(keywords, fromDate, toDate), start, end,
-				orderByComparator);
+		return dynamicQuery(getSearchDynamicQuery(keywords, fromDate, toDate),
+				start, end, orderByComparator);
 	}
 
 	/**
@@ -261,7 +260,7 @@ public class MOITraceRequestLocalServiceImpl
 	public List<MOITraceRequest> getMOITraceRequestBySearchCriteria(
 			String keywords, String fromDate, String toDate) {
 
-		List<MOITraceRequest> traceRequests = moiTraceRequestLocalService.dynamicQuery(
+		List<MOITraceRequest> traceRequests = dynamicQuery(
 				getSearchDynamicQuery(keywords, fromDate, toDate));
 		return traceRequests;
 	}
@@ -277,7 +276,7 @@ public class MOITraceRequestLocalServiceImpl
 	 */
 	public long getMOITraceRequestCountBySearchCriteria(String keywords,
 			String fromDate, String toDate) {
-		return moiTraceRequestLocalService.dynamicQueryCount(
+		return dynamicQueryCount(
 				getSearchDynamicQuery(keywords, fromDate, toDate));
 	}
 

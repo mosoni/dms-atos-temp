@@ -5,7 +5,7 @@
 	package-path="com.moi.dms.trace.request">
 	<namespace>moitr</namespace>
 	<entity name="MOITraceRequest" local-service="true"
-		table="moi_tracerequest">
+		table="moi_tracerequest" remote-service="true">
 		<column name="requestId" type="long" primary="true"></column>
 		<column name="requestedBy" type="String"></column>
 		<column name="requestIncomingDate" type="Date"></column>
