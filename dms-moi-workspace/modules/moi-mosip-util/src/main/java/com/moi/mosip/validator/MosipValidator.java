@@ -62,6 +62,14 @@ public class MosipValidator {
 					moiTraceRequest);
 			return MosipErrorConstants.MOSIP_INVALID_CONSUMER_CODE_OR_DOCUMENT_TYPE;
 		}
+		
+		String documentValidation = MosipDocumentValidator.isDocumentValid(file);
+		if (Validator.isNotNull(documentValidation)) {
+			/* Update Trace Request */
+			updateTraceRequest(documentValidation, moiTraceRequest);
+			return documentValidation;
+		}
+
 
 		return null;
 	}
