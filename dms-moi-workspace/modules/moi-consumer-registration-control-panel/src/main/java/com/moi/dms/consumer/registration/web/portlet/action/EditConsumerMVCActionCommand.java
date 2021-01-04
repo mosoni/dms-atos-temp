@@ -8,7 +8,7 @@ import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.moi.dms.consumer.registration.exception.ConsumerRegistrationValidationException;
-import com.moi.dms.consumer.registration.service.ConsumerRegistrationService;
+import com.moi.dms.consumer.registration.service.ConsumerRegistrationLocalService;
 import com.moi.dms.consumer.registration.web.constants.DMSConsumerRegistrationConstants;
 import com.moi.dms.consumer.registration.web.constants.DMSConsumerRegistrationPortletKeys;
 import com.moi.dms.consumer.registration.web.constants.MVCCommandNames;
@@ -85,5 +85,5 @@ public class EditConsumerMVCActionCommand extends BaseMVCActionCommand {
 	}
 
 	@Reference
-	protected ConsumerRegistrationService _consumerRegistrationService;
+	protected ConsumerRegistrationLocalService _consumerRegistrationService;
 }
