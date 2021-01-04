@@ -21,16 +21,16 @@ import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
+import com.moi.dms.consumer.registration.exception.ConsumerRegistrationValidationException;
 import com.moi.dms.consumer.registration.model.ConsumerRegistration;
 import com.moi.dms.consumer.registration.service.base.ConsumerRegistrationLocalServiceBaseImpl;
-import com.moi.dms.consumer.registration.validator.ConsumerRegistrationValidator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 /**
  * The implementation of the consumer registration local service.
@@ -82,7 +82,7 @@ public class ConsumerRegistrationLocalServiceImpl
 			throws PortalException {
 
 		List<ConsumerRegistration> existingConsumerRegistrations = getAllConsumerRegistrations();
-		_consumerRegistrationentValidator.validate(0, consumerId, consumerName,
+		validate(0, consumerId, consumerName,
 				supportedDocumentType, existingConsumerRegistrations);
 
 		// Generate primary key for the Consumer Registration.
@@ -124,7 +124,7 @@ public class ConsumerRegistrationLocalServiceImpl
 			String consumerStatus) throws PortalException {
 
 		List<ConsumerRegistration> existingConsumerRegistrations = getAllConsumerRegistrations();
-		_consumerRegistrationentValidator.validate(consumerRegistrationId,
+		validate(consumerRegistrationId,
 				consumerId, consumerName, supportedDocumentType,
 				existingConsumerRegistrations);
 
@@ -207,8 +207,7 @@ public class ConsumerRegistrationLocalServiceImpl
 			String keywords, int start, int end,
 			OrderByComparator<ConsumerRegistration> orderByComparator) {
 
-		return consumerRegistrationLocalService.dynamicQuery(
-				getKeywordSearchDynamicQuery(keywords), start, end,
+		return dynamicQuery(getKeywordSearchDynamicQuery(keywords), start, end,
 				orderByComparator);
 	}
 
@@ -219,8 +218,7 @@ public class ConsumerRegistrationLocalServiceImpl
 	 * @return long
 	 */
 	public long getConsumerRegistrationCountByKeywords(String keywords) {
-		return consumerRegistrationLocalService
-				.dynamicQueryCount(getKeywordSearchDynamicQuery(keywords));
+		return dynamicQueryCount(getKeywordSearchDynamicQuery(keywords));
 	}
 
 	/**
@@ -272,6 +270,122 @@ public class ConsumerRegistrationLocalServiceImpl
 		throw new UnsupportedOperationException("Not supported.");
 	}
 
-	@Reference
-	ConsumerRegistrationValidator _consumerRegistrationentValidator;
+	/**
+	 * Validates Consumer values and throws
+	 * {ConsumerRegistrationValidationException} if the Consumer values are not
+	 * valid.
+	 * 
+	 * @param descriptionMap
+	 * @throws ConsumerRegistrationValidationException
+	 */
+	private void validate(long consumerRegistrationId, String consumerId,
+			String consumerName, String supportedDocumentTypes,
+			List<ConsumerRegistration> existingConsumerRegistrations)
+			throws ConsumerRegistrationValidationException {
+
+		List<String> errors = new ArrayList<String>();
+
+		if (!isConsumerValid(consumerRegistrationId, consumerId, consumerName,
+				supportedDocumentTypes, existingConsumerRegistrations,
+				errors)) {
+			throw new ConsumerRegistrationValidationException(errors);
+		}
+	}
+
+	/**
+	 * Returns <code>true</code> if the given fields are valid for an consumer.
+	 * 
+	 * @param descriptionMap
+	 * @param errors
+	 * @return boolean <code>true</code> if consumer is valid, otherwise
+	 *         <code>false</code>
+	 */
+	private boolean isConsumerValid(final long consumerRegistrationId,
+			final String consumerId, final String consumerName,
+			final String supportedDocumentTypes,
+			final List<ConsumerRegistration> existingConsumerRegistrations,
+			final List<String> errors) {
+
+		boolean result = true;
+		result &= isConsumerDetailValid(consumerRegistrationId, consumerId,
+				consumerName, supportedDocumentTypes,
+				existingConsumerRegistrations, errors);
+		// result &= isDescriptionValid(descriptionMap, errors);
+		return result;
+	}
+
+	private boolean isConsumerDetailValid(final long consumerRegistrationId,
+			final String consumerId, final String consumerName,
+			String supportedDocumentTypes,
+			final List<ConsumerRegistration> existingConsumerRegistrations,
+			final List<String> errors) {
+
+		boolean result = true;
+		if (consumerRegistrationId <= 0) {
+			for (ConsumerRegistration existingConsumer : existingConsumerRegistrations) {
+				if (existingConsumer.getConsumerId().equals(consumerId)) {
+					if (!existingConsumer.getConsumerName()
+							.equals(consumerName)) {
+						errors.add("consumerIdInvalid");
+						result = false;
+						break;
+					}
+				}
+
+				if (existingConsumer.getConsumerName().equals(consumerName)) {
+					if (!existingConsumer.getConsumerId().equals(consumerId)) {
+						errors.add("consumerNameInvalid");
+						result = false;
+						break;
+					}
+				}
+
+				if (existingConsumer.getConsumerName().equals(consumerName)
+						&& existingConsumer.getConsumerId().equals(consumerId)
+						&& existingConsumer.getSupportedDocumentType()
+								.equals(supportedDocumentTypes)
+						&& existingConsumer
+								.getRegistrationId() != consumerRegistrationId) {
+					errors.add("documentTypeExists");
+					result = false;
+					break;
+				}
+			}
+		} else {
+			for (ConsumerRegistration existingConsumer : existingConsumerRegistrations) {
+				if (existingConsumer.getConsumerId().equals(consumerId)
+						&& existingConsumer
+								.getRegistrationId() != consumerRegistrationId) {
+					if (!existingConsumer.getConsumerName()
+							.equals(consumerName)) {
+						errors.add("consumerIdInvalid");
+						result = false;
+						break;
+					}
+				}
+
+				if (existingConsumer.getConsumerName().equals(consumerName)
+						&& existingConsumer
+								.getRegistrationId() != consumerRegistrationId) {
+					if (!existingConsumer.getConsumerId().equals(consumerId)) {
+						errors.add("consumerNameInvalid");
+						result = false;
+						break;
+					}
+				}
+
+				if (existingConsumer.getConsumerName().equals(consumerName)
+						&& existingConsumer.getConsumerId().equals(consumerId)
+						&& existingConsumer.getSupportedDocumentType()
+								.equals(supportedDocumentTypes)
+						&& existingConsumer
+								.getRegistrationId() != consumerRegistrationId) {
+					errors.add("documentTypeExists");
+					result = false;
+					break;
+				}
+			}
+		}
+		return result;
+	}
 }

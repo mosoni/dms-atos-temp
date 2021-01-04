@@ -5,7 +5,7 @@
 	package-path="com.moi.dms.consumer.registration">
 	<namespace>dms</namespace>
 	<entity name="ConsumerRegistration" local-service="true"
-		table="dms_consumer_registration">
+		table="dms_consumer_registration" remote-service="true">
 		<column name="registrationId" type="long" primary="true"></column>
 		<column name="consumerId" type="String"></column>
 		<column name="consumerName" type="String"></column>

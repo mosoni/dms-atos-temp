@@ -5,7 +5,6 @@ Export-Package:\
 	com.moi.dms.consumer.registration.exception,\
 	com.moi.dms.consumer.registration.model,\
 	com.moi.dms.consumer.registration.service,\
-	com.moi.dms.consumer.registration.service.persistence,\
-	com.moi.dms.consumer.registration.validator
+	com.moi.dms.consumer.registration.service.persistence
 -check: EXPORTS
 -includeresource: META-INF/service.xml=../moi-consumer-registration-service/service.xml

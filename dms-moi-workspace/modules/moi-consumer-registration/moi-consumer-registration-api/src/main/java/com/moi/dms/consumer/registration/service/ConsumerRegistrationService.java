@@ -20,15 +20,7 @@ import com.liferay.portal.kernel.jsonwebservice.JSONWebService;
 import com.liferay.portal.kernel.security.access.control.AccessControlled;
 import com.liferay.portal.kernel.service.BaseService;
 import com.liferay.portal.kernel.transaction.Isolation;
-import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
-import com.liferay.portal.kernel.util.OrderByComparator;
-
-import com.moi.dms.consumer.registration.model.ConsumerRegistration;
-
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 import org.osgi.annotation.versioning.ProviderType;
 
@@ -57,110 +49,10 @@ public interface ConsumerRegistrationService extends BaseService {
 	 */
 
 	/**
-	 * Remote service to add new consumer registration.
-	 *
-	 * @param consumerName
-	 * @param consumerId
-	 * @param descriptionMap
-	 * @param supportedDocumentType
-	 * @param consumerStatus
-	 * @return ConsumerRegistration
-	 * @throws PortalException
-	 */
-	public ConsumerRegistration addConsumerRegistration(
-			String consumerName, String consumerId,
-			Map<Locale, String> descriptionMap, String supportedDocumentType,
-			String consumerStatus)
-		throws PortalException;
-
-	/**
-	 * Delete the consumer registration with the primary key.
-	 *
-	 * @param registrationId the primary key of the consumer registration
-	 * @return the consumer registration
-	 * @throws PortalException if a consumer registration with the primary key could not be found
-	 */
-	public ConsumerRegistration deleteConsumerRegistration(long registrationId)
-		throws PortalException;
-
-	/**
-	 * Returns all the consumer registrations
-	 *
-	 * @param consumerId
-	 * @return the consumer registration
-	 * @throws PortalException
-	 */
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<ConsumerRegistration> getAllConsumerRegistrations();
-
-	/**
-	 * Returns the consumer registration with the primary key.
-	 *
-	 * @param registrationId the primary key of the consumer registration
-	 * @return the consumer registration
-	 * @throws PortalException if a consumer registration with the primary key could not be found
-	 */
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public ConsumerRegistration getConsumerRegistration(long registrationId)
-		throws PortalException;
-
-	/**
-	 * Returns the consumer registration with the Consumer Id.
-	 *
-	 * @param consumerId
-	 * @return the consumer registration
-	 * @throws PortalException
-	 */
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<ConsumerRegistration> getConsumerRegistrationByConsumerId(
-		String consumerId);
-
-	/**
-	 * Returns the consumer registrations with keywords.
-	 *
-	 * @param keywords
-	 * @param start
-	 * @param end
-	 * @param orderByComparator
-	 * @return List<ConsumerRegistration>
-	 */
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<ConsumerRegistration> getConsumerRegistrationByKeywords(
-		String keywords, int start, int end,
-		OrderByComparator<ConsumerRegistration> orderByComparator);
-
-	/**
-	 * Returns the consumer registrations count with keywords.
-	 *
-	 * @param keywords
-	 * @return long
-	 */
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public long getConsumerRegistrationCountByKeywords(String keywords);
-
-	/**
 	 * Returns the OSGi service identifier.
 	 *
 	 * @return the OSGi service identifier
 	 */
 	public String getOSGiServiceIdentifier();
-
-	/**
-	 * Remote service to update consumer registration.
-	 *
-	 * @param consumerRegistrationId
-	 * @param consumerName
-	 * @param consumerId
-	 * @param descriptionMap
-	 * @param supportedDocumentType
-	 * @param consumerStatus
-	 * @return ConsumerRegistration
-	 * @throws PortalException
-	 */
-	public ConsumerRegistration updateConsumerRegistration(
-			long consumerRegistrationId, String consumerName, String consumerId,
-			Map<Locale, String> descriptionMap, String supportedDocumentType,
-			String consumerStatus)
-		throws PortalException;
 
 }
