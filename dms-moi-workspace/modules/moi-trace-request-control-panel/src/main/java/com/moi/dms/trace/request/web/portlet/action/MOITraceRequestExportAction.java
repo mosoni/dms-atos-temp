@@ -6,7 +6,7 @@ import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.moi.dms.trace.request.model.MOITraceRequest;
-import com.moi.dms.trace.request.service.MOITraceRequestServiceUtil;
+import com.moi.dms.trace.request.service.MOITraceRequestLocalServiceUtil;
 import com.moi.dms.trace.request.web.constants.MOITraceRequestCommandNames;
 import com.moi.dms.trace.request.web.constants.MOITraceRequestConstants;
 import com.moi.dms.trace.request.web.constants.MOITraceRequestPortletKeys;
@@ -87,7 +87,7 @@ public class MOITraceRequestExportAction implements MVCResourceCommand {
 			toDate += MOITraceRequestConstants.TO_TIME;
 		}
 
-		List<MOITraceRequest> traceRequests = MOITraceRequestServiceUtil
+		List<MOITraceRequest> traceRequests = MOITraceRequestLocalServiceUtil
 				.getMOITraceRequestBySearchCriteria(keywords, fromDate, toDate);
 
 		try {

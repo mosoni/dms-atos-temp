@@ -8,7 +8,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.moi.dms.trace.request.model.MOITraceRequest;
-import com.moi.dms.trace.request.service.MOITraceRequestServiceUtil;
+import com.moi.dms.trace.request.service.MOITraceRequestLocalServiceUtil;
 import com.moi.dms.trace.request.web.constants.MOITraceRequestConstants;
 import com.moi.dms.trace.request.web.search.container.MOITraceRequestDisplayTerms;
 
@@ -50,7 +50,7 @@ public class MOITraceRequestHelper {
 			toDate += MOITraceRequestConstants.TO_TIME;
 		}
 
-		traceRequestList = MOITraceRequestServiceUtil
+		traceRequestList = MOITraceRequestLocalServiceUtil
 				.getMOITraceRequestBySearchCriteria(displayTerms.getKeywords(),
 						fromDate, toDate, start, end, traceRequestComparator);
 
@@ -85,7 +85,7 @@ public class MOITraceRequestHelper {
 			toDate += MOITraceRequestConstants.TO_TIME;
 		}
 
-		return (int) MOITraceRequestServiceUtil
+		return (int) MOITraceRequestLocalServiceUtil
 				.getMOITraceRequestCountBySearchCriteria(fromDate, toDate,
 						displayTerms.getKeywords());
 	}
