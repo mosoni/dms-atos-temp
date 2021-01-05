@@ -30,36 +30,23 @@ public class MosipValidator {
 	 * 
 	 * @return null if request is valid else returns message
 	 */
-	public static String validateRequest(String moduleType,
-			String consumerCode,String documentType,String identifierNumber,
-			long userId, File file, boolean isNewUpload) {
+	public static String validateRequest(String moduleType, String consumerCode,
+			String documentType, String identifierNumber, long userId,
+			File file, MOITraceRequest moiTraceRequest, boolean isNewUpload) {
 
 		String requestedOperation = MosipUtil.getAction(documentType,
 				isNewUpload);
 
-		/*
-		 * Entry Point : Trace the request
-		 */
-		MOITraceRequest moiTraceRequest = null;
-		try {
-			moiTraceRequest = MOITraceRequestLocalServiceUtil
-					.addMOITraceRequest(String.valueOf(userId), new Date(),
-							consumerCode, null, requestedOperation,
-							documentType, false, null, null);
-		} catch (PortalException e) {
-			_log.error(e);
-		}
-		
-		/*Start : Module */
-		if(Validator.isNull(moduleType) || !MosipPhase.getPhases().contains(moduleType)) {
-			updateTraceRequest(
-					MosipErrorConstants.MOSIP_INVALID_MODULE_TYPE,
+		/* Start : Module */
+		if (Validator.isNull(moduleType)
+				|| !MosipPhase.getPhases().contains(moduleType)) {
+			updateTraceRequest(MosipErrorConstants.MOSIP_INVALID_MODULE_TYPE,
 					moiTraceRequest);
 			return MosipErrorConstants.MOSIP_INVALID_MODULE_TYPE;
 		}
-		/*End : Module */
-		
-		/*Start : Consumer and Document Type */
+		/* End : Module */
+
+		/* Start : Consumer and Document Type */
 		if (!isConsumerCodeValid(consumerCode, documentType)) {
 			/* Update Trace Request */
 			updateTraceRequest(
@@ -67,9 +54,9 @@ public class MosipValidator {
 					moiTraceRequest);
 			return MosipErrorConstants.MOSIP_INVALID_CONSUMER_CODE_OR_DOCUMENT_TYPE;
 		}
-		/*End : Consumer and Document Type */
-		
-		/*Start : Validating Document */
+		/* End : Consumer and Document Type */
+
+		/* Start : Validating Document */
 		String documentValidation = MosipDocumentValidator
 				.isDocumentValid(file);
 		if (Validator.isNotNull(documentValidation)) {
@@ -77,9 +64,9 @@ public class MosipValidator {
 			updateTraceRequest(documentValidation, moiTraceRequest);
 			return documentValidation;
 		}
-		/*End : Validating Document */
-		
-		/*Start : Validating Authority */
+		/* End : Validating Document */
+
+		/* Start : Validating Authority */
 		if (!MosipAuthorizationValidator.isRequestAuthorized(moduleType,
 				requestedOperation)) {
 			/* Update Trace Request */
@@ -88,10 +75,8 @@ public class MosipValidator {
 					moiTraceRequest);
 			return MosipErrorConstants.MOSIP_AUTHORIZATION_LEVEL_MESSAGE;
 		}
-		/*End : Validating Authority */				
-		
-		
-		
+		/* End : Validating Authority */
+
 		return null;
 	}
 

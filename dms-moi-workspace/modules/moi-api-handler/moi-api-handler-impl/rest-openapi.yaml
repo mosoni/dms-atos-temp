@@ -28,14 +28,12 @@ components:
     DocumentResult:
       description: Represents an uploaded document.
       properties:
-        id:
+        traceId:
           format: int64
           type: integer
-        name:
+        result:
           type: string
-        mimeType:
-          type: string
-        folderName:
+        resultMessage:
           type: string
       type: object
 info:

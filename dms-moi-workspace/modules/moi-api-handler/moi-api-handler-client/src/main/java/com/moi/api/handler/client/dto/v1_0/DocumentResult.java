@@ -18,85 +18,68 @@ public class DocumentResult implements Cloneable {
 		return DocumentResultSerDes.toDTO(json);
 	}
 
-	public String getFolderName() {
-		return folderName;
+	public String getResult() {
+		return result;
 	}
 
-	public void setFolderName(String folderName) {
-		this.folderName = folderName;
+	public void setResult(String result) {
+		this.result = result;
 	}
 
-	public void setFolderName(
-		UnsafeSupplier<String, Exception> folderNameUnsafeSupplier) {
+	public void setResult(
+		UnsafeSupplier<String, Exception> resultUnsafeSupplier) {
 
 		try {
-			folderName = folderNameUnsafeSupplier.get();
+			result = resultUnsafeSupplier.get();
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	protected String folderName;
+	protected String result;
 
-	public Long getId() {
-		return id;
+	public String getResultMessage() {
+		return resultMessage;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setResultMessage(String resultMessage) {
+		this.resultMessage = resultMessage;
 	}
 
-	public void setId(UnsafeSupplier<Long, Exception> idUnsafeSupplier) {
+	public void setResultMessage(
+		UnsafeSupplier<String, Exception> resultMessageUnsafeSupplier) {
+
 		try {
-			id = idUnsafeSupplier.get();
+			resultMessage = resultMessageUnsafeSupplier.get();
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	protected Long id;
+	protected String resultMessage;
 
-	public String getMimeType() {
-		return mimeType;
+	public Long getTraceId() {
+		return traceId;
 	}
 
-	public void setMimeType(String mimeType) {
-		this.mimeType = mimeType;
+	public void setTraceId(Long traceId) {
+		this.traceId = traceId;
 	}
 
-	public void setMimeType(
-		UnsafeSupplier<String, Exception> mimeTypeUnsafeSupplier) {
+	public void setTraceId(
+		UnsafeSupplier<Long, Exception> traceIdUnsafeSupplier) {
 
 		try {
-			mimeType = mimeTypeUnsafeSupplier.get();
+			traceId = traceIdUnsafeSupplier.get();
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	protected String mimeType;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setName(UnsafeSupplier<String, Exception> nameUnsafeSupplier) {
-		try {
-			name = nameUnsafeSupplier.get();
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	protected String name;
+	protected Long traceId;
 
 	@Override
 	public DocumentResult clone() throws CloneNotSupportedException {

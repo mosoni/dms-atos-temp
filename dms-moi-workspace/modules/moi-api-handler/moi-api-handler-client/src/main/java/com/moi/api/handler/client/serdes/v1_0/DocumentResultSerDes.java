@@ -41,56 +41,42 @@ public class DocumentResultSerDes {
 
 		sb.append("{");
 
-		if (documentResult.getFolderName() != null) {
+		if (documentResult.getResult() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
-			sb.append("\"folderName\": ");
+			sb.append("\"result\": ");
 
 			sb.append("\"");
 
-			sb.append(_escape(documentResult.getFolderName()));
+			sb.append(_escape(documentResult.getResult()));
 
 			sb.append("\"");
 		}
 
-		if (documentResult.getId() != null) {
+		if (documentResult.getResultMessage() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
-			sb.append("\"id\": ");
-
-			sb.append(documentResult.getId());
-		}
-
-		if (documentResult.getMimeType() != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"mimeType\": ");
+			sb.append("\"resultMessage\": ");
 
 			sb.append("\"");
 
-			sb.append(_escape(documentResult.getMimeType()));
+			sb.append(_escape(documentResult.getResultMessage()));
 
 			sb.append("\"");
 		}
 
-		if (documentResult.getName() != null) {
+		if (documentResult.getTraceId() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
-			sb.append("\"name\": ");
+			sb.append("\"traceId\": ");
 
-			sb.append("\"");
-
-			sb.append(_escape(documentResult.getName()));
-
-			sb.append("\"");
+			sb.append(documentResult.getTraceId());
 		}
 
 		sb.append("}");
@@ -112,33 +98,27 @@ public class DocumentResultSerDes {
 
 		Map<String, String> map = new TreeMap<>();
 
-		if (documentResult.getFolderName() == null) {
-			map.put("folderName", null);
+		if (documentResult.getResult() == null) {
+			map.put("result", null);
+		}
+		else {
+			map.put("result", String.valueOf(documentResult.getResult()));
+		}
+
+		if (documentResult.getResultMessage() == null) {
+			map.put("resultMessage", null);
 		}
 		else {
 			map.put(
-				"folderName", String.valueOf(documentResult.getFolderName()));
+				"resultMessage",
+				String.valueOf(documentResult.getResultMessage()));
 		}
 
-		if (documentResult.getId() == null) {
-			map.put("id", null);
+		if (documentResult.getTraceId() == null) {
+			map.put("traceId", null);
 		}
 		else {
-			map.put("id", String.valueOf(documentResult.getId()));
-		}
-
-		if (documentResult.getMimeType() == null) {
-			map.put("mimeType", null);
-		}
-		else {
-			map.put("mimeType", String.valueOf(documentResult.getMimeType()));
-		}
-
-		if (documentResult.getName() == null) {
-			map.put("name", null);
-		}
-		else {
-			map.put("name", String.valueOf(documentResult.getName()));
+			map.put("traceId", String.valueOf(documentResult.getTraceId()));
 		}
 
 		return map;
@@ -162,25 +142,21 @@ public class DocumentResultSerDes {
 			DocumentResult documentResult, String jsonParserFieldName,
 			Object jsonParserFieldValue) {
 
-			if (Objects.equals(jsonParserFieldName, "folderName")) {
+			if (Objects.equals(jsonParserFieldName, "result")) {
 				if (jsonParserFieldValue != null) {
-					documentResult.setFolderName((String)jsonParserFieldValue);
+					documentResult.setResult((String)jsonParserFieldValue);
 				}
 			}
-			else if (Objects.equals(jsonParserFieldName, "id")) {
+			else if (Objects.equals(jsonParserFieldName, "resultMessage")) {
 				if (jsonParserFieldValue != null) {
-					documentResult.setId(
+					documentResult.setResultMessage(
+						(String)jsonParserFieldValue);
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "traceId")) {
+				if (jsonParserFieldValue != null) {
+					documentResult.setTraceId(
 						Long.valueOf((String)jsonParserFieldValue));
-				}
-			}
-			else if (Objects.equals(jsonParserFieldName, "mimeType")) {
-				if (jsonParserFieldValue != null) {
-					documentResult.setMimeType((String)jsonParserFieldValue);
-				}
-			}
-			else if (Objects.equals(jsonParserFieldName, "name")) {
-				if (jsonParserFieldValue != null) {
-					documentResult.setName((String)jsonParserFieldValue);
 				}
 			}
 			else {

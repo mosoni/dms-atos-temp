@@ -36,20 +36,20 @@ public class DocumentResult {
 	}
 
 	@Schema
-	public String getFolderName() {
-		return folderName;
+	public String getResult() {
+		return result;
 	}
 
-	public void setFolderName(String folderName) {
-		this.folderName = folderName;
+	public void setResult(String result) {
+		this.result = result;
 	}
 
 	@JsonIgnore
-	public void setFolderName(
-		UnsafeSupplier<String, Exception> folderNameUnsafeSupplier) {
+	public void setResult(
+		UnsafeSupplier<String, Exception> resultUnsafeSupplier) {
 
 		try {
-			folderName = folderNameUnsafeSupplier.get();
+			result = resultUnsafeSupplier.get();
 		}
 		catch (RuntimeException re) {
 			throw re;
@@ -61,21 +61,23 @@ public class DocumentResult {
 
 	@GraphQLField
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected String folderName;
+	protected String result;
 
 	@Schema
-	public Long getId() {
-		return id;
+	public String getResultMessage() {
+		return resultMessage;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setResultMessage(String resultMessage) {
+		this.resultMessage = resultMessage;
 	}
 
 	@JsonIgnore
-	public void setId(UnsafeSupplier<Long, Exception> idUnsafeSupplier) {
+	public void setResultMessage(
+		UnsafeSupplier<String, Exception> resultMessageUnsafeSupplier) {
+
 		try {
-			id = idUnsafeSupplier.get();
+			resultMessage = resultMessageUnsafeSupplier.get();
 		}
 		catch (RuntimeException re) {
 			throw re;
@@ -87,23 +89,23 @@ public class DocumentResult {
 
 	@GraphQLField
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected Long id;
+	protected String resultMessage;
 
 	@Schema
-	public String getMimeType() {
-		return mimeType;
+	public Long getTraceId() {
+		return traceId;
 	}
 
-	public void setMimeType(String mimeType) {
-		this.mimeType = mimeType;
+	public void setTraceId(Long traceId) {
+		this.traceId = traceId;
 	}
 
 	@JsonIgnore
-	public void setMimeType(
-		UnsafeSupplier<String, Exception> mimeTypeUnsafeSupplier) {
+	public void setTraceId(
+		UnsafeSupplier<Long, Exception> traceIdUnsafeSupplier) {
 
 		try {
-			mimeType = mimeTypeUnsafeSupplier.get();
+			traceId = traceIdUnsafeSupplier.get();
 		}
 		catch (RuntimeException re) {
 			throw re;
@@ -115,33 +117,7 @@ public class DocumentResult {
 
 	@GraphQLField
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected String mimeType;
-
-	@Schema
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	@JsonIgnore
-	public void setName(UnsafeSupplier<String, Exception> nameUnsafeSupplier) {
-		try {
-			name = nameUnsafeSupplier.get();
-		}
-		catch (RuntimeException re) {
-			throw re;
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	@GraphQLField
-	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected String name;
+	protected Long traceId;
 
 	@Override
 	public boolean equals(Object object) {
@@ -170,56 +146,42 @@ public class DocumentResult {
 
 		sb.append("{");
 
-		if (folderName != null) {
+		if (result != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
-			sb.append("\"folderName\": ");
+			sb.append("\"result\": ");
 
 			sb.append("\"");
 
-			sb.append(_escape(folderName));
+			sb.append(_escape(result));
 
 			sb.append("\"");
 		}
 
-		if (id != null) {
+		if (resultMessage != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
-			sb.append("\"id\": ");
-
-			sb.append(id);
-		}
-
-		if (mimeType != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"mimeType\": ");
+			sb.append("\"resultMessage\": ");
 
 			sb.append("\"");
 
-			sb.append(_escape(mimeType));
+			sb.append(_escape(resultMessage));
 
 			sb.append("\"");
 		}
 
-		if (name != null) {
+		if (traceId != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
-			sb.append("\"name\": ");
+			sb.append("\"traceId\": ");
 
-			sb.append("\"");
-
-			sb.append(_escape(name));
-
-			sb.append("\"");
+			sb.append(traceId);
 		}
 
 		sb.append("}");
