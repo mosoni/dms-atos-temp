@@ -27,8 +27,13 @@ public class MosipDocumentValidator {
 	 */
 	public static String isDocumentValid(File file) {
 
+		/* Start : Check file */
+		if(Validator.isNull(file)) {
+			return MosipErrorConstants.MOSIP_BLANK_DOCUMENT;
+		}
+		/* End : Check file */
+		
 		/* Start : Check file extension */
-
 		String availableExtension = PropsUtil
 				.get(MOIProperties.MOSIP_FILE_EXTENSION);
 

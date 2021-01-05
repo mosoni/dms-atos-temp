@@ -18,5 +18,15 @@ public class CommonConstants {
 	 */
 	public static final String FILE_NOT_AVAILABLE="File is empty";
 	
+	/**
+	 * Constant for update
+	 */
+	public static final String UPDATE="_UPDATE";
+
+	/**
+	 * Constant for upload
+	 */
+	public static final String UPLOAD="_UPLOAD";
+
 
 }

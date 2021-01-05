@@ -39,4 +39,16 @@ public class MosipPhase {
 	 */
 	public static final String PORTAL_FOR_RESIDENT="MOSIP_RESIDENT_PORTAL";
 
+	
+	
+	/**
+	 * This method is used to get all mosip phases
+	 *
+	 * @return : MOSIP_PRE_REG/MOSIP_REG/MOSIP_FREEZED/MOSIP_AGENT_PORTAL/PORTAL_FOR_RESIDENT
+	 */
+	public static String getPhases() {
+
+		return PRE_REGISTRATION_PHASE + "/" + REGISTRATION_PHASE + "/"
+				+ FREEZED_PHASE + "/" + PORTAL_FOR_AGENT+ "/" + PORTAL_FOR_RESIDENT;
+	}
 }

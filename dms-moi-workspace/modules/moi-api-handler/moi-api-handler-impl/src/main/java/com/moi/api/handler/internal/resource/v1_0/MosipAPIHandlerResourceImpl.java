@@ -1,5 +1,6 @@
 package com.moi.api.handler.internal.resource.v1_0;
 
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.vulcan.multipart.MultipartBody;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.moi.api.handler.dto.v1_0.DocumentResult;
@@ -27,19 +28,19 @@ public class MosipAPIHandlerResourceImpl
 			String Metadata, String PreviousModuleType,
 			String PreviousIdentifier, MultipartBody multipartBody)
 			throws Exception {
-		
+
 		File file = null;
-		
-		/*
-		 * MosipValidator.validateRequest(ModuleType, ConsumerCode,
-		 * DocumentType, IdentifierNumber, Metadata, PreviousModuleType,
-		 * PreviousIdentifier, file);
-		 */
-		
+		long userId = 0;
+		String validationResult = MosipValidator.validateRequest(ModuleType, ConsumerCode, DocumentType,
+				IdentifierNumber, userId, file, true);
+
+//		if(Validator.isNotNull(validationResult)) {
+//			return validationResult;
+//		}
 		
 		return super.uploadMosipDocument(ModuleType, ConsumerCode, DocumentType,
-				IdentifierNumber, Metadata, PreviousModuleType, PreviousIdentifier,
-				multipartBody);
+				IdentifierNumber, Metadata, PreviousModuleType,
+				PreviousIdentifier, multipartBody);
 	}
 	
 	

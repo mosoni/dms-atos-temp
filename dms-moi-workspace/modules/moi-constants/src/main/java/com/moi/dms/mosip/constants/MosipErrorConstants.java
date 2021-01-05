@@ -31,8 +31,16 @@ public class MosipErrorConstants {
 	public static final String MOSIP_INVALID_DOCUMENT_EXTENSION="Document Extension is invalid , Please upload document with extension "+MosipConstants.DOCUMENT_EXTENSION_DYNAMIC_PARAMETER;
 	
 	/**
+	 * Message to be displayed when Mosip Document is null
+	 */
+	public static final String MOSIP_BLANK_DOCUMENT="Document can not be blank/empty ";
+	/**
 	 * Message to be displayed when Mosip Document extension is invalid
 	 */
 	public static final String MOSIP_INVALID_DOCUMENT_SIZE="Document Size is invalid , Please upload document with size no longer than "+MosipConstants.DOCUMENT_SIZE_DYNAMIC_PARAMETER;
+	/**
+	 * Message to be displayed when Mosip Document extension is invalid
+	 */
+	public static final String MOSIP_INVALID_MODULE_TYPE="Module Type is invalid , please provide any of the following "+MosipPhase.getPhases();
 
 }
