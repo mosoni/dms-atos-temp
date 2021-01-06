@@ -86,7 +86,7 @@ public class MosipValidator {
 	 * @param result
 	 * @param moiTraceRequest :
 	 */
-	private static void updateTraceRequest(String result,
+	public static void updateTraceRequest(String result,
 			MOITraceRequest moiTraceRequest) {
 
 		if (Validator.isNotNull(moiTraceRequest)) {

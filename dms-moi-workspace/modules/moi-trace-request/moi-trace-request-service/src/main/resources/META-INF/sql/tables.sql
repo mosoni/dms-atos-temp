@@ -8,5 +8,6 @@ create table moi_tracerequest (
 	requestedDocumentType VARCHAR(75) null,
 	requestValid BOOLEAN,
 	requestResult VARCHAR(75) null,
-	requestResultDate DATE null
+	requestResultDate DATE null,
+	comment_ VARCHAR(75) null
 );

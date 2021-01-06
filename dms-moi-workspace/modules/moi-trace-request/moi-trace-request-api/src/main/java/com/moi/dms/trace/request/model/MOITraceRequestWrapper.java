@@ -52,6 +52,7 @@ public class MOITraceRequestWrapper
 		attributes.put("requestValid", isRequestValid());
 		attributes.put("requestResult", getRequestResult());
 		attributes.put("requestResultDate", getRequestResultDate());
+		attributes.put("comment", getComment());
 
 		return attributes;
 	}
@@ -121,6 +122,22 @@ public class MOITraceRequestWrapper
 		if (requestResultDate != null) {
 			setRequestResultDate(requestResultDate);
 		}
+
+		String comment = (String)attributes.get("comment");
+
+		if (comment != null) {
+			setComment(comment);
+		}
+	}
+
+	/**
+	 * Returns the comment of this moi trace request.
+	 *
+	 * @return the comment of this moi trace request
+	 */
+	@Override
+	public String getComment() {
+		return model.getComment();
 	}
 
 	/**
@@ -246,6 +263,16 @@ public class MOITraceRequestWrapper
 	@Override
 	public void persist() {
 		model.persist();
+	}
+
+	/**
+	 * Sets the comment of this moi trace request.
+	 *
+	 * @param comment the comment of this moi trace request
+	 */
+	@Override
+	public void setComment(String comment) {
+		model.setComment(comment);
 	}
 
 	/**

@@ -77,7 +77,7 @@ public class MOITraceRequestModelImpl
 		{"requestedOperation", Types.VARCHAR},
 		{"requestedDocumentType", Types.VARCHAR},
 		{"requestValid", Types.BOOLEAN}, {"requestResult", Types.VARCHAR},
-		{"requestResultDate", Types.TIMESTAMP}
+		{"requestResultDate", Types.TIMESTAMP}, {"comment_", Types.VARCHAR}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -94,10 +94,11 @@ public class MOITraceRequestModelImpl
 		TABLE_COLUMNS_MAP.put("requestValid", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("requestResult", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("requestResultDate", Types.TIMESTAMP);
+		TABLE_COLUMNS_MAP.put("comment_", Types.VARCHAR);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table moi_tracerequest (requestId LONG not null primary key,requestedBy VARCHAR(75) null,requestIncomingDate DATE null,requestedConsumerCode VARCHAR(75) null,requestedConsumerName VARCHAR(75) null,requestedOperation VARCHAR(75) null,requestedDocumentType VARCHAR(75) null,requestValid BOOLEAN,requestResult VARCHAR(75) null,requestResultDate DATE null)";
+		"create table moi_tracerequest (requestId LONG not null primary key,requestedBy VARCHAR(75) null,requestIncomingDate DATE null,requestedConsumerCode VARCHAR(75) null,requestedConsumerName VARCHAR(75) null,requestedOperation VARCHAR(75) null,requestedDocumentType VARCHAR(75) null,requestValid BOOLEAN,requestResult VARCHAR(75) null,requestResultDate DATE null,comment_ VARCHAR(75) null)";
 
 	public static final String TABLE_SQL_DROP = "drop table moi_tracerequest";
 
@@ -160,6 +161,7 @@ public class MOITraceRequestModelImpl
 		model.setRequestValid(soapModel.isRequestValid());
 		model.setRequestResult(soapModel.getRequestResult());
 		model.setRequestResultDate(soapModel.getRequestResultDate());
+		model.setComment(soapModel.getComment());
 
 		return model;
 	}
@@ -374,6 +376,10 @@ public class MOITraceRequestModelImpl
 			"requestResultDate",
 			(BiConsumer<MOITraceRequest, Date>)
 				MOITraceRequest::setRequestResultDate);
+		attributeGetterFunctions.put("comment", MOITraceRequest::getComment);
+		attributeSetterBiConsumers.put(
+			"comment",
+			(BiConsumer<MOITraceRequest, String>)MOITraceRequest::setComment);
 
 		_attributeGetterFunctions = Collections.unmodifiableMap(
 			attributeGetterFunctions);
@@ -609,6 +615,22 @@ public class MOITraceRequestModelImpl
 		return _originalRequestResultDate;
 	}
 
+	@JSON
+	@Override
+	public String getComment() {
+		if (_comment == null) {
+			return "";
+		}
+		else {
+			return _comment;
+		}
+	}
+
+	@Override
+	public void setComment(String comment) {
+		_comment = comment;
+	}
+
 	public long getColumnBitmask() {
 		return _columnBitmask;
 	}
@@ -658,6 +680,7 @@ public class MOITraceRequestModelImpl
 		moiTraceRequestImpl.setRequestValid(isRequestValid());
 		moiTraceRequestImpl.setRequestResult(getRequestResult());
 		moiTraceRequestImpl.setRequestResultDate(getRequestResultDate());
+		moiTraceRequestImpl.setComment(getComment());
 
 		moiTraceRequestImpl.resetOriginalValues();
 
@@ -837,6 +860,14 @@ public class MOITraceRequestModelImpl
 			moiTraceRequestCacheModel.requestResultDate = Long.MIN_VALUE;
 		}
 
+		moiTraceRequestCacheModel.comment = getComment();
+
+		String comment = moiTraceRequestCacheModel.comment;
+
+		if ((comment != null) && (comment.length() == 0)) {
+			moiTraceRequestCacheModel.comment = null;
+		}
+
 		return moiTraceRequestCacheModel;
 	}
 
@@ -932,6 +963,7 @@ public class MOITraceRequestModelImpl
 	private String _originalRequestResult;
 	private Date _requestResultDate;
 	private Date _originalRequestResultDate;
+	private String _comment;
 	private long _columnBitmask;
 	private MOITraceRequest _escapedModel;
 

@@ -208,4 +208,19 @@ public interface MOITraceRequestModel extends BaseModel<MOITraceRequest> {
 	 */
 	public void setRequestResultDate(Date requestResultDate);
 
+	/**
+	 * Returns the comment of this moi trace request.
+	 *
+	 * @return the comment of this moi trace request
+	 */
+	@AutoEscape
+	public String getComment();
+
+	/**
+	 * Sets the comment of this moi trace request.
+	 *
+	 * @param comment the comment of this moi trace request
+	 */
+	public void setComment(String comment);
+
 }

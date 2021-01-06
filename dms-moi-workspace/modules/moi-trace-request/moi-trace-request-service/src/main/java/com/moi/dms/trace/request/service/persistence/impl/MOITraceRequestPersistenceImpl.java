@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.ProxyUtil;
+import com.liferay.portal.kernel.util.SetUtil;
 
 import com.moi.dms.trace.request.exception.NoSuchMOITraceRequestException;
 import com.moi.dms.trace.request.model.MOITraceRequest;
@@ -45,6 +46,7 @@ import java.lang.reflect.InvocationHandler;
 import java.sql.Timestamp;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -4374,6 +4376,12 @@ public class MOITraceRequestPersistenceImpl
 			"moiTraceRequest.requestResultDate = ?";
 
 	public MOITraceRequestPersistenceImpl() {
+		Map<String, String> dbColumnNames = new HashMap<String, String>();
+
+		dbColumnNames.put("comment", "comment_");
+
+		setDBColumnNames(dbColumnNames);
+
 		setModelClass(MOITraceRequest.class);
 
 		setModelImplClass(MOITraceRequestImpl.class);
@@ -5122,6 +5130,11 @@ public class MOITraceRequestPersistenceImpl
 	}
 
 	@Override
+	public Set<String> getBadColumnNames() {
+		return _badColumnNames;
+	}
+
+	@Override
 	protected EntityCache getEntityCache() {
 		return entityCache;
 	}
@@ -5405,6 +5418,9 @@ public class MOITraceRequestPersistenceImpl
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		MOITraceRequestPersistenceImpl.class);
+
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(
+		new String[] {"comment"});
 
 	static {
 		try {

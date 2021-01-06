@@ -16,6 +16,7 @@
 		<column name="requestValid" type="boolean"></column>
 		<column name="requestResult" type="String"></column>
 		<column name="requestResultDate" type="Date"></column>
+		<column name="comment" type="String"></column>
 		<order by="asc">
 			<order-column name="requestId"></order-column>
 		</order>

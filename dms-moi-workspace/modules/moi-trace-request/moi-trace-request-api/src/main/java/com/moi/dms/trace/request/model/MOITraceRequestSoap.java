@@ -41,6 +41,7 @@ public class MOITraceRequestSoap implements Serializable {
 		soapModel.setRequestValid(model.isRequestValid());
 		soapModel.setRequestResult(model.getRequestResult());
 		soapModel.setRequestResultDate(model.getRequestResultDate());
+		soapModel.setComment(model.getComment());
 
 		return soapModel;
 	}
@@ -184,6 +185,14 @@ public class MOITraceRequestSoap implements Serializable {
 		_requestResultDate = requestResultDate;
 	}
 
+	public String getComment() {
+		return _comment;
+	}
+
+	public void setComment(String comment) {
+		_comment = comment;
+	}
+
 	private long _requestId;
 	private String _requestedBy;
 	private Date _requestIncomingDate;
@@ -194,5 +203,6 @@ public class MOITraceRequestSoap implements Serializable {
 	private boolean _requestValid;
 	private String _requestResult;
 	private Date _requestResultDate;
+	private String _comment;
 
 }

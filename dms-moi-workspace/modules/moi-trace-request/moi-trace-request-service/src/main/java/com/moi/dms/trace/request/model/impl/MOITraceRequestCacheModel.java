@@ -63,7 +63,7 @@ public class MOITraceRequestCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(21);
+		StringBundler sb = new StringBundler(23);
 
 		sb.append("{requestId=");
 		sb.append(requestId);
@@ -85,6 +85,8 @@ public class MOITraceRequestCacheModel
 		sb.append(requestResult);
 		sb.append(", requestResultDate=");
 		sb.append(requestResultDate);
+		sb.append(", comment=");
+		sb.append(comment);
 		sb.append("}");
 
 		return sb.toString();
@@ -156,6 +158,13 @@ public class MOITraceRequestCacheModel
 				new Date(requestResultDate));
 		}
 
+		if (comment == null) {
+			moiTraceRequestImpl.setComment("");
+		}
+		else {
+			moiTraceRequestImpl.setComment(comment);
+		}
+
 		moiTraceRequestImpl.resetOriginalValues();
 
 		return moiTraceRequestImpl;
@@ -174,6 +183,7 @@ public class MOITraceRequestCacheModel
 		requestValid = objectInput.readBoolean();
 		requestResult = objectInput.readUTF();
 		requestResultDate = objectInput.readLong();
+		comment = objectInput.readUTF();
 	}
 
 	@Override
@@ -227,6 +237,13 @@ public class MOITraceRequestCacheModel
 		}
 
 		objectOutput.writeLong(requestResultDate);
+
+		if (comment == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(comment);
+		}
 	}
 
 	public long requestId;
@@ -239,5 +256,6 @@ public class MOITraceRequestCacheModel
 	public boolean requestValid;
 	public String requestResult;
 	public long requestResultDate;
+	public String comment;
 
 }

@@ -12,5 +12,6 @@
 		<field name="requestValid" type="boolean" />
 		<field name="requestResult" type="String" />
 		<field name="requestResultDate" type="Date" />
+		<field name="comment" type="String" />
 	</model>
 </model-hints>
