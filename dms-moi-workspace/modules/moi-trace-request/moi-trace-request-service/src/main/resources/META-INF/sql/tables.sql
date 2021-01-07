@@ -7,7 +7,7 @@ create table moi_tracerequest (
 	requestedOperation VARCHAR(75) null,
 	requestedDocumentType VARCHAR(75) null,
 	requestValid BOOLEAN,
-	requestResult VARCHAR(75) null,
+	requestResult VARCHAR(100) null,
 	requestResultDate DATE null,
 	comment_ VARCHAR(75) null
 );

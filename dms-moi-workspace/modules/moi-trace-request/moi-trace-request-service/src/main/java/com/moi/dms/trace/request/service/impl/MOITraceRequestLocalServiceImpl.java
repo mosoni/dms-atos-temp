@@ -76,6 +76,7 @@ public class MOITraceRequestLocalServiceImpl
 	 * @param requestValid
 	 * @param requestResult
 	 * @param requestResultDate
+	 * @param requestComment
 	 * @return MOITraceRequest
 	 * @throws PortalException
 	 */
@@ -83,7 +84,7 @@ public class MOITraceRequestLocalServiceImpl
 			Date requestIncomingDate, String requestedConsumerCode,
 			String requestedConsumerName, String requestedOperation,
 			String requestedDocumentType, Boolean requestValid,
-			String requestResult, Date requestResultDate)
+			String requestResult, Date requestResultDate, String requestComment)
 			throws PortalException {
 
 		// Generate primary key for the MOITraceRequest.
@@ -103,6 +104,7 @@ public class MOITraceRequestLocalServiceImpl
 		traceRequest.setRequestValid(requestValid);
 		traceRequest.setRequestResult(requestResult);
 		traceRequest.setRequestResultDate(requestResultDate);
+		traceRequest.setComment(requestComment);
 
 		// Persist MOITraceRequest to database.
 		return super.addMOITraceRequest(traceRequest);
@@ -122,6 +124,7 @@ public class MOITraceRequestLocalServiceImpl
 	 * @param requestValid
 	 * @param requestResult
 	 * @param requestResultDate
+	 * @param requestComment
 	 * @return MOITraceRequest
 	 * @throws PortalException
 	 */
@@ -129,8 +132,8 @@ public class MOITraceRequestLocalServiceImpl
 			String requestedBy, Date requestIncomingDate,
 			String requestedConsumerCode, String requestedConsumerName,
 			String requestedOperation, String requestedDocumentType,
-			Boolean requestValid, String requestResult, Date requestResultDate)
-			throws PortalException {
+			Boolean requestValid, String requestResult, Date requestResultDate,
+			String requestComment) throws PortalException {
 
 		// Get the MOI Trace Request by id.
 		MOITraceRequest traceRequest = getMOITraceRequest(requestId);
@@ -145,6 +148,7 @@ public class MOITraceRequestLocalServiceImpl
 		traceRequest.setRequestValid(requestValid);
 		traceRequest.setRequestResult(requestResult);
 		traceRequest.setRequestResultDate(requestResultDate);
+		traceRequest.setComment(requestComment);
 
 		// Persist MOI Trace Request to database.
 		return super.updateMOITraceRequest(traceRequest);

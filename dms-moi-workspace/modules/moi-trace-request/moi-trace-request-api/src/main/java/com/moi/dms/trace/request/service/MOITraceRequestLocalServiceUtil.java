@@ -68,6 +68,7 @@ public class MOITraceRequestLocalServiceUtil {
 	 * @param requestValid
 	 * @param requestResult
 	 * @param requestResultDate
+	 * @param requestComment
 	 * @return MOITraceRequest
 	 * @throws PortalException
 	 */
@@ -77,13 +78,13 @@ public class MOITraceRequestLocalServiceUtil {
 				String requestedConsumerCode, String requestedConsumerName,
 				String requestedOperation, String requestedDocumentType,
 				Boolean requestValid, String requestResult,
-				java.util.Date requestResultDate)
+				java.util.Date requestResultDate, String requestComment)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return getService().addMOITraceRequest(
 			requestedBy, requestIncomingDate, requestedConsumerCode,
 			requestedConsumerName, requestedOperation, requestedDocumentType,
-			requestValid, requestResult, requestResultDate);
+			requestValid, requestResult, requestResultDate, requestComment);
 	}
 
 	/**
@@ -418,6 +419,7 @@ public class MOITraceRequestLocalServiceUtil {
 	 * @param requestValid
 	 * @param requestResult
 	 * @param requestResultDate
+	 * @param requestComment
 	 * @return MOITraceRequest
 	 * @throws PortalException
 	 */
@@ -428,13 +430,13 @@ public class MOITraceRequestLocalServiceUtil {
 				String requestedConsumerCode, String requestedConsumerName,
 				String requestedOperation, String requestedDocumentType,
 				Boolean requestValid, String requestResult,
-				java.util.Date requestResultDate)
+				java.util.Date requestResultDate, String requestComment)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return getService().updateMOITraceRequest(
 			requestId, requestedBy, requestIncomingDate, requestedConsumerCode,
 			requestedConsumerName, requestedOperation, requestedDocumentType,
-			requestValid, requestResult, requestResultDate);
+			requestValid, requestResult, requestResultDate, requestComment);
 	}
 
 	/**

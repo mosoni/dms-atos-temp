@@ -10,7 +10,9 @@
 		<field name="requestedOperation" type="String" />
 		<field name="requestedDocumentType" type="String" />
 		<field name="requestValid" type="boolean" />
-		<field name="requestResult" type="String" />
+		<field name="requestResult" type="String">
+			<hint name="max-length">100</hint>
+		</field>
 		<field name="requestResultDate" type="Date" />
 		<field name="comment" type="String" />
 	</model>

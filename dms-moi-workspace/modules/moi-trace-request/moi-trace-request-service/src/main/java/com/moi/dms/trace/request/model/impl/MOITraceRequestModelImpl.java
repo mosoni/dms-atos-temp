@@ -98,7 +98,7 @@ public class MOITraceRequestModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table moi_tracerequest (requestId LONG not null primary key,requestedBy VARCHAR(75) null,requestIncomingDate DATE null,requestedConsumerCode VARCHAR(75) null,requestedConsumerName VARCHAR(75) null,requestedOperation VARCHAR(75) null,requestedDocumentType VARCHAR(75) null,requestValid BOOLEAN,requestResult VARCHAR(75) null,requestResultDate DATE null,comment_ VARCHAR(75) null)";
+		"create table moi_tracerequest (requestId LONG not null primary key,requestedBy VARCHAR(75) null,requestIncomingDate DATE null,requestedConsumerCode VARCHAR(75) null,requestedConsumerName VARCHAR(75) null,requestedOperation VARCHAR(75) null,requestedDocumentType VARCHAR(75) null,requestValid BOOLEAN,requestResult VARCHAR(100) null,requestResultDate DATE null,comment_ VARCHAR(75) null)";
 
 	public static final String TABLE_SQL_DROP = "drop table moi_tracerequest";
 

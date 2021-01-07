@@ -89,6 +89,7 @@ public interface MOITraceRequestLocalService
 	 * @param requestValid
 	 * @param requestResult
 	 * @param requestResultDate
+	 * @param requestComment
 	 * @return MOITraceRequest
 	 * @throws PortalException
 	 */
@@ -96,7 +97,8 @@ public interface MOITraceRequestLocalService
 			String requestedBy, Date requestIncomingDate,
 			String requestedConsumerCode, String requestedConsumerName,
 			String requestedOperation, String requestedDocumentType,
-			Boolean requestValid, String requestResult, Date requestResultDate)
+			Boolean requestValid, String requestResult, Date requestResultDate,
+			String requestComment)
 		throws PortalException;
 
 	/**
@@ -349,6 +351,7 @@ public interface MOITraceRequestLocalService
 	 * @param requestValid
 	 * @param requestResult
 	 * @param requestResultDate
+	 * @param requestComment
 	 * @return MOITraceRequest
 	 * @throws PortalException
 	 */
@@ -356,7 +359,8 @@ public interface MOITraceRequestLocalService
 			long requestId, String requestedBy, Date requestIncomingDate,
 			String requestedConsumerCode, String requestedConsumerName,
 			String requestedOperation, String requestedDocumentType,
-			Boolean requestValid, String requestResult, Date requestResultDate)
+			Boolean requestValid, String requestResult, Date requestResultDate,
+			String requestComment)
 		throws PortalException;
 
 	/**
