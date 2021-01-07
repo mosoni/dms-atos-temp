@@ -5,6 +5,7 @@ import com.liferay.document.library.kernel.model.DLFolder;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLAppServiceUtil;
 import com.liferay.document.library.kernel.service.DLFolderLocalServiceUtil;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -77,7 +78,7 @@ public class MosipAPIHandlerResourceImpl
 					.addMOITraceRequest(String.valueOf(userId), new Date(),
 							ConsumerCode, null,
 							MosipUtil.getAction(DocumentType, true),
-							DocumentType, false, null, null);
+							DocumentType, false, null, null, StringPool.BLANK);
 		} catch (PortalException e) {
 			_log.error(e);
 		}

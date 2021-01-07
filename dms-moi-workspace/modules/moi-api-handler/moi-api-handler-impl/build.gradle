@@ -13,8 +13,10 @@ buildscript {
 apply plugin: "com.liferay.portal.tools.rest.builder"
 
 dependencies {
-	compile project(":modules:moi-api-handler:moi-api-handler-api")
-	compile project(":modules:moi-mosip-util")
+	compileOnly project(":modules:moi-api-handler:moi-api-handler-api")
+	compileOnly project(":modules:moi-mosip-util")
+	compileOnly project(":modules:moi-jira-util")
+	compileOnly project(":modules:moi-constants")
 	compileOnly project(":modules:moi-id-mapper:moi-id-mapper-api")
 	compileOnly project(":modules:moi-trace-request:moi-trace-request-api")
 	

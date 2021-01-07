@@ -15,19 +15,18 @@ import java.util.List;
  * Accessibility : Within API handler
  *
  *
- *@author Mohit Soni
+ * @author Mohit Soni
  * 
  */
 public class GenerateDocumentResult {
 
-	
 	/**
 	 * This method is used to genrate Document result for all APIs as result
 	 *
 	 * @param traceId
 	 * @param result
 	 * @param resultMessage
-	 * @return : 
+	 * @return :
 	 */
 	public static Page<DocumentResult> generateDocumentResult(long traceId,
 			String result, String resultMessage) {
@@ -38,6 +37,7 @@ public class GenerateDocumentResult {
 		documentResult.setTraceId(traceId);
 		documentResult.setResult(result);
 		documentResult.setResultMessage(resultMessage);
+		documentResultList.add(documentResult);
 
 		return Page.of(documentResultList);
 
