@@ -1,0 +1,6 @@
+Bundle-Name: moi-jira-util
+Bundle-SymbolicName: com.moi.jira.util
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.moi.jira.util.constants,\
+	com.moi.jira.validator
