@@ -82,8 +82,8 @@ public class ConsumerRegistrationLocalServiceImpl
 			throws PortalException {
 
 		List<ConsumerRegistration> existingConsumerRegistrations = getAllConsumerRegistrations();
-		validate(0, consumerId, consumerName,
-				supportedDocumentType, existingConsumerRegistrations);
+		validate(0, consumerId, consumerName, supportedDocumentType,
+				existingConsumerRegistrations);
 
 		// Generate primary key for the Consumer Registration.
 		long consumerRegistrationId = counterLocalService
@@ -124,9 +124,8 @@ public class ConsumerRegistrationLocalServiceImpl
 			String consumerStatus) throws PortalException {
 
 		List<ConsumerRegistration> existingConsumerRegistrations = getAllConsumerRegistrations();
-		validate(consumerRegistrationId,
-				consumerId, consumerName, supportedDocumentType,
-				existingConsumerRegistrations);
+		validate(consumerRegistrationId, consumerId, consumerName,
+				supportedDocumentType, existingConsumerRegistrations);
 
 		// Get the Consumer Registration by id.
 		ConsumerRegistration consumerRegistration = getConsumerRegistration(
@@ -245,8 +244,7 @@ public class ConsumerRegistrationLocalServiceImpl
 	}
 
 	/**
-	 * This method returns count with respect to ConsumerId/Consumer Code
-	 * and Document Type
+	 * This method returns count with respect to ConsumerId and Document Type
 	 *
 	 * @param consumerId
 	 * @param documentType
@@ -254,10 +252,38 @@ public class ConsumerRegistrationLocalServiceImpl
 	 */
 	public long countByConsumerIdDocumentType(String consumerId,
 			String documentType) {
-		return consumerRegistrationPersistence.countByConsumerIdSupportedDocumentType(
-				consumerId, documentType);
+		return consumerRegistrationPersistence
+				.countByConsumerIdSupportedDocumentType(consumerId,
+						documentType);
 
 	}
+
+	/**
+	 * This method returns count with respect to Consumer Code/Name and Document
+	 * Type
+	 *
+	 * @param consumerName
+	 * @param documentType
+	 * @return : count
+	 */
+	public long countByConsumerNameDocumentType(String consumerName,
+			String documentType) {
+		return consumerRegistrationPersistence
+				.countByConsumerNameSupportedDocumentType(consumerName,
+						documentType);
+	}
+
+	/**
+	 * This method returns count with respect to Consumer Code/Name
+	 *
+	 * @param consumerName
+	 * @return : count
+	 */
+	public long countByConsumerName(String consumerName) {
+		return consumerRegistrationPersistence
+				.countByConsumerName(consumerName);
+	}
+
 	@Override
 	public ConsumerRegistration addConsumerRegistration(
 			ConsumerRegistration consumerRegistration) {
@@ -314,6 +340,16 @@ public class ConsumerRegistrationLocalServiceImpl
 		return result;
 	}
 
+	/**
+	 * Method to check validity of consumer added.
+	 * @param consumerRegistrationId
+	 * @param consumerId
+	 * @param consumerName
+	 * @param supportedDocumentTypes
+	 * @param existingConsumerRegistrations
+	 * @param errors
+	 * @return boolean
+	 */
 	private boolean isConsumerDetailValid(final long consumerRegistrationId,
 			final String consumerId, final String consumerName,
 			String supportedDocumentTypes,

@@ -78,8 +78,7 @@ public class ConsumerRegistrationLocalServiceWrapper
 	}
 
 	/**
-	 * This method returns count with respect to ConsumerId/Consumer Code
-	 * and Document Type
+	 * This method returns count with respect to ConsumerId and Document Type
 	 *
 	 * @param consumerId
 	 * @param documentType
@@ -91,6 +90,34 @@ public class ConsumerRegistrationLocalServiceWrapper
 
 		return _consumerRegistrationLocalService.countByConsumerIdDocumentType(
 			consumerId, documentType);
+	}
+
+	/**
+	 * This method returns count with respect to Consumer Code/Name
+	 *
+	 * @param consumerName
+	 * @return : count
+	 */
+	@Override
+	public long countByConsumerName(String consumerName) {
+		return _consumerRegistrationLocalService.countByConsumerName(
+			consumerName);
+	}
+
+	/**
+	 * This method returns count with respect to Consumer Code/Name and Document
+	 * Type
+	 *
+	 * @param consumerName
+	 * @param documentType
+	 * @return : count
+	 */
+	@Override
+	public long countByConsumerNameDocumentType(
+		String consumerName, String documentType) {
+
+		return _consumerRegistrationLocalService.
+			countByConsumerNameDocumentType(consumerName, documentType);
 	}
 
 	/**

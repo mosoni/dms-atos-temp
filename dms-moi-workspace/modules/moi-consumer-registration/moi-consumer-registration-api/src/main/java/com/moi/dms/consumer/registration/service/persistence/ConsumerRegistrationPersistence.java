@@ -242,6 +242,172 @@ public interface ConsumerRegistrationPersistence
 		String consumerId, String supportedDocumentType);
 
 	/**
+	 * Returns all the consumer registrations where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @return the matching consumer registrations
+	 */
+	public java.util.List<ConsumerRegistration>
+		findByConsumerNameSupportedDocumentType(
+			String consumerName, String supportedDocumentType);
+
+	/**
+	 * Returns a range of all the consumer registrations where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ConsumerRegistrationModelImpl</code>.
+	 * </p>
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @param start the lower bound of the range of consumer registrations
+	 * @param end the upper bound of the range of consumer registrations (not inclusive)
+	 * @return the range of matching consumer registrations
+	 */
+	public java.util.List<ConsumerRegistration>
+		findByConsumerNameSupportedDocumentType(
+			String consumerName, String supportedDocumentType, int start,
+			int end);
+
+	/**
+	 * Returns an ordered range of all the consumer registrations where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ConsumerRegistrationModelImpl</code>.
+	 * </p>
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @param start the lower bound of the range of consumer registrations
+	 * @param end the upper bound of the range of consumer registrations (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching consumer registrations
+	 */
+	public java.util.List<ConsumerRegistration>
+		findByConsumerNameSupportedDocumentType(
+			String consumerName, String supportedDocumentType, int start,
+			int end,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<ConsumerRegistration> orderByComparator);
+
+	/**
+	 * Returns an ordered range of all the consumer registrations where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ConsumerRegistrationModelImpl</code>.
+	 * </p>
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @param start the lower bound of the range of consumer registrations
+	 * @param end the upper bound of the range of consumer registrations (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching consumer registrations
+	 */
+	public java.util.List<ConsumerRegistration>
+		findByConsumerNameSupportedDocumentType(
+			String consumerName, String supportedDocumentType, int start,
+			int end,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<ConsumerRegistration> orderByComparator,
+			boolean useFinderCache);
+
+	/**
+	 * Returns the first consumer registration in the ordered set where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching consumer registration
+	 * @throws NoSuchConsumerRegistrationException if a matching consumer registration could not be found
+	 */
+	public ConsumerRegistration findByConsumerNameSupportedDocumentType_First(
+			String consumerName, String supportedDocumentType,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<ConsumerRegistration> orderByComparator)
+		throws NoSuchConsumerRegistrationException;
+
+	/**
+	 * Returns the first consumer registration in the ordered set where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching consumer registration, or <code>null</code> if a matching consumer registration could not be found
+	 */
+	public ConsumerRegistration fetchByConsumerNameSupportedDocumentType_First(
+		String consumerName, String supportedDocumentType,
+		com.liferay.portal.kernel.util.OrderByComparator<ConsumerRegistration>
+			orderByComparator);
+
+	/**
+	 * Returns the last consumer registration in the ordered set where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching consumer registration
+	 * @throws NoSuchConsumerRegistrationException if a matching consumer registration could not be found
+	 */
+	public ConsumerRegistration findByConsumerNameSupportedDocumentType_Last(
+			String consumerName, String supportedDocumentType,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<ConsumerRegistration> orderByComparator)
+		throws NoSuchConsumerRegistrationException;
+
+	/**
+	 * Returns the last consumer registration in the ordered set where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching consumer registration, or <code>null</code> if a matching consumer registration could not be found
+	 */
+	public ConsumerRegistration fetchByConsumerNameSupportedDocumentType_Last(
+		String consumerName, String supportedDocumentType,
+		com.liferay.portal.kernel.util.OrderByComparator<ConsumerRegistration>
+			orderByComparator);
+
+	/**
+	 * Returns the consumer registrations before and after the current consumer registration in the ordered set where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * @param registrationId the primary key of the current consumer registration
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next consumer registration
+	 * @throws NoSuchConsumerRegistrationException if a consumer registration with the primary key could not be found
+	 */
+	public ConsumerRegistration[]
+			findByConsumerNameSupportedDocumentType_PrevAndNext(
+				long registrationId, String consumerName,
+				String supportedDocumentType,
+				com.liferay.portal.kernel.util.OrderByComparator
+					<ConsumerRegistration> orderByComparator)
+		throws NoSuchConsumerRegistrationException;
+
+	/**
+	 * Removes all the consumer registrations where consumerName = &#63; and supportedDocumentType = &#63; from the database.
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 */
+	public void removeByConsumerNameSupportedDocumentType(
+		String consumerName, String supportedDocumentType);
+
+	/**
+	 * Returns the number of consumer registrations where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @return the number of matching consumer registrations
+	 */
+	public int countByConsumerNameSupportedDocumentType(
+		String consumerName, String supportedDocumentType);
+
+	/**
 	 * Returns all the consumer registrations where consumerName = &#63;.
 	 *
 	 * @param consumerName the consumer name

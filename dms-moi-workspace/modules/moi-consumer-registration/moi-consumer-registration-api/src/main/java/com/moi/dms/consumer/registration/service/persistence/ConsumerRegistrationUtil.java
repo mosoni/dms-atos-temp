@@ -383,6 +383,218 @@ public class ConsumerRegistrationUtil {
 	}
 
 	/**
+	 * Returns all the consumer registrations where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @return the matching consumer registrations
+	 */
+	public static List<ConsumerRegistration>
+		findByConsumerNameSupportedDocumentType(
+			String consumerName, String supportedDocumentType) {
+
+		return getPersistence().findByConsumerNameSupportedDocumentType(
+			consumerName, supportedDocumentType);
+	}
+
+	/**
+	 * Returns a range of all the consumer registrations where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ConsumerRegistrationModelImpl</code>.
+	 * </p>
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @param start the lower bound of the range of consumer registrations
+	 * @param end the upper bound of the range of consumer registrations (not inclusive)
+	 * @return the range of matching consumer registrations
+	 */
+	public static List<ConsumerRegistration>
+		findByConsumerNameSupportedDocumentType(
+			String consumerName, String supportedDocumentType, int start,
+			int end) {
+
+		return getPersistence().findByConsumerNameSupportedDocumentType(
+			consumerName, supportedDocumentType, start, end);
+	}
+
+	/**
+	 * Returns an ordered range of all the consumer registrations where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ConsumerRegistrationModelImpl</code>.
+	 * </p>
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @param start the lower bound of the range of consumer registrations
+	 * @param end the upper bound of the range of consumer registrations (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching consumer registrations
+	 */
+	public static List<ConsumerRegistration>
+		findByConsumerNameSupportedDocumentType(
+			String consumerName, String supportedDocumentType, int start,
+			int end,
+			OrderByComparator<ConsumerRegistration> orderByComparator) {
+
+		return getPersistence().findByConsumerNameSupportedDocumentType(
+			consumerName, supportedDocumentType, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns an ordered range of all the consumer registrations where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ConsumerRegistrationModelImpl</code>.
+	 * </p>
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @param start the lower bound of the range of consumer registrations
+	 * @param end the upper bound of the range of consumer registrations (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching consumer registrations
+	 */
+	public static List<ConsumerRegistration>
+		findByConsumerNameSupportedDocumentType(
+			String consumerName, String supportedDocumentType, int start,
+			int end, OrderByComparator<ConsumerRegistration> orderByComparator,
+			boolean useFinderCache) {
+
+		return getPersistence().findByConsumerNameSupportedDocumentType(
+			consumerName, supportedDocumentType, start, end, orderByComparator,
+			useFinderCache);
+	}
+
+	/**
+	 * Returns the first consumer registration in the ordered set where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching consumer registration
+	 * @throws NoSuchConsumerRegistrationException if a matching consumer registration could not be found
+	 */
+	public static ConsumerRegistration
+			findByConsumerNameSupportedDocumentType_First(
+				String consumerName, String supportedDocumentType,
+				OrderByComparator<ConsumerRegistration> orderByComparator)
+		throws com.moi.dms.consumer.registration.exception.
+			NoSuchConsumerRegistrationException {
+
+		return getPersistence().findByConsumerNameSupportedDocumentType_First(
+			consumerName, supportedDocumentType, orderByComparator);
+	}
+
+	/**
+	 * Returns the first consumer registration in the ordered set where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching consumer registration, or <code>null</code> if a matching consumer registration could not be found
+	 */
+	public static ConsumerRegistration
+		fetchByConsumerNameSupportedDocumentType_First(
+			String consumerName, String supportedDocumentType,
+			OrderByComparator<ConsumerRegistration> orderByComparator) {
+
+		return getPersistence().fetchByConsumerNameSupportedDocumentType_First(
+			consumerName, supportedDocumentType, orderByComparator);
+	}
+
+	/**
+	 * Returns the last consumer registration in the ordered set where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching consumer registration
+	 * @throws NoSuchConsumerRegistrationException if a matching consumer registration could not be found
+	 */
+	public static ConsumerRegistration
+			findByConsumerNameSupportedDocumentType_Last(
+				String consumerName, String supportedDocumentType,
+				OrderByComparator<ConsumerRegistration> orderByComparator)
+		throws com.moi.dms.consumer.registration.exception.
+			NoSuchConsumerRegistrationException {
+
+		return getPersistence().findByConsumerNameSupportedDocumentType_Last(
+			consumerName, supportedDocumentType, orderByComparator);
+	}
+
+	/**
+	 * Returns the last consumer registration in the ordered set where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching consumer registration, or <code>null</code> if a matching consumer registration could not be found
+	 */
+	public static ConsumerRegistration
+		fetchByConsumerNameSupportedDocumentType_Last(
+			String consumerName, String supportedDocumentType,
+			OrderByComparator<ConsumerRegistration> orderByComparator) {
+
+		return getPersistence().fetchByConsumerNameSupportedDocumentType_Last(
+			consumerName, supportedDocumentType, orderByComparator);
+	}
+
+	/**
+	 * Returns the consumer registrations before and after the current consumer registration in the ordered set where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * @param registrationId the primary key of the current consumer registration
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next consumer registration
+	 * @throws NoSuchConsumerRegistrationException if a consumer registration with the primary key could not be found
+	 */
+	public static ConsumerRegistration[]
+			findByConsumerNameSupportedDocumentType_PrevAndNext(
+				long registrationId, String consumerName,
+				String supportedDocumentType,
+				OrderByComparator<ConsumerRegistration> orderByComparator)
+		throws com.moi.dms.consumer.registration.exception.
+			NoSuchConsumerRegistrationException {
+
+		return getPersistence().
+			findByConsumerNameSupportedDocumentType_PrevAndNext(
+				registrationId, consumerName, supportedDocumentType,
+				orderByComparator);
+	}
+
+	/**
+	 * Removes all the consumer registrations where consumerName = &#63; and supportedDocumentType = &#63; from the database.
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 */
+	public static void removeByConsumerNameSupportedDocumentType(
+		String consumerName, String supportedDocumentType) {
+
+		getPersistence().removeByConsumerNameSupportedDocumentType(
+			consumerName, supportedDocumentType);
+	}
+
+	/**
+	 * Returns the number of consumer registrations where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @return the number of matching consumer registrations
+	 */
+	public static int countByConsumerNameSupportedDocumentType(
+		String consumerName, String supportedDocumentType) {
+
+		return getPersistence().countByConsumerNameSupportedDocumentType(
+			consumerName, supportedDocumentType);
+	}
+
+	/**
 	 * Returns all the consumer registrations where consumerName = &#63;.
 	 *
 	 * @param consumerName the consumer name

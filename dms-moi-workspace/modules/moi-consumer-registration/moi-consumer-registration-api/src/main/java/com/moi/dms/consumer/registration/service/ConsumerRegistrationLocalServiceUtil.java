@@ -80,8 +80,7 @@ public class ConsumerRegistrationLocalServiceUtil {
 	}
 
 	/**
-	 * This method returns count with respect to ConsumerId/Consumer Code
-	 * and Document Type
+	 * This method returns count with respect to ConsumerId and Document Type
 	 *
 	 * @param consumerId
 	 * @param documentType
@@ -92,6 +91,31 @@ public class ConsumerRegistrationLocalServiceUtil {
 
 		return getService().countByConsumerIdDocumentType(
 			consumerId, documentType);
+	}
+
+	/**
+	 * This method returns count with respect to Consumer Code/Name
+	 *
+	 * @param consumerName
+	 * @return : count
+	 */
+	public static long countByConsumerName(String consumerName) {
+		return getService().countByConsumerName(consumerName);
+	}
+
+	/**
+	 * This method returns count with respect to Consumer Code/Name and Document
+	 * Type
+	 *
+	 * @param consumerName
+	 * @param documentType
+	 * @return : count
+	 */
+	public static long countByConsumerNameDocumentType(
+		String consumerName, String documentType) {
+
+		return getService().countByConsumerNameDocumentType(
+			consumerName, documentType);
 	}
 
 	/**

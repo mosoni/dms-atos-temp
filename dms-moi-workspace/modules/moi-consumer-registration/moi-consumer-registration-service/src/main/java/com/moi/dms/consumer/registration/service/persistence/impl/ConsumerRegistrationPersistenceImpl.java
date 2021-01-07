@@ -976,6 +976,679 @@ public class ConsumerRegistrationPersistenceImpl
 		_FINDER_COLUMN_CONSUMERIDSUPPORTEDDOCUMENTTYPE_SUPPORTEDDOCUMENTTYPE_3 =
 			"(consumerRegistration.supportedDocumentType IS NULL OR consumerRegistration.supportedDocumentType = '')";
 
+	private FinderPath
+		_finderPathWithPaginationFindByConsumerNameSupportedDocumentType;
+	private FinderPath
+		_finderPathWithoutPaginationFindByConsumerNameSupportedDocumentType;
+	private FinderPath _finderPathCountByConsumerNameSupportedDocumentType;
+
+	/**
+	 * Returns all the consumer registrations where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @return the matching consumer registrations
+	 */
+	@Override
+	public List<ConsumerRegistration> findByConsumerNameSupportedDocumentType(
+		String consumerName, String supportedDocumentType) {
+
+		return findByConsumerNameSupportedDocumentType(
+			consumerName, supportedDocumentType, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the consumer registrations where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ConsumerRegistrationModelImpl</code>.
+	 * </p>
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @param start the lower bound of the range of consumer registrations
+	 * @param end the upper bound of the range of consumer registrations (not inclusive)
+	 * @return the range of matching consumer registrations
+	 */
+	@Override
+	public List<ConsumerRegistration> findByConsumerNameSupportedDocumentType(
+		String consumerName, String supportedDocumentType, int start, int end) {
+
+		return findByConsumerNameSupportedDocumentType(
+			consumerName, supportedDocumentType, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the consumer registrations where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ConsumerRegistrationModelImpl</code>.
+	 * </p>
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @param start the lower bound of the range of consumer registrations
+	 * @param end the upper bound of the range of consumer registrations (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching consumer registrations
+	 */
+	@Override
+	public List<ConsumerRegistration> findByConsumerNameSupportedDocumentType(
+		String consumerName, String supportedDocumentType, int start, int end,
+		OrderByComparator<ConsumerRegistration> orderByComparator) {
+
+		return findByConsumerNameSupportedDocumentType(
+			consumerName, supportedDocumentType, start, end, orderByComparator,
+			true);
+	}
+
+	/**
+	 * Returns an ordered range of all the consumer registrations where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ConsumerRegistrationModelImpl</code>.
+	 * </p>
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @param start the lower bound of the range of consumer registrations
+	 * @param end the upper bound of the range of consumer registrations (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching consumer registrations
+	 */
+	@Override
+	public List<ConsumerRegistration> findByConsumerNameSupportedDocumentType(
+		String consumerName, String supportedDocumentType, int start, int end,
+		OrderByComparator<ConsumerRegistration> orderByComparator,
+		boolean useFinderCache) {
+
+		consumerName = Objects.toString(consumerName, "");
+		supportedDocumentType = Objects.toString(supportedDocumentType, "");
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			if (useFinderCache) {
+				finderPath =
+					_finderPathWithoutPaginationFindByConsumerNameSupportedDocumentType;
+				finderArgs = new Object[] {consumerName, supportedDocumentType};
+			}
+		}
+		else if (useFinderCache) {
+			finderPath =
+				_finderPathWithPaginationFindByConsumerNameSupportedDocumentType;
+			finderArgs = new Object[] {
+				consumerName, supportedDocumentType, start, end,
+				orderByComparator
+			};
+		}
+
+		List<ConsumerRegistration> list = null;
+
+		if (useFinderCache) {
+			list = (List<ConsumerRegistration>)finderCache.getResult(
+				finderPath, finderArgs, this);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (ConsumerRegistration consumerRegistration : list) {
+					if (!consumerName.equals(
+							consumerRegistration.getConsumerName()) ||
+						!supportedDocumentType.equals(
+							consumerRegistration.getSupportedDocumentType())) {
+
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler sb = null;
+
+			if (orderByComparator != null) {
+				sb = new StringBundler(
+					4 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				sb = new StringBundler(4);
+			}
+
+			sb.append(_SQL_SELECT_CONSUMERREGISTRATION_WHERE);
+
+			boolean bindConsumerName = false;
+
+			if (consumerName.isEmpty()) {
+				sb.append(
+					_FINDER_COLUMN_CONSUMERNAMESUPPORTEDDOCUMENTTYPE_CONSUMERNAME_3);
+			}
+			else {
+				bindConsumerName = true;
+
+				sb.append(
+					_FINDER_COLUMN_CONSUMERNAMESUPPORTEDDOCUMENTTYPE_CONSUMERNAME_2);
+			}
+
+			boolean bindSupportedDocumentType = false;
+
+			if (supportedDocumentType.isEmpty()) {
+				sb.append(
+					_FINDER_COLUMN_CONSUMERNAMESUPPORTEDDOCUMENTTYPE_SUPPORTEDDOCUMENTTYPE_3);
+			}
+			else {
+				bindSupportedDocumentType = true;
+
+				sb.append(
+					_FINDER_COLUMN_CONSUMERNAMESUPPORTEDDOCUMENTTYPE_SUPPORTEDDOCUMENTTYPE_2);
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else {
+				sb.append(ConsumerRegistrationModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindConsumerName) {
+					queryPos.add(consumerName);
+				}
+
+				if (bindSupportedDocumentType) {
+					queryPos.add(supportedDocumentType);
+				}
+
+				list = (List<ConsumerRegistration>)QueryUtil.list(
+					query, getDialect(), start, end);
+
+				cacheResult(list);
+
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
+			}
+			catch (Exception exception) {
+				if (useFinderCache) {
+					finderCache.removeResult(finderPath, finderArgs);
+				}
+
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first consumer registration in the ordered set where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching consumer registration
+	 * @throws NoSuchConsumerRegistrationException if a matching consumer registration could not be found
+	 */
+	@Override
+	public ConsumerRegistration findByConsumerNameSupportedDocumentType_First(
+			String consumerName, String supportedDocumentType,
+			OrderByComparator<ConsumerRegistration> orderByComparator)
+		throws NoSuchConsumerRegistrationException {
+
+		ConsumerRegistration consumerRegistration =
+			fetchByConsumerNameSupportedDocumentType_First(
+				consumerName, supportedDocumentType, orderByComparator);
+
+		if (consumerRegistration != null) {
+			return consumerRegistration;
+		}
+
+		StringBundler sb = new StringBundler(6);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("consumerName=");
+		sb.append(consumerName);
+
+		sb.append(", supportedDocumentType=");
+		sb.append(supportedDocumentType);
+
+		sb.append("}");
+
+		throw new NoSuchConsumerRegistrationException(sb.toString());
+	}
+
+	/**
+	 * Returns the first consumer registration in the ordered set where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching consumer registration, or <code>null</code> if a matching consumer registration could not be found
+	 */
+	@Override
+	public ConsumerRegistration fetchByConsumerNameSupportedDocumentType_First(
+		String consumerName, String supportedDocumentType,
+		OrderByComparator<ConsumerRegistration> orderByComparator) {
+
+		List<ConsumerRegistration> list =
+			findByConsumerNameSupportedDocumentType(
+				consumerName, supportedDocumentType, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last consumer registration in the ordered set where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching consumer registration
+	 * @throws NoSuchConsumerRegistrationException if a matching consumer registration could not be found
+	 */
+	@Override
+	public ConsumerRegistration findByConsumerNameSupportedDocumentType_Last(
+			String consumerName, String supportedDocumentType,
+			OrderByComparator<ConsumerRegistration> orderByComparator)
+		throws NoSuchConsumerRegistrationException {
+
+		ConsumerRegistration consumerRegistration =
+			fetchByConsumerNameSupportedDocumentType_Last(
+				consumerName, supportedDocumentType, orderByComparator);
+
+		if (consumerRegistration != null) {
+			return consumerRegistration;
+		}
+
+		StringBundler sb = new StringBundler(6);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("consumerName=");
+		sb.append(consumerName);
+
+		sb.append(", supportedDocumentType=");
+		sb.append(supportedDocumentType);
+
+		sb.append("}");
+
+		throw new NoSuchConsumerRegistrationException(sb.toString());
+	}
+
+	/**
+	 * Returns the last consumer registration in the ordered set where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching consumer registration, or <code>null</code> if a matching consumer registration could not be found
+	 */
+	@Override
+	public ConsumerRegistration fetchByConsumerNameSupportedDocumentType_Last(
+		String consumerName, String supportedDocumentType,
+		OrderByComparator<ConsumerRegistration> orderByComparator) {
+
+		int count = countByConsumerNameSupportedDocumentType(
+			consumerName, supportedDocumentType);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<ConsumerRegistration> list =
+			findByConsumerNameSupportedDocumentType(
+				consumerName, supportedDocumentType, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the consumer registrations before and after the current consumer registration in the ordered set where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * @param registrationId the primary key of the current consumer registration
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next consumer registration
+	 * @throws NoSuchConsumerRegistrationException if a consumer registration with the primary key could not be found
+	 */
+	@Override
+	public ConsumerRegistration[]
+			findByConsumerNameSupportedDocumentType_PrevAndNext(
+				long registrationId, String consumerName,
+				String supportedDocumentType,
+				OrderByComparator<ConsumerRegistration> orderByComparator)
+		throws NoSuchConsumerRegistrationException {
+
+		consumerName = Objects.toString(consumerName, "");
+		supportedDocumentType = Objects.toString(supportedDocumentType, "");
+
+		ConsumerRegistration consumerRegistration = findByPrimaryKey(
+			registrationId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			ConsumerRegistration[] array = new ConsumerRegistrationImpl[3];
+
+			array[0] = getByConsumerNameSupportedDocumentType_PrevAndNext(
+				session, consumerRegistration, consumerName,
+				supportedDocumentType, orderByComparator, true);
+
+			array[1] = consumerRegistration;
+
+			array[2] = getByConsumerNameSupportedDocumentType_PrevAndNext(
+				session, consumerRegistration, consumerName,
+				supportedDocumentType, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected ConsumerRegistration
+		getByConsumerNameSupportedDocumentType_PrevAndNext(
+			Session session, ConsumerRegistration consumerRegistration,
+			String consumerName, String supportedDocumentType,
+			OrderByComparator<ConsumerRegistration> orderByComparator,
+			boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				5 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(4);
+		}
+
+		sb.append(_SQL_SELECT_CONSUMERREGISTRATION_WHERE);
+
+		boolean bindConsumerName = false;
+
+		if (consumerName.isEmpty()) {
+			sb.append(
+				_FINDER_COLUMN_CONSUMERNAMESUPPORTEDDOCUMENTTYPE_CONSUMERNAME_3);
+		}
+		else {
+			bindConsumerName = true;
+
+			sb.append(
+				_FINDER_COLUMN_CONSUMERNAMESUPPORTEDDOCUMENTTYPE_CONSUMERNAME_2);
+		}
+
+		boolean bindSupportedDocumentType = false;
+
+		if (supportedDocumentType.isEmpty()) {
+			sb.append(
+				_FINDER_COLUMN_CONSUMERNAMESUPPORTEDDOCUMENTTYPE_SUPPORTEDDOCUMENTTYPE_3);
+		}
+		else {
+			bindSupportedDocumentType = true;
+
+			sb.append(
+				_FINDER_COLUMN_CONSUMERNAMESUPPORTEDDOCUMENTTYPE_SUPPORTEDDOCUMENTTYPE_2);
+		}
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			sb.append(ConsumerRegistrationModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = sb.toString();
+
+		Query query = session.createQuery(sql);
+
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+
+		if (bindConsumerName) {
+			queryPos.add(consumerName);
+		}
+
+		if (bindSupportedDocumentType) {
+			queryPos.add(supportedDocumentType);
+		}
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						consumerRegistration)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<ConsumerRegistration> list = query.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the consumer registrations where consumerName = &#63; and supportedDocumentType = &#63; from the database.
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 */
+	@Override
+	public void removeByConsumerNameSupportedDocumentType(
+		String consumerName, String supportedDocumentType) {
+
+		for (ConsumerRegistration consumerRegistration :
+				findByConsumerNameSupportedDocumentType(
+					consumerName, supportedDocumentType, QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS, null)) {
+
+			remove(consumerRegistration);
+		}
+	}
+
+	/**
+	 * Returns the number of consumer registrations where consumerName = &#63; and supportedDocumentType = &#63;.
+	 *
+	 * @param consumerName the consumer name
+	 * @param supportedDocumentType the supported document type
+	 * @return the number of matching consumer registrations
+	 */
+	@Override
+	public int countByConsumerNameSupportedDocumentType(
+		String consumerName, String supportedDocumentType) {
+
+		consumerName = Objects.toString(consumerName, "");
+		supportedDocumentType = Objects.toString(supportedDocumentType, "");
+
+		FinderPath finderPath =
+			_finderPathCountByConsumerNameSupportedDocumentType;
+
+		Object[] finderArgs = new Object[] {
+			consumerName, supportedDocumentType
+		};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_COUNT_CONSUMERREGISTRATION_WHERE);
+
+			boolean bindConsumerName = false;
+
+			if (consumerName.isEmpty()) {
+				sb.append(
+					_FINDER_COLUMN_CONSUMERNAMESUPPORTEDDOCUMENTTYPE_CONSUMERNAME_3);
+			}
+			else {
+				bindConsumerName = true;
+
+				sb.append(
+					_FINDER_COLUMN_CONSUMERNAMESUPPORTEDDOCUMENTTYPE_CONSUMERNAME_2);
+			}
+
+			boolean bindSupportedDocumentType = false;
+
+			if (supportedDocumentType.isEmpty()) {
+				sb.append(
+					_FINDER_COLUMN_CONSUMERNAMESUPPORTEDDOCUMENTTYPE_SUPPORTEDDOCUMENTTYPE_3);
+			}
+			else {
+				bindSupportedDocumentType = true;
+
+				sb.append(
+					_FINDER_COLUMN_CONSUMERNAMESUPPORTEDDOCUMENTTYPE_SUPPORTEDDOCUMENTTYPE_2);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindConsumerName) {
+					queryPos.add(consumerName);
+				}
+
+				if (bindSupportedDocumentType) {
+					queryPos.add(supportedDocumentType);
+				}
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				finderCache.removeResult(finderPath, finderArgs);
+
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String
+		_FINDER_COLUMN_CONSUMERNAMESUPPORTEDDOCUMENTTYPE_CONSUMERNAME_2 =
+			"consumerRegistration.consumerName = ? AND ";
+
+	private static final String
+		_FINDER_COLUMN_CONSUMERNAMESUPPORTEDDOCUMENTTYPE_CONSUMERNAME_3 =
+			"(consumerRegistration.consumerName IS NULL OR consumerRegistration.consumerName = '') AND ";
+
+	private static final String
+		_FINDER_COLUMN_CONSUMERNAMESUPPORTEDDOCUMENTTYPE_SUPPORTEDDOCUMENTTYPE_2 =
+			"consumerRegistration.supportedDocumentType = ?";
+
+	private static final String
+		_FINDER_COLUMN_CONSUMERNAMESUPPORTEDDOCUMENTTYPE_SUPPORTEDDOCUMENTTYPE_3 =
+			"(consumerRegistration.supportedDocumentType IS NULL OR consumerRegistration.supportedDocumentType = '')";
+
 	private FinderPath _finderPathWithPaginationFindByConsumerName;
 	private FinderPath _finderPathWithoutPaginationFindByConsumerName;
 	private FinderPath _finderPathCountByConsumerName;
@@ -2997,6 +3670,17 @@ public class ConsumerRegistrationPersistenceImpl
 				_finderPathWithoutPaginationFindByConsumerId, args);
 
 			args = new Object[] {
+				consumerRegistrationModelImpl.getConsumerName(),
+				consumerRegistrationModelImpl.getSupportedDocumentType()
+			};
+
+			finderCache.removeResult(
+				_finderPathCountByConsumerNameSupportedDocumentType, args);
+			finderCache.removeResult(
+				_finderPathWithoutPaginationFindByConsumerNameSupportedDocumentType,
+				args);
+
+			args = new Object[] {
 				consumerRegistrationModelImpl.getConsumerName()
 			};
 
@@ -3045,6 +3729,34 @@ public class ConsumerRegistrationPersistenceImpl
 				finderCache.removeResult(_finderPathCountByConsumerId, args);
 				finderCache.removeResult(
 					_finderPathWithoutPaginationFindByConsumerId, args);
+			}
+
+			if ((consumerRegistrationModelImpl.getColumnBitmask() &
+				 _finderPathWithoutPaginationFindByConsumerNameSupportedDocumentType.
+					 getColumnBitmask()) != 0) {
+
+				Object[] args = new Object[] {
+					consumerRegistrationModelImpl.getOriginalConsumerName(),
+					consumerRegistrationModelImpl.
+						getOriginalSupportedDocumentType()
+				};
+
+				finderCache.removeResult(
+					_finderPathCountByConsumerNameSupportedDocumentType, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByConsumerNameSupportedDocumentType,
+					args);
+
+				args = new Object[] {
+					consumerRegistrationModelImpl.getConsumerName(),
+					consumerRegistrationModelImpl.getSupportedDocumentType()
+				};
+
+				finderCache.removeResult(
+					_finderPathCountByConsumerNameSupportedDocumentType, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByConsumerNameSupportedDocumentType,
+					args);
 			}
 
 			if ((consumerRegistrationModelImpl.getColumnBitmask() &
@@ -3447,6 +4159,36 @@ public class ConsumerRegistrationPersistenceImpl
 			entityCacheEnabled, finderCacheEnabled, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 			"countByConsumerIdSupportedDocumentType",
+			new String[] {String.class.getName(), String.class.getName()});
+
+		_finderPathWithPaginationFindByConsumerNameSupportedDocumentType =
+			new FinderPath(
+				entityCacheEnabled, finderCacheEnabled,
+				ConsumerRegistrationImpl.class,
+				FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+				"findByConsumerNameSupportedDocumentType",
+				new String[] {
+					String.class.getName(), String.class.getName(),
+					Integer.class.getName(), Integer.class.getName(),
+					OrderByComparator.class.getName()
+				});
+
+		_finderPathWithoutPaginationFindByConsumerNameSupportedDocumentType =
+			new FinderPath(
+				entityCacheEnabled, finderCacheEnabled,
+				ConsumerRegistrationImpl.class,
+				FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+				"findByConsumerNameSupportedDocumentType",
+				new String[] {String.class.getName(), String.class.getName()},
+				ConsumerRegistrationModelImpl.CONSUMERNAME_COLUMN_BITMASK |
+				ConsumerRegistrationModelImpl.
+					SUPPORTEDDOCUMENTTYPE_COLUMN_BITMASK |
+				ConsumerRegistrationModelImpl.CONSUMERID_COLUMN_BITMASK);
+
+		_finderPathCountByConsumerNameSupportedDocumentType = new FinderPath(
+			entityCacheEnabled, finderCacheEnabled, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByConsumerNameSupportedDocumentType",
 			new String[] {String.class.getName(), String.class.getName()});
 
 		_finderPathWithPaginationFindByConsumerName = new FinderPath(

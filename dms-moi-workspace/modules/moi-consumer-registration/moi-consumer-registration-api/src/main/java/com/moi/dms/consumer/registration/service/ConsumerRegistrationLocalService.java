@@ -96,8 +96,7 @@ public interface ConsumerRegistrationLocalService
 		throws PortalException;
 
 	/**
-	 * This method returns count with respect to ConsumerId/Consumer Code
-	 * and Document Type
+	 * This method returns count with respect to ConsumerId and Document Type
 	 *
 	 * @param consumerId
 	 * @param documentType
@@ -105,6 +104,25 @@ public interface ConsumerRegistrationLocalService
 	 */
 	public long countByConsumerIdDocumentType(
 		String consumerId, String documentType);
+
+	/**
+	 * This method returns count with respect to Consumer Code/Name
+	 *
+	 * @param consumerName
+	 * @return : count
+	 */
+	public long countByConsumerName(String consumerName);
+
+	/**
+	 * This method returns count with respect to Consumer Code/Name and Document
+	 * Type
+	 *
+	 * @param consumerName
+	 * @param documentType
+	 * @return : count
+	 */
+	public long countByConsumerNameDocumentType(
+		String consumerName, String documentType);
 
 	/**
 	 * Creates a new consumer registration with the primary key. Does not add the consumer registration to the database.

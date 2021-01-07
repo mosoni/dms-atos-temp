@@ -21,8 +21,14 @@
 		<finder name="ConsumerId" return-type="Collection">
 			<finder-column name="consumerId"></finder-column>
 		</finder>
-		<finder name="ConsumerIdSupportedDocumentType" return-type="ConsumerRegistration">
+		<finder name="ConsumerIdSupportedDocumentType"
+			return-type="ConsumerRegistration">
 			<finder-column name="consumerId"></finder-column>
+			<finder-column name="supportedDocumentType"></finder-column>
+		</finder>
+		<finder name="ConsumerNameSupportedDocumentType"
+			return-type="Collection">
+			<finder-column name="consumerName"></finder-column>
 			<finder-column name="supportedDocumentType"></finder-column>
 		</finder>
 		<finder name="ConsumerName" return-type="Collection">
