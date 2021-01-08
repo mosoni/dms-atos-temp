@@ -6,7 +6,7 @@ import com.liferay.document.library.kernel.model.DLFolder;
 import com.liferay.document.library.kernel.model.DLVersionNumberIncrease;
 import com.liferay.document.library.kernel.service.DLAppServiceUtil;
 import com.liferay.document.library.kernel.service.DLFileEntryLocalServiceUtil;
-import com.liferay.document.library.kernel.service.DLFileEntryTypeServiceUtil;
+import com.liferay.document.library.kernel.service.DLFileEntryTypeLocalServiceUtil;
 import com.liferay.document.library.kernel.service.DLFolderLocalServiceUtil;
 import com.liferay.dynamic.data.mapping.kernel.DDMFormValues;
 import com.liferay.petra.string.StringPool;
@@ -19,7 +19,6 @@ import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.util.FileUtil;
-import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.vulcan.multipart.BinaryFile;
 import com.liferay.portal.vulcan.multipart.MultipartBody;
@@ -40,8 +39,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.osgi.service.component.annotations.Component;
@@ -59,6 +56,16 @@ public class JiraAPIHandlerResourceImpl extends BaseJiraAPIHandlerResourceImpl {
 	// TODO: Ths is static user. Need to find a way to get original user.
 	private static long DEFAULT_USER_ID = 20130;
 
+	/**
+	 * Main method to implement the document upload received from JIRA Rest API
+	 * 
+	 * @param consumerCode
+	 * @param ticketNumber
+	 * @param documentTitle
+	 * @param metadata
+	 * @param multipartBody
+	 * @return Page<DocumentResult>
+	 */
 	@Override
 	public Page<DocumentResult> uploadJiraDocument(String consumerCode,
 			String ticketNumber, String documentTitle, String metadata,
@@ -69,7 +76,6 @@ public class JiraAPIHandlerResourceImpl extends BaseJiraAPIHandlerResourceImpl {
 		ServiceContext serviceContext = ServiceContextThreadLocal
 				.getServiceContext();
 		long userId = serviceContext.getUserId();
-		System.out.println("User Id: " + userId);
 
 		// TODO: Remove in actual implementation.
 		if (0 == userId) {
@@ -95,8 +101,12 @@ public class JiraAPIHandlerResourceImpl extends BaseJiraAPIHandlerResourceImpl {
 		if (null == metadataParam) {
 			metadataParam = StringPool.BLANK;
 		}
-		System.out.println(consumerCodeParam + "::" + ticketNumberParam + "::"
-				+ documentTitleParam + "::" + metadataParam);
+
+		_log.debug("consumerCode: " + consumerCodeParam);
+		_log.debug("ticketNumber: " + ticketNumberParam);
+		_log.debug("documentTitle: " + documentTitleParam);
+		_log.debug("metadata: " + metadataParam);
+		_log.debug("userId: " + userId);
 
 		BinaryFile binaryFile = multipartBody
 				.getBinaryFile(CommonConstants.JIRA_REQ_PARAM_DOCUMENT);
@@ -113,7 +123,6 @@ public class JiraAPIHandlerResourceImpl extends BaseJiraAPIHandlerResourceImpl {
 							JiraUtil.getAction(documentTitle, true),
 							documentTitle, true, null, null, StringPool.BLANK);
 		} catch (PortalException e) {
-			e.printStackTrace();
 			_log.error(e);
 		}
 
@@ -124,7 +133,7 @@ public class JiraAPIHandlerResourceImpl extends BaseJiraAPIHandlerResourceImpl {
 		String validationResult = JiraValidator.validateRequest(
 				consumerCodeParam, ticketNumberParam, documentTitleParam,
 				metadataParam, binaryFile, moiTraceRequest);
-		System.out.println("validationResult: " + validationResult);
+		_log.debug("validationResult: " + validationResult);
 
 		if (Validator.isNotNull(validationResult)) {
 			return GenerateDocumentResult.generateDocumentResult(
@@ -137,10 +146,10 @@ public class JiraAPIHandlerResourceImpl extends BaseJiraAPIHandlerResourceImpl {
 		Folder uploadFolder = null;
 		try {
 			uploadFolder = getFolder(ticketNumberParam, serviceContext);
+			_log.debug("folderId: " + uploadFolder.getFolderId());
 
 			// Check if File exists
 			boolean fileExists = isFileExist(uploadFolder, documentTitleParam,
-					FileUtil.getExtension(binaryFile.getFileName()),
 					serviceContext);
 
 			// If file available, send error message if not upload the
@@ -171,6 +180,14 @@ public class JiraAPIHandlerResourceImpl extends BaseJiraAPIHandlerResourceImpl {
 				MosipErrorConstants.JIRA_FILE_UPLOADED_MSG);
 	}
 
+	/**
+	 * Get parameter either from request URL or from request body
+	 * 
+	 * @param paramName
+	 * @param paramValue
+	 * @param multipartBody
+	 * @return String
+	 */
 	private String getJiraUploadDocParams(String paramName, String paramValue,
 			MultipartBody multipartBody) {
 
@@ -183,60 +200,90 @@ public class JiraAPIHandlerResourceImpl extends BaseJiraAPIHandlerResourceImpl {
 		return value;
 	}
 
-	private DLFolder isFolderExist(String folderName) {
+	/**
+	 * Method to check if folder exists or not
+	 * 
+	 * @param folderName
+	 * @param serviceContext
+	 * @return DLFolder
+	 */
+	private DLFolder isFolderExist(String folderName,
+			ServiceContext serviceContext) {
 		DLFolder dlFolder = null;
 
-		List<DLFolder> dlFolders = DLFolderLocalServiceUtil.getDLFolders(0,
-				DLFolderLocalServiceUtil.getDLFoldersCount());
-		for (DLFolder folder : dlFolders) {
-			if (folderName.equalsIgnoreCase(folder.getName())) {
-				dlFolder = folder;
-				break;
-			}
+		try {
+			dlFolder = DLFolderLocalServiceUtil.getFolder(
+					serviceContext.getScopeGroupId(),
+					CommonConstants.JIRA_PARENT_FOLDER_ID, folderName);
+		} catch (PortalException e) {
+			_log.error(e);
 		}
+
 		return dlFolder;
 	}
 
-	private boolean isFileExist(Folder folder, String documentTitle, String ext,
-			ServiceContext serviceContext) throws PortalException {
+	/**
+	 * Method to check if file exists or not
+	 * 
+	 * @param folder
+	 * @param documentTitle
+	 * @param serviceContext
+	 * @return
+	 * @throws PortalException
+	 */
+	private boolean isFileExist(Folder folder, String documentTitle,
+			ServiceContext serviceContext) {
 
 		boolean fileExists = false;
+		FileEntry fileEntry = null;
+
 		StringBuilder fileName = new StringBuilder(32);
 		fileName.append(folder.getName()).append(StringPool.UNDERLINE)
-				.append(documentTitle).append(StringPool.PERIOD).append(ext);
+				.append(documentTitle);
 
-		List<FileEntry> fileEntryList = DLAppServiceUtil.getFileEntries(
-				getRepositoryId(serviceContext), folder.getFolderId());
-		for (FileEntry fileEntry : fileEntryList) {
-			if (fileEntry.getFileName().equals(fileName.toString())) {
+		try {
+			fileEntry = DLAppServiceUtil.getFileEntry(
+					serviceContext.getScopeGroupId(), folder.getFolderId(),
+					fileName.toString());
+
+			if (null != fileEntry) {
 				fileExists = true;
 			}
+		} catch (PortalException e) {
+			_log.error(e);
 		}
 		return fileExists;
 	}
 
-	/*
-	 * private long getRepositoryId() { long repoId = 0; List<Repository>
-	 * repoList = RepositoryLocalServiceUtil.getRepositories( 0,
-	 * RepositoryLocalServiceUtil.getRepositoriesCount()); for (Repository repo
-	 * : repoList) { if ("".equalsIgnoreCase(repo.getName())) { repoId =
-	 * repo.getRepositoryId(); } } return repoId; }
+	/**
+	 * Get existing repository Id
+	 * 
+	 * @param serviceContext
+	 * @return long
 	 */
-
 	private long getRepositoryId(ServiceContext serviceContext) {
 		return serviceContext.getScopeGroupId();
 	}
 
+	/**
+	 * Get folder. If folder is not present, this method will create one and
+	 * return the same.
+	 * 
+	 * @param folderName
+	 * @param serviceContext
+	 * @return Folder
+	 * @throws PortalException
+	 */
 	private Folder getFolder(String folderName, ServiceContext serviceContext)
 			throws PortalException {
-		DLFolder dlFolder = isFolderExist(folderName);
+		DLFolder dlFolder = isFolderExist(folderName, serviceContext);
 		Folder folder = null;
 		if (null == dlFolder) {
 			try {
 				folder = DLAppServiceUtil.addFolder(
 						serviceContext.getScopeGroupId(),
 						CommonConstants.JIRA_PARENT_FOLDER_ID, folderName,
-						StringPool.BLANK, serviceContext);
+						folderName, serviceContext);
 			} catch (PortalException e1) {
 				e1.printStackTrace();
 			} catch (SystemException e1) {
@@ -248,6 +295,18 @@ public class JiraAPIHandlerResourceImpl extends BaseJiraAPIHandlerResourceImpl {
 		return folder;
 	}
 
+	/**
+	 * This method uploads file to JIRA Folder.
+	 * 
+	 * @param ticketNumber
+	 * @param documentTitle
+	 * @param metadata
+	 * @param binaryFile
+	 * @param uploadFolder
+	 * @param serviceContext
+	 * @throws PortalException
+	 * @throws IOException
+	 */
 	private void uploadJiraFile(String ticketNumber, String documentTitle,
 			String metadata, BinaryFile binaryFile, Folder uploadFolder,
 			ServiceContext serviceContext) throws PortalException, IOException {
@@ -259,23 +318,13 @@ public class JiraAPIHandlerResourceImpl extends BaseJiraAPIHandlerResourceImpl {
 		String changeLog = StringPool.BLANK;
 		long repositoryId = getRepositoryId(serviceContext);
 
+		_log.debug("repositoryId: " + repositoryId);
+
 		DLFileEntry dlFileEntry = null;
-		List<DLFileEntryType> fileEntryTypes = null;
-		DLFileEntryType jiraFileEntryType = null;
 		Map<String, DDMFormValues> ddmFormValuesMap = new HashMap<String, DDMFormValues>();
 
-		fileEntryTypes = DLFileEntryTypeServiceUtil.getFolderFileEntryTypes(
-				PortalUtil.getCurrentAndAncestorSiteGroupIds(
-						serviceContext.getScopeGroupId()),
-				uploadFolder.getFolderId(), true);
-
-		for (DLFileEntryType fileEntryType : fileEntryTypes) {
-			if (CommonConstants.JIRA_METADATA_SETS_NAME
-					.equalsIgnoreCase(fileEntryType.getName(Locale.US))) {
-				jiraFileEntryType = fileEntryType;
-				break;
-			}
-		}
+		DLFileEntryType jiraFileEntryType = DLFileEntryTypeLocalServiceUtil
+				.getBasicDocumentDLFileEntryType();
 
 		InputStream is = binaryFile.getInputStream();
 		File file = FileUtil.createTempFile(is);
@@ -288,12 +337,13 @@ public class JiraAPIHandlerResourceImpl extends BaseJiraAPIHandlerResourceImpl {
 				description, changeLog, jiraFileEntryType.getFileEntryTypeId(),
 				ddmFormValuesMap, file, is, binaryFile.getSize(),
 				serviceContext);
-		System.out.println("File Added");
+		is.close();
+		_log.debug("File Added with ID: " + dlFileEntry.getFileEntryId());
 
 		DLAppServiceUtil.updateFileEntry(dlFileEntry.getFileEntryId(),
 				dlFileEntry.getFileName(), mimeType, title, description,
 				changeLog, DLVersionNumberIncrease.NONE, file, serviceContext);
-		System.out.println("File Updated");
+		_log.debug("Updated file status");
 	}
 
 	private static final Log _log = LogFactoryUtil
