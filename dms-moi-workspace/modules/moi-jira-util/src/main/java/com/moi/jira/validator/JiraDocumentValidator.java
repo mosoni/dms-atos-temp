@@ -27,8 +27,6 @@ public class JiraDocumentValidator {
 	 */
 	public static String isDocumentValid(BinaryFile binaryFile) {
 
-		System.out.println("binaryFile" + binaryFile.getSize());
-		System.out.println("binaryFile" + binaryFile.getFileName());
 		/* Start : Check file */
 		if (Validator.isNull(binaryFile)) {
 			return MosipErrorConstants.JIRA_INVALID_DOCUMENT_MSG;
@@ -42,7 +40,7 @@ public class JiraDocumentValidator {
 
 		if(length <= 0) {
 			return MosipErrorConstants.JIRA_INVALID_DOCUMENT_MSG;
-		} else if (length >= maxFileSize) {
+		} else if (length > maxFileSize) {
 			return MosipErrorConstants.JIRA_INVALID_DOCUMENT_SIZE_MSG.replace(
 					MosipConstants.DOCUMENT_SIZE_DYNAMIC_PARAMETER,
 					String.valueOf(maxFileSize));

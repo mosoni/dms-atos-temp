@@ -66,10 +66,8 @@ public class JiraValidator {
 	 */
 	private static boolean isConsumerCodeValid(String consumerCode) {
 
-		System.out.println("consumerCode: " + consumerCode);
 		long count = ConsumerRegistrationLocalServiceUtil
 				.countByConsumerName(consumerCode);
-		System.out.println("count: " + count);
 
 		return (count >= 1) ? true : false;
 	}

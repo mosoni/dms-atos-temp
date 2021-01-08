@@ -3,7 +3,6 @@
  */
 package com.moi.jira.validator;
 
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.util.Validator;
 import com.moi.dms.mosip.constants.CommonConstants;
 import com.moi.dms.mosip.constants.MosipErrorConstants;
@@ -65,20 +64,8 @@ public class JiraUtil {
 		if (Validator.isNotNull(moiTraceRequest)) {
 			moiTraceRequest.setRequestResult(result);
 			moiTraceRequest.setRequestResultDate(new Date());
-			try {
-				MOITraceRequestLocalServiceUtil.updateMOITraceRequest(
-						moiTraceRequest.getRequestId(),
-						moiTraceRequest.getRequestedBy(),
-						moiTraceRequest.getRequestIncomingDate(),
-						moiTraceRequest.getRequestedConsumerCode(),
-						moiTraceRequest.getRequestedConsumerName(),
-						moiTraceRequest.getRequestedOperation(),
-						moiTraceRequest.getRequestedDocumentType(), true,
-						result, new Date(), moiTraceRequest.getComment());
-			} catch (PortalException e) {
-				// TODO: Add Log here
-				e.printStackTrace();
-			}
+			MOITraceRequestLocalServiceUtil
+					.updateMOITraceRequest(moiTraceRequest);
 		}
 	}
 }
