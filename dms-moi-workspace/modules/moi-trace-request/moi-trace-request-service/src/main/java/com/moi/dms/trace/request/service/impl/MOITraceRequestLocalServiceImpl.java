@@ -78,14 +78,13 @@ public class MOITraceRequestLocalServiceImpl
 	 * @param requestResultDate
 	 * @param requestComment
 	 * @return MOITraceRequest
-	 * @throws PortalException
 	 */
 	public MOITraceRequest addMOITraceRequest(String requestedBy,
 			Date requestIncomingDate, String requestedConsumerCode,
 			String requestedConsumerName, String requestedOperation,
 			String requestedDocumentType, Boolean requestValid,
-			String requestResult, Date requestResultDate, String requestComment)
-			throws PortalException {
+			String requestResult, Date requestResultDate,
+			String requestComment) {
 
 		// Generate primary key for the MOITraceRequest.
 		long requestId = counterLocalService
@@ -296,13 +295,13 @@ public class MOITraceRequestLocalServiceImpl
 	}
 
 	/**
-	 * Method overridden as this method is not supported.
+	 * Calls update method of parent class.
 	 * 
 	 * @param moiTraceRequest
 	 */
 	@Override
 	public MOITraceRequest updateMOITraceRequest(
 			MOITraceRequest moiTraceRequest) {
-		throw new UnsupportedOperationException("Method not supported.");
+		return super.updateMOITraceRequest(moiTraceRequest);
 	}
 }
