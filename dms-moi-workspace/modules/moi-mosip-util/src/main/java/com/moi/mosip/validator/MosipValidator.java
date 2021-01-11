@@ -1,11 +1,9 @@
 package com.moi.mosip.validator;
 
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.moi.dms.consumer.registration.service.ConsumerRegistrationLocalServiceUtil;
-import com.moi.dms.mosip.constants.MosipActions;
 import com.moi.dms.mosip.constants.MosipErrorConstants;
 import com.moi.dms.mosip.constants.MosipPhase;
 import com.moi.dms.trace.request.model.MOITraceRequest;

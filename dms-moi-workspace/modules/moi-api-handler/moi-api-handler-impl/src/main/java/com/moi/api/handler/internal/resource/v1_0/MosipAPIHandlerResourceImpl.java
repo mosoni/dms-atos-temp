@@ -151,6 +151,10 @@ public class MosipAPIHandlerResourceImpl
 					ModuleType, group, userId);
 		}
 
+		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+		processDocument(IdentifierNumber, group.getGroupId(), userId, ModuleType, serviceContext, file, moiTraceRequest);
+		
+		
 		return super.uploadMosipDocument(ModuleType, ConsumerCode, DocumentType,
 				IdentifierNumber, Metadata, PreviousModuleType,
 				PreviousIdentifier, multipartBody);
