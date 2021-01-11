@@ -1,10 +1,22 @@
 package com.moi.api.handler.internal.resource.v1_0;
 
+import com.liferay.dynamic.data.mapping.kernel.Value;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
+import com.liferay.document.library.kernel.model.DLFileEntry;
+import com.liferay.document.library.kernel.model.DLFileEntryType;
 import com.liferay.document.library.kernel.model.DLFolder;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
+import com.liferay.document.library.kernel.model.DLVersionNumberIncrease;
 import com.liferay.document.library.kernel.service.DLAppServiceUtil;
+import com.liferay.document.library.kernel.service.DLFileEntryLocalServiceUtil;
+import com.liferay.document.library.kernel.service.DLFileEntryTypeServiceUtil;
 import com.liferay.document.library.kernel.service.DLFolderLocalServiceUtil;
+import com.liferay.dynamic.data.mapping.kernel.DDMForm;
+import com.liferay.dynamic.data.mapping.kernel.DDMFormField;
+import com.liferay.dynamic.data.mapping.kernel.DDMFormFieldValue;
+import com.liferay.dynamic.data.mapping.kernel.DDMFormValues;
+import com.liferay.dynamic.data.mapping.kernel.DDMStructure;
+import com.liferay.dynamic.data.mapping.kernel.LocalizedValue;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -22,6 +34,7 @@ import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.vulcan.multipart.MultipartBody;
 import com.liferay.portal.vulcan.pagination.Page;
@@ -38,8 +51,20 @@ import com.moi.mosip.validator.MosipUtil;
 import com.moi.mosip.validator.MosipValidator;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+
+import javax.activation.MimetypesFileTypeMap;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
@@ -265,7 +290,10 @@ public class MosipAPIHandlerResourceImpl
 				guestRole.getRoleId(), new String[]{"VIEW", "UPDATE"});
 
 	}
-	
+	private static String METADATA_SETS_NAME = "RNP";
+	private static String PRE_REG_ID = "Pre-Reg Id";
+	private static String REG_ID = "Reg Id";
+	private static String IDCS_ID = "IDCS Id";
 	/**
 	 * This method is used to Process Document
 	 *
@@ -278,7 +306,7 @@ public class MosipAPIHandlerResourceImpl
 	 * @return :
 	 */
 	private Page<DocumentResult> processDocument(String folderName, long groupId, long userId,
-			String moduleType, ServiceContext serviceContext,MOITraceRequest moiTraceRequest) {
+			String moduleType, ServiceContext serviceContext,File file, MOITraceRequest moiTraceRequest) {
 		
 		/*Processing Folder. Folder should be available with Identifier Name*/
 		long folderId = processFolder(folderName, groupId, serviceContext);
@@ -289,6 +317,144 @@ public class MosipAPIHandlerResourceImpl
 					UNABLE_TO_CREATE_FOLDER.replace(FOLDER_NAME_DYNAMIC_PARAM, folderName), null); 
 		}
 		
+		String documentTitle = null;
+		String documentDesc = null;
+		String changeLog = null;
+		List<DLFileEntryType> fileEntryTypes;
+		
+		InputStream is = null;
+		
+		try {
+			fileEntryTypes = DLFileEntryTypeServiceUtil
+					.getFolderFileEntryTypes(
+							PortalUtil.getCurrentAndAncestorSiteGroupIds(
+									groupId),
+							folderId, true);
+		
+
+		DLFileEntryType mosipFileEntryType = null;
+		DDMStructure ddmStruct = null;
+		DDMFormValues ddmFormValues = null;
+		for (DLFileEntryType fileEntryType : fileEntryTypes) {
+			if (METADATA_SETS_NAME
+					.equalsIgnoreCase(fileEntryType.getName(Locale.US))) {
+				mosipFileEntryType = fileEntryType;
+				break;
+			}
+		}
+		String preRegNo = null;
+		String regNo = null;
+		String idcsNo = null;
+		
+		if (null != mosipFileEntryType) {
+			
+			List<DDMStructure> structures = mosipFileEntryType
+					.getDDMStructures();
+			for (DDMStructure struct : structures) {
+				if (METADATA_SETS_NAME
+						.equalsIgnoreCase(struct.getName(Locale.US))) {
+					ddmStruct = struct;
+					break;
+				}
+			}
+
+			if (null != ddmStruct) {
+			
+				DDMForm ddmForm = ddmStruct.getDDMForm();
+				List<DDMFormField> ddmFormFields = ddmForm
+						.getDDMFormFields();
+
+				List<DDMFormFieldValue> ddmFormFieldValues = new ArrayList<DDMFormFieldValue>();
+
+				int i = 0;
+				for (DDMFormField formField : ddmFormFields) {
+					Value value = new LocalizedValue();
+					DDMFormFieldValue ddmFormFieldValue = new DDMFormFieldValue();
+					i++;
+					if (PRE_REG_ID.equalsIgnoreCase(
+							formField.getLabel().getString(Locale.US))) {
+						System.out.println("PRE REG ID");
+						value.addString(Locale.US, preRegNo);
+						ddmFormFieldValue.setName(formField.getName());
+						ddmFormFieldValue.setValue(value);
+						ddmFormFieldValues.add(ddmFormFieldValue);
+					} else if (REG_ID.equalsIgnoreCase(
+							formField.getLabel().getString(Locale.US))) {
+						System.out.println("REG ID");
+						value.addString(Locale.US, regNo);
+						ddmFormFieldValue.setName(formField.getName());
+						ddmFormFieldValue.setValue(value);
+						ddmFormFieldValues.add(ddmFormFieldValue);
+					} else if (IDCS_ID.equalsIgnoreCase(
+							formField.getLabel().getString(Locale.US))) {
+						System.out.println("idcsNo: " + idcsNo);
+						value.addString(Locale.US, idcsNo);
+						ddmFormFieldValue.setName(formField.getName());
+						ddmFormFieldValue.setValue(value);
+						ddmFormFieldValues.add(ddmFormFieldValue);
+					}
+					System.out.println(i);
+				}
+
+				// Set the name of value you need to set
+				Set<Locale> localeSet = new HashSet<Locale>();
+				localeSet.add(Locale.US);
+				ddmFormValues = new DDMFormValues(ddmForm);
+				ddmFormValues.setAvailableLocales(localeSet);
+				ddmFormValues.setDefaultLocale(Locale.US);
+				ddmFormValues.setDDMFormFieldValues(ddmFormFieldValues);
+
+				Map<String, DDMFormValues> ddmFormValuesMap = new HashMap<String, DDMFormValues>();
+				ddmFormValuesMap.put(ddmStruct.getStructureKey(),
+						ddmFormValues);
+
+				
+				MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
+				String mimeType = fileTypeMap.getContentType(file.getName());
+				
+				is = new FileInputStream(file);
+				
+				DLFileEntry dlFileEntry = DLFileEntryLocalServiceUtil.addFileEntry(
+						userId,
+						groupId, groupId,
+						folderId, documentTitle, mimeType, documentTitle,
+						documentDesc, changeLog,
+						mosipFileEntryType.getFileEntryTypeId(),
+						ddmFormValuesMap, file, is, file.length(),
+						serviceContext);
+				System.out.println("File Added");
+
+				/*DLAppServiceUtil.updateFileEntry(
+						dlFileEntry.getFileEntryId(),
+						dlFileEntry.getFileName(), mimeType, title,
+						description, changeLog, false, null,
+						dlFileEntry.getSize(), serviceContext);*/
+
+				
+					DLAppServiceUtil.updateFileEntry(
+							dlFileEntry.getFileEntryId(),
+							dlFileEntry.getFileName(), mimeType, documentTitle,
+							documentDesc, changeLog,
+							DLVersionNumberIncrease.NONE, file, serviceContext);
+				
+				System.out.println("File Status Updated");
+			}
+			
+		}
+		} catch (PortalException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(is!=null) {
+				try {
+					is.close();
+				} catch (IOException e) {
+				}
+			}
+		}
 		
 		/*Validate Document Title, Should be added If not added. If already added, then Throw Exception*/
 		
