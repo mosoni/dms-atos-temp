@@ -108,6 +108,64 @@ public class Mutation {
 	}
 
 	@GraphQLField
+	public java.util.Collection<DocumentResult> getMosipDocument(
+			@GraphQLName("ModuleType") String ModuleType,
+			@GraphQLName("ConsumerCode") String ConsumerCode,
+			@GraphQLName("DocumentType") String DocumentType,
+			@GraphQLName("Identifier") String Identifier)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_mosipAPIHandlerResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			mosipAPIHandlerResource -> {
+				Page paginationPage = mosipAPIHandlerResource.getMosipDocument(
+					ModuleType, ConsumerCode, DocumentType, Identifier);
+
+				return paginationPage.getItems();
+			});
+	}
+
+	@GraphQLField
+	public java.util.Collection<DocumentResult> addIDCSNumber(
+			@GraphQLName("RegistrationNumber") String RegistrationNumber,
+			@GraphQLName("IDCSNumber") String IDCSNumber)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_mosipAPIHandlerResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			mosipAPIHandlerResource -> {
+				Page paginationPage = mosipAPIHandlerResource.addIDCSNumber(
+					RegistrationNumber, IDCSNumber);
+
+				return paginationPage.getItems();
+			});
+	}
+
+	@GraphQLField
+	@GraphQLName(
+		value = "deleteMosipDocumentModuleTypeMultipartBody",
+		description = "null"
+	)
+	public java.util.Collection<DocumentResult> deleteMosipDocument(
+			@GraphQLName("ModuleType") String ModuleType,
+			@GraphQLName("multipartBody") MultipartBody multipartBody)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_mosipAPIHandlerResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			mosipAPIHandlerResource -> {
+				Page paginationPage =
+					mosipAPIHandlerResource.deleteMosipDocument(
+						ModuleType, multipartBody);
+
+				return paginationPage.getItems();
+			});
+	}
+
+	@GraphQLField
 	@GraphQLName(
 		value = "uploadJiraDocumentConsumerCodeTicketNumberDocumentTitleMetadataMultipartBody",
 		description = "null"

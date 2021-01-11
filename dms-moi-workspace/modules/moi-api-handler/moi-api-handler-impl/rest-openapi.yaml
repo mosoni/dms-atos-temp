@@ -35,6 +35,8 @@ components:
           type: string
         resultMessage:
           type: string
+        resultFile:
+          type: object
       type: object
 info:
   description: ""
@@ -159,7 +161,103 @@ paths:
                 items:
                   $ref: "#/components/schemas/DocumentResult"
                 type: array
-          description: "Upload Jira Documents"
+          description: "Update MOSIP Documents"
+      tags: ["MosipAPIHandler"]
+  "/getDocument":
+    post:
+      operationId: getMosipDocument
+      parameters:
+        - in: query
+          name: ModuleType
+          schema:
+            type: string
+        - in: query
+          name: ConsumerCode
+          schema:
+            type: string
+        - in: query
+          name: DocumentType
+          schema:
+            type: string
+        - in: query
+          name: Identifier
+          schema:
+            type: string
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/DocumentResult"
+                type: array
+            application/xml:
+              schema:
+                items:
+                  $ref: "#/components/schemas/DocumentResult"
+                type: array
+          description: "View MOSIP Documents"
+      tags: ["MosipAPIHandler"]
+  "/addIDCSNumber":
+    post:
+      operationId: addIDCSNumber
+      parameters:
+        - in: query
+          name: RegistrationNumber
+          schema:
+            type: string
+        - in: query
+          name: IDCSNumber
+          schema:
+            type: string
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/DocumentResult"
+                type: array
+            application/xml:
+              schema:
+                items:
+                  $ref: "#/components/schemas/DocumentResult"
+                type: array
+          description: "Add IDCS Number"
+      tags: ["MosipAPIHandler"]
+  "/deleteDocument":
+    post:
+      operationId: deleteMosipDocument
+      parameters:
+        - in: query
+          name: ModuleType
+          schema:
+            type: string
+      requestBody:
+                content:
+                    multipart/form-data:
+                        schema:
+                            properties:
+                                document:
+                                    $ref: "#/components/schemas/MosipAPIHandler"
+                                file:
+                                    format: binary
+                                    type: string
+                            type: object
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/DocumentResult"
+                type: array
+            application/xml:
+              schema:
+                items:
+                  $ref: "#/components/schemas/DocumentResult"
+                type: array
+          description: "Bulk Delete MOSIP Documents"
       tags: ["MosipAPIHandler"]
   "/uploadJiraDocument":
     post:

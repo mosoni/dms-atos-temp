@@ -55,6 +55,20 @@ public class DocumentResultSerDes {
 			sb.append("\"");
 		}
 
+		if (documentResult.getResultFile() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"resultFile\": ");
+
+			sb.append("\"");
+
+			sb.append(_escape(documentResult.getResultFile()));
+
+			sb.append("\"");
+		}
+
 		if (documentResult.getResultMessage() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -105,6 +119,14 @@ public class DocumentResultSerDes {
 			map.put("result", String.valueOf(documentResult.getResult()));
 		}
 
+		if (documentResult.getResultFile() == null) {
+			map.put("resultFile", null);
+		}
+		else {
+			map.put(
+				"resultFile", String.valueOf(documentResult.getResultFile()));
+		}
+
 		if (documentResult.getResultMessage() == null) {
 			map.put("resultMessage", null);
 		}
@@ -145,6 +167,11 @@ public class DocumentResultSerDes {
 			if (Objects.equals(jsonParserFieldName, "result")) {
 				if (jsonParserFieldValue != null) {
 					documentResult.setResult((String)jsonParserFieldValue);
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "resultFile")) {
+				if (jsonParserFieldValue != null) {
+					documentResult.setResultFile((Object)jsonParserFieldValue);
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "resultMessage")) {

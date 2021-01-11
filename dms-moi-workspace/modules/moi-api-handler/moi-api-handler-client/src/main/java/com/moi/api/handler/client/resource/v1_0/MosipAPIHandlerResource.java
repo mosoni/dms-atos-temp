@@ -57,6 +57,34 @@ public interface MosipAPIHandlerResource {
 			Map<String, File> multipartFiles)
 		throws Exception;
 
+	public Page<DocumentResult> getMosipDocument(
+			String ModuleType, String ConsumerCode, String DocumentType,
+			String Identifier)
+		throws Exception;
+
+	public HttpInvoker.HttpResponse getMosipDocumentHttpResponse(
+			String ModuleType, String ConsumerCode, String DocumentType,
+			String Identifier)
+		throws Exception;
+
+	public Page<DocumentResult> addIDCSNumber(
+			String RegistrationNumber, String IDCSNumber)
+		throws Exception;
+
+	public HttpInvoker.HttpResponse addIDCSNumberHttpResponse(
+			String RegistrationNumber, String IDCSNumber)
+		throws Exception;
+
+	public Page<DocumentResult> deleteMosipDocument(
+			String ModuleType, MosipAPIHandler mosipAPIHandler,
+			Map<String, File> multipartFiles)
+		throws Exception;
+
+	public HttpInvoker.HttpResponse deleteMosipDocumentHttpResponse(
+			String ModuleType, MosipAPIHandler mosipAPIHandler,
+			Map<String, File> multipartFiles)
+		throws Exception;
+
 	public static class Builder {
 
 		public Builder authentication(String login, String password) {
@@ -338,6 +366,243 @@ public interface MosipAPIHandlerResource {
 			httpInvoker.path(
 				_builder._scheme + "://" + _builder._host + ":" +
 					_builder._port + "/o/moi-api-handler/v1.0/updateDocument");
+
+			httpInvoker.userNameAndPassword(
+				_builder._login + ":" + _builder._password);
+
+			return httpInvoker.invoke();
+		}
+
+		public Page<DocumentResult> getMosipDocument(
+				String ModuleType, String ConsumerCode, String DocumentType,
+				String Identifier)
+			throws Exception {
+
+			HttpInvoker.HttpResponse httpResponse =
+				getMosipDocumentHttpResponse(
+					ModuleType, ConsumerCode, DocumentType, Identifier);
+
+			String content = httpResponse.getContent();
+
+			_logger.fine("HTTP response content: " + content);
+
+			_logger.fine("HTTP response message: " + httpResponse.getMessage());
+			_logger.fine(
+				"HTTP response status code: " + httpResponse.getStatusCode());
+
+			try {
+				return Page.of(content, DocumentResultSerDes::toDTO);
+			}
+			catch (Exception e) {
+				_logger.log(
+					Level.WARNING,
+					"Unable to process HTTP response: " + content, e);
+
+				throw new Problem.ProblemException(Problem.toDTO(content));
+			}
+		}
+
+		public HttpInvoker.HttpResponse getMosipDocumentHttpResponse(
+				String ModuleType, String ConsumerCode, String DocumentType,
+				String Identifier)
+			throws Exception {
+
+			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
+
+			httpInvoker.body(Identifier.toString(), "application/json");
+
+			if (_builder._locale != null) {
+				httpInvoker.header(
+					"Accept-Language", _builder._locale.toLanguageTag());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._headers.entrySet()) {
+
+				httpInvoker.header(entry.getKey(), entry.getValue());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._parameters.entrySet()) {
+
+				httpInvoker.parameter(entry.getKey(), entry.getValue());
+			}
+
+			httpInvoker.httpMethod(HttpInvoker.HttpMethod.POST);
+
+			if (ModuleType != null) {
+				httpInvoker.parameter("ModuleType", String.valueOf(ModuleType));
+			}
+
+			if (ConsumerCode != null) {
+				httpInvoker.parameter(
+					"ConsumerCode", String.valueOf(ConsumerCode));
+			}
+
+			if (DocumentType != null) {
+				httpInvoker.parameter(
+					"DocumentType", String.valueOf(DocumentType));
+			}
+
+			if (Identifier != null) {
+				httpInvoker.parameter("Identifier", String.valueOf(Identifier));
+			}
+
+			httpInvoker.path(
+				_builder._scheme + "://" + _builder._host + ":" +
+					_builder._port + "/o/moi-api-handler/v1.0/getDocument");
+
+			httpInvoker.userNameAndPassword(
+				_builder._login + ":" + _builder._password);
+
+			return httpInvoker.invoke();
+		}
+
+		public Page<DocumentResult> addIDCSNumber(
+				String RegistrationNumber, String IDCSNumber)
+			throws Exception {
+
+			HttpInvoker.HttpResponse httpResponse = addIDCSNumberHttpResponse(
+				RegistrationNumber, IDCSNumber);
+
+			String content = httpResponse.getContent();
+
+			_logger.fine("HTTP response content: " + content);
+
+			_logger.fine("HTTP response message: " + httpResponse.getMessage());
+			_logger.fine(
+				"HTTP response status code: " + httpResponse.getStatusCode());
+
+			try {
+				return Page.of(content, DocumentResultSerDes::toDTO);
+			}
+			catch (Exception e) {
+				_logger.log(
+					Level.WARNING,
+					"Unable to process HTTP response: " + content, e);
+
+				throw new Problem.ProblemException(Problem.toDTO(content));
+			}
+		}
+
+		public HttpInvoker.HttpResponse addIDCSNumberHttpResponse(
+				String RegistrationNumber, String IDCSNumber)
+			throws Exception {
+
+			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
+
+			httpInvoker.body(IDCSNumber.toString(), "application/json");
+
+			if (_builder._locale != null) {
+				httpInvoker.header(
+					"Accept-Language", _builder._locale.toLanguageTag());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._headers.entrySet()) {
+
+				httpInvoker.header(entry.getKey(), entry.getValue());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._parameters.entrySet()) {
+
+				httpInvoker.parameter(entry.getKey(), entry.getValue());
+			}
+
+			httpInvoker.httpMethod(HttpInvoker.HttpMethod.POST);
+
+			if (RegistrationNumber != null) {
+				httpInvoker.parameter(
+					"RegistrationNumber", String.valueOf(RegistrationNumber));
+			}
+
+			if (IDCSNumber != null) {
+				httpInvoker.parameter("IDCSNumber", String.valueOf(IDCSNumber));
+			}
+
+			httpInvoker.path(
+				_builder._scheme + "://" + _builder._host + ":" +
+					_builder._port + "/o/moi-api-handler/v1.0/addIDCSNumber");
+
+			httpInvoker.userNameAndPassword(
+				_builder._login + ":" + _builder._password);
+
+			return httpInvoker.invoke();
+		}
+
+		public Page<DocumentResult> deleteMosipDocument(
+				String ModuleType, MosipAPIHandler mosipAPIHandler,
+				Map<String, File> multipartFiles)
+			throws Exception {
+
+			HttpInvoker.HttpResponse httpResponse =
+				deleteMosipDocumentHttpResponse(
+					ModuleType, mosipAPIHandler, multipartFiles);
+
+			String content = httpResponse.getContent();
+
+			_logger.fine("HTTP response content: " + content);
+
+			_logger.fine("HTTP response message: " + httpResponse.getMessage());
+			_logger.fine(
+				"HTTP response status code: " + httpResponse.getStatusCode());
+
+			try {
+				return Page.of(content, DocumentResultSerDes::toDTO);
+			}
+			catch (Exception e) {
+				_logger.log(
+					Level.WARNING,
+					"Unable to process HTTP response: " + content, e);
+
+				throw new Problem.ProblemException(Problem.toDTO(content));
+			}
+		}
+
+		public HttpInvoker.HttpResponse deleteMosipDocumentHttpResponse(
+				String ModuleType, MosipAPIHandler mosipAPIHandler,
+				Map<String, File> multipartFiles)
+			throws Exception {
+
+			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
+
+			httpInvoker.multipart();
+
+			httpInvoker.part(
+				"mosipAPIHandler",
+				MosipAPIHandlerSerDes.toJSON(mosipAPIHandler));
+
+			for (Map.Entry<String, File> entry : multipartFiles.entrySet()) {
+				httpInvoker.part(entry.getKey(), entry.getValue());
+			}
+
+			if (_builder._locale != null) {
+				httpInvoker.header(
+					"Accept-Language", _builder._locale.toLanguageTag());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._headers.entrySet()) {
+
+				httpInvoker.header(entry.getKey(), entry.getValue());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._parameters.entrySet()) {
+
+				httpInvoker.parameter(entry.getKey(), entry.getValue());
+			}
+
+			httpInvoker.httpMethod(HttpInvoker.HttpMethod.POST);
+
+			if (ModuleType != null) {
+				httpInvoker.parameter("ModuleType", String.valueOf(ModuleType));
+			}
+
+			httpInvoker.path(
+				_builder._scheme + "://" + _builder._host + ":" +
+					_builder._port + "/o/moi-api-handler/v1.0/deleteDocument");
 
 			httpInvoker.userNameAndPassword(
 				_builder._login + ":" + _builder._password);

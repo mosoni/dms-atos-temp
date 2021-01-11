@@ -39,6 +39,27 @@ public class DocumentResult implements Cloneable {
 
 	protected String result;
 
+	public Object getResultFile() {
+		return resultFile;
+	}
+
+	public void setResultFile(Object resultFile) {
+		this.resultFile = resultFile;
+	}
+
+	public void setResultFile(
+		UnsafeSupplier<Object, Exception> resultFileUnsafeSupplier) {
+
+		try {
+			resultFile = resultFileUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected Object resultFile;
+
 	public String getResultMessage() {
 		return resultMessage;
 	}

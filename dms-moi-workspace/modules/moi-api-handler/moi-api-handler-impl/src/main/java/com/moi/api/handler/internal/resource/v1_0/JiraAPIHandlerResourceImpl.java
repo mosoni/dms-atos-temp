@@ -102,11 +102,11 @@ public class JiraAPIHandlerResourceImpl extends BaseJiraAPIHandlerResourceImpl {
 			metadataParam = StringPool.BLANK;
 		}
 
-		_log.debug("consumerCode: " + consumerCodeParam);
-		_log.debug("ticketNumber: " + ticketNumberParam);
-		_log.debug("documentTitle: " + documentTitleParam);
-		_log.debug("metadata: " + metadataParam);
-		_log.debug("userId: " + userId);
+		debugLog("consumerCode: " + consumerCodeParam);
+		debugLog("ticketNumber: " + ticketNumberParam);
+		debugLog("documentTitle: " + documentTitleParam);
+		debugLog("metadata: " + metadataParam);
+		debugLog("userId: " + userId);
 
 		BinaryFile binaryFile = multipartBody
 				.getBinaryFile(CommonConstants.JIRA_REQ_PARAM_DOCUMENT);
@@ -123,7 +123,9 @@ public class JiraAPIHandlerResourceImpl extends BaseJiraAPIHandlerResourceImpl {
 							JiraUtil.getAction(documentTitle, true),
 							documentTitle, true, null, null, StringPool.BLANK);
 		} catch (PortalException e) {
-			_log.error(e);
+			if (_log.isErrorEnabled()) {
+				_log.error(e);
+			}
 		}
 
 		/*
@@ -133,20 +135,20 @@ public class JiraAPIHandlerResourceImpl extends BaseJiraAPIHandlerResourceImpl {
 		String validationResult = JiraValidator.validateRequest(
 				consumerCodeParam, ticketNumberParam, documentTitleParam,
 				metadataParam, binaryFile, moiTraceRequest);
-		_log.debug("validationResult: " + validationResult);
+		debugLog("validationResult: " + validationResult);
 
 		if (Validator.isNotNull(validationResult)) {
 			return GenerateDocumentResult.generateDocumentResult(
 					moiTraceRequest.getRequestId(), APIConstants.FAILURE,
-					validationResult);
+					validationResult, null);
 		}
 
 		// Check Folder. If Folder not available, create new folder with
 		// ticket number
 		Folder uploadFolder = null;
 		try {
-			uploadFolder = getFolder(ticketNumberParam, serviceContext);
-			_log.debug("folderId: " + uploadFolder.getFolderId());
+			uploadFolder = getFolder(ticketNumberParam, true, serviceContext);
+			debugLog("folderId: " + uploadFolder.getFolderId());
 
 			// Check if File exists
 			boolean fileExists = isFileExist(uploadFolder, documentTitleParam,
@@ -164,20 +166,20 @@ public class JiraAPIHandlerResourceImpl extends BaseJiraAPIHandlerResourceImpl {
 						moiTraceRequest);
 				return GenerateDocumentResult.generateDocumentResult(
 						moiTraceRequest.getRequestId(), APIConstants.FAILURE,
-						MosipErrorConstants.JIRA_FILE_EXISTS_MSG);
+						MosipErrorConstants.JIRA_FILE_EXISTS_MSG, null);
 			}
 		} catch (PortalException | IOException e) {
 			JiraUtil.updateTraceRequest(MosipErrorConstants.JIRA_COMMON_ERROR,
 					moiTraceRequest);
 			return GenerateDocumentResult.generateDocumentResult(
 					moiTraceRequest.getRequestId(), APIConstants.FAILURE,
-					MosipErrorConstants.JIRA_COMMON_ERROR);
+					MosipErrorConstants.JIRA_COMMON_ERROR, null);
 		}
 		JiraUtil.updateTraceRequest(MosipErrorConstants.JIRA_FILE_UPLOADED_MSG,
 				moiTraceRequest);
 		return GenerateDocumentResult.generateDocumentResult(
 				moiTraceRequest.getRequestId(), APIConstants.SUCCESS,
-				MosipErrorConstants.JIRA_FILE_UPLOADED_MSG);
+				MosipErrorConstants.JIRA_FILE_UPLOADED_MSG, null);
 	}
 
 	/**
@@ -216,7 +218,9 @@ public class JiraAPIHandlerResourceImpl extends BaseJiraAPIHandlerResourceImpl {
 					serviceContext.getScopeGroupId(),
 					CommonConstants.JIRA_PARENT_FOLDER_ID, folderName);
 		} catch (PortalException e) {
-			_log.error(e);
+			if (_log.isErrorEnabled()) {
+				_log.error(e);
+			}
 		}
 
 		return dlFolder;
@@ -250,7 +254,9 @@ public class JiraAPIHandlerResourceImpl extends BaseJiraAPIHandlerResourceImpl {
 				fileExists = true;
 			}
 		} catch (PortalException e) {
-			_log.error(e);
+			if (_log.isErrorEnabled()) {
+				_log.error(e);
+			}
 		}
 		return fileExists;
 	}
@@ -274,20 +280,24 @@ public class JiraAPIHandlerResourceImpl extends BaseJiraAPIHandlerResourceImpl {
 	 * @return Folder
 	 * @throws PortalException
 	 */
-	private Folder getFolder(String folderName, ServiceContext serviceContext)
-			throws PortalException {
+	private Folder getFolder(String folderName, boolean createNew,
+			ServiceContext serviceContext) throws PortalException {
 		DLFolder dlFolder = isFolderExist(folderName, serviceContext);
 		Folder folder = null;
-		if (null == dlFolder) {
+		if (null == dlFolder && createNew) {
 			try {
 				folder = DLAppServiceUtil.addFolder(
 						serviceContext.getScopeGroupId(),
 						CommonConstants.JIRA_PARENT_FOLDER_ID, folderName,
 						folderName, serviceContext);
-			} catch (PortalException e1) {
-				e1.printStackTrace();
-			} catch (SystemException e1) {
-				e1.printStackTrace();
+			} catch (PortalException e) {
+				if (_log.isErrorEnabled()) {
+					_log.error(e);
+				}
+			} catch (SystemException e) {
+				if (_log.isErrorEnabled()) {
+					_log.error(e);
+				}
 			}
 		} else {
 			folder = DLAppServiceUtil.getFolder(dlFolder.getFolderId());
@@ -318,7 +328,7 @@ public class JiraAPIHandlerResourceImpl extends BaseJiraAPIHandlerResourceImpl {
 		String changeLog = StringPool.BLANK;
 		long repositoryId = getRepositoryId(serviceContext);
 
-		_log.debug("repositoryId: " + repositoryId);
+		debugLog("repositoryId: " + repositoryId);
 
 		DLFileEntry dlFileEntry = null;
 		Map<String, DDMFormValues> ddmFormValuesMap = new HashMap<String, DDMFormValues>();
@@ -338,12 +348,18 @@ public class JiraAPIHandlerResourceImpl extends BaseJiraAPIHandlerResourceImpl {
 				ddmFormValuesMap, file, is, binaryFile.getSize(),
 				serviceContext);
 		is.close();
-		_log.debug("File Added with ID: " + dlFileEntry.getFileEntryId());
+		debugLog("File Added with ID: " + dlFileEntry.getFileEntryId());
 
 		DLAppServiceUtil.updateFileEntry(dlFileEntry.getFileEntryId(),
 				dlFileEntry.getFileName(), mimeType, title, description,
 				changeLog, DLVersionNumberIncrease.NONE, file, serviceContext);
-		_log.debug("Updated file status");
+		debugLog("Updated file status");
+	}
+
+	private static void debugLog(Object msg) {
+		if (_log.isDebugEnabled()) {
+			_log.debug(msg);
+		}
 	}
 
 	private static final Log _log = LogFactoryUtil

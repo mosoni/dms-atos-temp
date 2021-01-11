@@ -45,6 +45,19 @@ public interface MosipAPIHandlerResource {
 			String PreviousIdentifier, MultipartBody multipartBody)
 		throws Exception;
 
+	public Page<DocumentResult> getMosipDocument(
+			String ModuleType, String ConsumerCode, String DocumentType,
+			String Identifier)
+		throws Exception;
+
+	public Page<DocumentResult> addIDCSNumber(
+			String RegistrationNumber, String IDCSNumber)
+		throws Exception;
+
+	public Page<DocumentResult> deleteMosipDocument(
+			String ModuleType, MultipartBody multipartBody)
+		throws Exception;
+
 	public default void setContextAcceptLanguage(
 		AcceptLanguage contextAcceptLanguage) {
 	}

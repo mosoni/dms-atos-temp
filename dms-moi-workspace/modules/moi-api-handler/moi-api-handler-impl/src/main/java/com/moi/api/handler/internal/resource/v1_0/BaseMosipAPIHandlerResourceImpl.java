@@ -145,6 +145,87 @@ public abstract class BaseMosipAPIHandlerResourceImpl
 		return Page.of(Collections.emptyList());
 	}
 
+	/**
+	 * Invoke this method with the command line:
+	 *
+	 * curl -X 'POST' 'http://localhost:8080/o/moi-api-handler/v1.0/getDocument'  -u 'test@liferay.com:test'
+	 */
+	@Override
+	@POST
+	@Parameters(
+		value = {
+			@Parameter(in = ParameterIn.QUERY, name = "ModuleType"),
+			@Parameter(in = ParameterIn.QUERY, name = "ConsumerCode"),
+			@Parameter(in = ParameterIn.QUERY, name = "DocumentType"),
+			@Parameter(in = ParameterIn.QUERY, name = "Identifier")
+		}
+	)
+	@Path("/getDocument")
+	@Produces({"application/json", "application/xml"})
+	@Tags(value = {@Tag(name = "MosipAPIHandler")})
+	public Page<DocumentResult> getMosipDocument(
+			@Parameter(hidden = true) @QueryParam("ModuleType") String
+				ModuleType,
+			@Parameter(hidden = true) @QueryParam("ConsumerCode") String
+				ConsumerCode,
+			@Parameter(hidden = true) @QueryParam("DocumentType") String
+				DocumentType,
+			@Parameter(hidden = true) @QueryParam("Identifier") String
+				Identifier)
+		throws Exception {
+
+		return Page.of(Collections.emptyList());
+	}
+
+	/**
+	 * Invoke this method with the command line:
+	 *
+	 * curl -X 'POST' 'http://localhost:8080/o/moi-api-handler/v1.0/addIDCSNumber'  -u 'test@liferay.com:test'
+	 */
+	@Override
+	@POST
+	@Parameters(
+		value = {
+			@Parameter(in = ParameterIn.QUERY, name = "RegistrationNumber"),
+			@Parameter(in = ParameterIn.QUERY, name = "IDCSNumber")
+		}
+	)
+	@Path("/addIDCSNumber")
+	@Produces({"application/json", "application/xml"})
+	@Tags(value = {@Tag(name = "MosipAPIHandler")})
+	public Page<DocumentResult> addIDCSNumber(
+			@Parameter(hidden = true) @QueryParam("RegistrationNumber") String
+				RegistrationNumber,
+			@Parameter(hidden = true) @QueryParam("IDCSNumber") String
+				IDCSNumber)
+		throws Exception {
+
+		return Page.of(Collections.emptyList());
+	}
+
+	/**
+	 * Invoke this method with the command line:
+	 *
+	 * curl -X 'POST' 'http://localhost:8080/o/moi-api-handler/v1.0/deleteDocument'  -u 'test@liferay.com:test'
+	 */
+	@Override
+	@Consumes("multipart/form-data")
+	@POST
+	@Parameters(
+		value = {@Parameter(in = ParameterIn.QUERY, name = "ModuleType")}
+	)
+	@Path("/deleteDocument")
+	@Produces({"application/json", "application/xml"})
+	@Tags(value = {@Tag(name = "MosipAPIHandler")})
+	public Page<DocumentResult> deleteMosipDocument(
+			@Parameter(hidden = true) @QueryParam("ModuleType") String
+				ModuleType,
+			MultipartBody multipartBody)
+		throws Exception {
+
+		return Page.of(Collections.emptyList());
+	}
+
 	@Override
 	@SuppressWarnings("PMD.UnusedLocalVariable")
 	public void create(

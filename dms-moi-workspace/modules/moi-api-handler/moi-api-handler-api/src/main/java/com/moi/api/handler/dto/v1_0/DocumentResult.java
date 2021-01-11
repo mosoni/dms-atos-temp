@@ -19,6 +19,8 @@ import java.util.Set;
 
 import javax.annotation.Generated;
 
+import javax.validation.Valid;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -62,6 +64,35 @@ public class DocumentResult {
 	@GraphQLField
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
 	protected String result;
+
+	@Schema
+	@Valid
+	public Object getResultFile() {
+		return resultFile;
+	}
+
+	public void setResultFile(Object resultFile) {
+		this.resultFile = resultFile;
+	}
+
+	@JsonIgnore
+	public void setResultFile(
+		UnsafeSupplier<Object, Exception> resultFileUnsafeSupplier) {
+
+		try {
+			resultFile = resultFileUnsafeSupplier.get();
+		}
+		catch (RuntimeException re) {
+			throw re;
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@GraphQLField
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	protected Object resultFile;
 
 	@Schema
 	public String getResultMessage() {
@@ -158,6 +189,16 @@ public class DocumentResult {
 			sb.append(_escape(result));
 
 			sb.append("\"");
+		}
+
+		if (resultFile != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"resultFile\": ");
+
+			sb.append(String.valueOf(resultFile));
 		}
 
 		if (resultMessage != null) {

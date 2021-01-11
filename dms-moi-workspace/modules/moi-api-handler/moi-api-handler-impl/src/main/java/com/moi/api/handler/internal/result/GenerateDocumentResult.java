@@ -29,7 +29,7 @@ public class GenerateDocumentResult {
 	 * @return :
 	 */
 	public static Page<DocumentResult> generateDocumentResult(long traceId,
-			String result, String resultMessage) {
+			String result, String resultMessage, Object resultFile) {
 
 		DocumentResult documentResult = new DocumentResult();
 		List<DocumentResult> documentResultList = new ArrayList<DocumentResult>();
@@ -37,9 +37,11 @@ public class GenerateDocumentResult {
 		documentResult.setTraceId(traceId);
 		documentResult.setResult(result);
 		documentResult.setResultMessage(resultMessage);
+		if (null != resultFile) {
+			documentResult.setResultFile(resultFile);
+		}
 		documentResultList.add(documentResult);
 
 		return Page.of(documentResultList);
-
 	}
 }

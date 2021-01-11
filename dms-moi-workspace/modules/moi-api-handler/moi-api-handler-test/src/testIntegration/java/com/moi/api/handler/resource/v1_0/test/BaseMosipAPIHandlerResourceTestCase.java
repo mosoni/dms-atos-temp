@@ -187,6 +187,21 @@ public abstract class BaseMosipAPIHandlerResourceTestCase {
 		Assert.assertTrue(false);
 	}
 
+	@Test
+	public void testGetMosipDocument() throws Exception {
+		Assert.assertTrue(false);
+	}
+
+	@Test
+	public void testAddIDCSNumber() throws Exception {
+		Assert.assertTrue(false);
+	}
+
+	@Test
+	public void testDeleteMosipDocument() throws Exception {
+		Assert.assertTrue(false);
+	}
+
 	protected MosipAPIHandler testGraphQLMosipAPIHandler_addMosipAPIHandler()
 		throws Exception {
 
