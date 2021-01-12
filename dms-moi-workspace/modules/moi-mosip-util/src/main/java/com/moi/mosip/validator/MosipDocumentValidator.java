@@ -9,6 +9,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.moi.dms.mosip.constants.MOIProperties;
 import com.moi.dms.mosip.constants.MosipConstants;
 import com.moi.dms.mosip.constants.MosipErrorConstants;
+import com.moi.dms.trace.request.model.MOITraceRequest;
 
 import java.io.File;
 
@@ -25,10 +26,13 @@ public class MosipDocumentValidator {
 	 * 
 	 * @return true if Document is valid
 	 */
-	public static String isDocumentValid(File file) {
+	public static String isDocumentValid(File file,MOITraceRequest moiTraceRequest) {
 
 		/* Start : Check file */
 		if(Validator.isNull(file)) {
+			updateTraceComment(
+					"Document is blank/Empty" ,
+					moiTraceRequest);
 			return MosipErrorConstants.MOSIP_BLANK_DOCUMENT;
 		}
 		/* End : Check file */
@@ -42,6 +46,9 @@ public class MosipDocumentValidator {
 		if (Validator.isNotNull(fileExtension)
 				&& Validator.isNotNull(availableExtension)) {
 			if (!availableExtension.contains(fileExtension)) {
+				updateTraceComment(
+						"Incorrect Extension :"+fileExtension ,
+						moiTraceRequest);
 				return MosipErrorConstants.MOSIP_INVALID_DOCUMENT_EXTENSION
 						.replace(
 								MosipConstants.DOCUMENT_EXTENSION_DYNAMIC_PARAMETER,
@@ -57,6 +64,9 @@ public class MosipDocumentValidator {
 				.valueOf(PropsUtil.get(MOIProperties.MOSIP_FILE_SIZE));
 
 		if (length > mosipFileSize) {
+			updateTraceComment(
+					"Incorrect file Size :"+length,
+					moiTraceRequest);
 			return MosipErrorConstants.MOSIP_INVALID_DOCUMENT_SIZE.replace(
 					MosipConstants.DOCUMENT_SIZE_DYNAMIC_PARAMETER,
 					String.valueOf(mosipFileSize));
@@ -65,9 +75,21 @@ public class MosipDocumentValidator {
 		return null;
 	}
 	
-	public static void main(String[] args) {
-		String a = "Document Extension is invalid , Please upload document with extension {extension} ";
-		//a = a.replace("{extension}", "12345");
-		System.out.println(a.replace("{extension}", "12345"));
+	/*
+	 * This method is used to concatinate comment section of MOITraceRequest
+	 *
+	 * @param comment
+	 * @param traceRequest : 
+	 */
+	private static void updateTraceComment(String comment,
+			MOITraceRequest traceRequest) {
+		if (Validator.isNotNull(traceRequest)) {
+			if (Validator.isNotNull(traceRequest.getComment())) {
+				traceRequest.setComment(
+						traceRequest.getComment() + " | " + comment + ".");
+			} else {
+				traceRequest.setComment(comment + ".");
+			}
+		}
 	}
 }

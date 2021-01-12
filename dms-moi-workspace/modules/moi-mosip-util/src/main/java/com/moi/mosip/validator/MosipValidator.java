@@ -20,6 +20,8 @@ import java.util.Date;
  */
 public class MosipValidator {
 
+	
+	public static final String INVALID_REQUEST="Invalid Request";
 	/**
 	 * This method validates the requets coming from Mosip and checks following. -
 	 * If request has proper authorization level on resource - If request has valid
@@ -35,10 +37,15 @@ public class MosipValidator {
 
 		String requestedOperation = MosipUtil.getAction(documentType,
 				isNewUpload);
-
+		updateTraceComment(
+				"requestedOperation is :" + requestedOperation,
+				moiTraceRequest);
 		/* Start : moduleType */
 		if (Validator.isNull(moduleType)
 				|| !MosipPhase.getPhases().contains(moduleType)) {
+			updateTraceComment(
+					INVALID_REQUEST,
+					moiTraceRequest);
 			updateTraceRequest(MosipErrorConstants.MOSIP_INVALID_MODULE_TYPE,
 					moiTraceRequest);
 			return MosipErrorConstants.MOSIP_INVALID_MODULE_TYPE;
@@ -48,11 +55,12 @@ public class MosipValidator {
 		String identifierResult = validateIdentifier(previousModuleType,
 				previousidentifier, moiTraceRequest, previousModuleType,
 				identifierNumber);
-		
-		if(Validator.isNotNull(identifierResult)) {
-			updateTraceRequest(
-					identifierResult,
+
+		if (Validator.isNotNull(identifierResult)) {
+			updateTraceComment(
+					INVALID_REQUEST,
 					moiTraceRequest);
+			updateTraceRequest(identifierResult, moiTraceRequest);
 			return identifierResult;
 		}
 
@@ -61,6 +69,12 @@ public class MosipValidator {
 		/* Start : Consumer and Document Type */
 		if (!isConsumerCodeValid(consumerCode, documentType)) {
 			/* Update Trace Request */
+			updateTraceComment(
+					MosipErrorConstants.MOSIP_INVALID_CONSUMER_CODE_OR_DOCUMENT_TYPE,
+					moiTraceRequest);
+			updateTraceComment(
+					INVALID_REQUEST,
+					moiTraceRequest);
 			updateTraceRequest(
 					MosipErrorConstants.MOSIP_INVALID_CONSUMER_CODE_OR_DOCUMENT_TYPE,
 					moiTraceRequest);
@@ -70,9 +84,12 @@ public class MosipValidator {
 
 		/* Start : Validating Document */
 		String documentValidation = MosipDocumentValidator
-				.isDocumentValid(file);
+				.isDocumentValid(file,moiTraceRequest);
 		if (Validator.isNotNull(documentValidation)) {
 			/* Update Trace Request */
+			updateTraceComment(
+					INVALID_REQUEST,
+					moiTraceRequest);
 			updateTraceRequest(documentValidation, moiTraceRequest);
 			return documentValidation;
 		}
@@ -80,8 +97,11 @@ public class MosipValidator {
 
 		/* Start : Validating Authority */
 		if (!MosipAuthorizationValidator.isRequestAuthorized(moduleType,
-				requestedOperation)) {
+				requestedOperation,moiTraceRequest)) {
 			/* Update Trace Request */
+			updateTraceComment(
+					INVALID_REQUEST,
+					moiTraceRequest);
 			updateTraceRequest(
 					MosipErrorConstants.MOSIP_AUTHORIZATION_LEVEL_MESSAGE,
 					moiTraceRequest);
@@ -146,7 +166,10 @@ public class MosipValidator {
 				 * Its First Entry point for any Document and No Previous Module
 				 * and Identifier is applicable
 				 */
-
+				updateTraceComment(
+						"Assuming 1st Entry point is Pre registration with Pre Reg ID "
+								+ identifier,
+						moiTraceRequest);
 				if (!previousModuleType.equals(MosipPhase.NO_PREVIOUS_MODULE)
 						|| !previousIdentifier
 								.equals(MosipPhase.NO_PREVIOUS_IDENTIFIER)) {
@@ -156,7 +179,7 @@ public class MosipValidator {
 					return MosipErrorConstants.MOSIP_INVALID_PREVIOUS_MODULE_TYPE_OR_IDENTIFIER;
 				}
 				updateTraceComment(
-						"VALID Request : DMS assumes Identifier is Pre registration ID, Phase is Pre Registration Phase ",
+						IDENTIFIER_PARAM_CORRECT,
 						moiTraceRequest);
 				
 				return null;
@@ -187,7 +210,7 @@ public class MosipValidator {
 					}
 
 					updateTraceComment(
-							"VALID Request : DMS assumes Identifier Registration ID, Phase is Registration Phase and Citizen Directly came to Registration i.e.  No Pre Registration",
+							IDENTIFIER_PARAM_CORRECT,
 							moiTraceRequest);
 					
 					/*End Use case 1*/
@@ -199,9 +222,6 @@ public class MosipValidator {
 							moiTraceRequest);
 					
 					if(!previousModuleType.equals(MosipPhase.PRE_REGISTRATION_PHASE)) {
-						updateTraceComment(
-								"Treating Request as Invalid ",
-								moiTraceRequest);
 						updateTraceRequest(
 								"Invalid Previous Module :"+previousModuleType,
 								moiTraceRequest);
@@ -209,9 +229,6 @@ public class MosipValidator {
 					}
 					
 					if(!previousIdentifier.equals(MosipPhase.NO_PREVIOUS_IDENTIFIER) || !previousIdentifier.equals(MosipPhase.NOT_APPLICABLE)) {
-						updateTraceComment(
-								"Treating Request as Invalid ",
-								moiTraceRequest);
 						updateTraceRequest(
 								"Invalid Previous Identifier :"+previousIdentifier,
 								moiTraceRequest);
@@ -219,16 +236,13 @@ public class MosipValidator {
 					}
 					
 					updateTraceComment(
-							"VALID Request : DMS assumes Identifier Registration ID, Phase is Registration Phase and Citizen Came to Pre registration with ID :"+previousIdentifier,
+							IDENTIFIER_PARAM_CORRECT,
 							moiTraceRequest);
 					
 					return null;
 				}			
 			case MosipPhase.FREEZED_PHASE :
 				if(!previousModuleType.equals(MosipPhase.REGISTRATION_PHASE)) {
-					updateTraceComment(
-							"Treating Request as Invalid ",
-							moiTraceRequest);
 					updateTraceRequest(
 							"Invalid Previous Module :"+previousModuleType,
 							moiTraceRequest);
@@ -236,44 +250,35 @@ public class MosipValidator {
 				}
 				
 				if(!previousIdentifier.equals(MosipPhase.NO_PREVIOUS_IDENTIFIER) || !previousIdentifier.equals(MosipPhase.NOT_APPLICABLE)) {
-					updateTraceComment(
-							"Treating Request as Invalid ",
-							moiTraceRequest);
 					updateTraceRequest(
 							"Invalid Previous Identifier :"+previousIdentifier,
 							moiTraceRequest);
 					return "Invalid Previous Identifier :"+previousIdentifier;
 				}
 				updateTraceComment(
-						"VALID Request ",
+						IDENTIFIER_PARAM_CORRECT,
 						moiTraceRequest);
 			return null;
 			case MosipPhase.PORTAL_FOR_AGENT :
 				if(!previousModuleType.equals(MosipPhase.NOT_APPLICABLE) || !previousIdentifier.equals(MosipPhase.NOT_APPLICABLE)) {
-					updateTraceComment(
-							"Treating Request as Invalid ",
-							moiTraceRequest);
 					updateTraceRequest(
 							"Previous Module Type and Previous Identifier is not applicable for Module Type"+MosipPhase.PORTAL_FOR_AGENT,
 							moiTraceRequest);
 					return "Previous Module Type and Previous Identifier is not applicable for Module Type"+MosipPhase.PORTAL_FOR_AGENT;
 				}
 				updateTraceComment(
-						"VALID Request ",
+						IDENTIFIER_PARAM_CORRECT,
 						moiTraceRequest);
 				return null;	
 			case MosipPhase.PORTAL_FOR_RESIDENT :
 				if(!previousModuleType.equals(MosipPhase.NOT_APPLICABLE) || !previousIdentifier.equals(MosipPhase.NOT_APPLICABLE)) {
-					updateTraceComment(
-							"Treating Request as Invalid ",
-							moiTraceRequest);
 					updateTraceRequest(
 							"Previous Module Type and Previous Identifier is not applicable for Module Type"+MosipPhase.PORTAL_FOR_RESIDENT,
 							moiTraceRequest);
 					return "Previous Module Type and Previous Identifier is not applicable for Module Type"+MosipPhase.PORTAL_FOR_RESIDENT;
 				}
 				updateTraceComment(
-						"VALID Request ",
+						IDENTIFIER_PARAM_CORRECT,
 						moiTraceRequest);
 				return null;
 			default :
@@ -281,7 +286,7 @@ public class MosipValidator {
 		}
 	}
 
-	
+	public static final String IDENTIFIER_PARAM_CORRECT="Identifier Parameters are correct";
 	/*
 	 * This method is used to concatinate comment section of MOITraceRequest
 	 *
