@@ -1,6 +1,5 @@
 package com.moi.api.handler.internal.resource.v1_0;
 
-import com.liferay.dynamic.data.mapping.kernel.Value;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.model.DLFileEntryType;
@@ -17,6 +16,7 @@ import com.liferay.dynamic.data.mapping.kernel.DDMFormFieldValue;
 import com.liferay.dynamic.data.mapping.kernel.DDMFormValues;
 import com.liferay.dynamic.data.mapping.kernel.DDMStructure;
 import com.liferay.dynamic.data.mapping.kernel.LocalizedValue;
+import com.liferay.dynamic.data.mapping.kernel.Value;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -39,7 +39,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.vulcan.multipart.MultipartBody;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.moi.api.handler.dto.v1_0.DocumentResult;
-import com.moi.api.handler.dto.v1_0.MosipAPIHandler;
 import com.moi.api.handler.internal.result.APIConstants;
 import com.moi.api.handler.internal.result.GenerateDocumentResult;
 import com.moi.api.handler.resource.v1_0.MosipAPIHandlerResource;
@@ -56,9 +55,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -68,12 +65,9 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.activation.MimetypesFileTypeMap;
-import javax.ws.rs.QueryParam;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
-
-import io.swagger.v3.oas.annotations.Parameter;
 
 /**
  * @author Mohit
@@ -117,13 +111,15 @@ public class MosipAPIHandlerResourceImpl
 							ConsumerCode, null,
 							MosipUtil.getAction(DocumentType, true),
 							DocumentType, false, null, null, StringPool.BLANK);
+			MosipValidator.updateTraceComment("Mapping Initiated",
+					moiTraceRequest);
 		} catch (PortalException e) {
 			_log.error(e);
 		}
 
 		String validationResult = MosipValidator.validateRequest(ModuleType,
 				ConsumerCode, DocumentType, IdentifierNumber, userId, file,
-				moiTraceRequest,PreviousModuleType,PreviousIdentifier, true);
+				moiTraceRequest, PreviousModuleType, PreviousIdentifier, true);
 
 		if (Validator.isNotNull(validationResult)) {
 			return GenerateDocumentResult.generateDocumentResult(
@@ -134,20 +130,27 @@ public class MosipAPIHandlerResourceImpl
 		/* Identifier Check */
 		List<MOIIdMapper> idMapperList = MOIIdMapperLocalServiceUtil
 				.findByRegistrationId(IdentifierNumber);
-		
+
+		MosipValidator.updateTraceComment(
+				"Mapping list Size :" + idMapperList.size() + " : For Phase :"
+						+ ModuleType + ": and Identifier :" + IdentifierNumber,
+				moiTraceRequest);
+
 		Group group = GroupLocalServiceUtil.fetchFriendlyURLGroup(
 				CompanyThreadLocal.getCompanyId(), MOSIP_SITE_FRIENDLY_URL);
 
-		if(Validator.isNull(group)) {
-			MosipValidator.updateTraceRequest(GROUP_NOT_FOUND, moiTraceRequest);
+		if (Validator.isNull(group)) {
+			MosipValidator.updateTraceComment(GROUP_NOT_FOUND, moiTraceRequest);
+			MosipValidator.updateTraceRequest(GROUP_NOT_FOUND, moiTraceRequest,
+					false);
+
 			return GenerateDocumentResult.generateDocumentResult(
 					moiTraceRequest.getRequestId(), APIConstants.FAILURE,
 					GROUP_NOT_FOUND, null);
 		}
-		
+
 		if (Validator.isNull(idMapperList)) {
-			
-			
+
 			/*
 			 * Assuming Request is coming for the first time with
 			 * IdentifierNumber
@@ -157,10 +160,12 @@ public class MosipAPIHandlerResourceImpl
 					ModuleType, group, userId);
 		}
 
-		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
-		processDocument(IdentifierNumber, group.getGroupId(), userId, ModuleType, serviceContext, file, moiTraceRequest);
-		
-		
+		ServiceContext serviceContext = ServiceContextThreadLocal
+				.getServiceContext();
+		processDocument(IdentifierNumber, group.getGroupId(), userId,
+				ModuleType, serviceContext, file, DocumentType,
+				IdentifierNumber, moiTraceRequest);
+
 		return super.uploadMosipDocument(ModuleType, ConsumerCode, DocumentType,
 				IdentifierNumber, Metadata, PreviousModuleType,
 				PreviousIdentifier, multipartBody);
@@ -320,159 +325,216 @@ public class MosipAPIHandlerResourceImpl
 	 * @return :
 	 */
 	private Page<DocumentResult> processDocument(String folderName, long groupId, long userId,
-			String moduleType, ServiceContext serviceContext,File file, MOITraceRequest moiTraceRequest) {
-		
-		/*Processing Folder. Folder should be available with Identifier Name*/
+			String moduleType, ServiceContext serviceContext, File file,String documentType,String identifier,
+			MOITraceRequest moiTraceRequest) {
+
+		/* Processing Folder. Folder should be available with Identifier Name */
 		long folderId = processFolder(folderName, groupId, serviceContext);
-		if(folderId==0) {
-			MosipValidator.updateTraceRequest(UNABLE_TO_CREATE_FOLDER.replace(FOLDER_NAME_DYNAMIC_PARAM, folderName), moiTraceRequest);
-			return GenerateDocumentResult.generateDocumentResult(
-					moiTraceRequest.getRequestId(), APIConstants.FAILURE,
-					UNABLE_TO_CREATE_FOLDER.replace(FOLDER_NAME_DYNAMIC_PARAM, folderName), null); 
+		if (folderId == 0) {
+			MosipValidator
+			.updateTraceComment("folderName :"+folderName +" is not available", moiTraceRequest);
+			MosipValidator
+					.updateTraceRequest(
+							UNABLE_TO_CREATE_FOLDER.replace(
+									FOLDER_NAME_DYNAMIC_PARAM, folderName),
+							moiTraceRequest, false);
+			return GenerateDocumentResult
+					.generateDocumentResult(moiTraceRequest.getRequestId(),
+							APIConstants.FAILURE,
+							UNABLE_TO_CREATE_FOLDER.replace(
+									FOLDER_NAME_DYNAMIC_PARAM, folderName),
+							null);
 		}
-		
+
 		String documentTitle = null;
 		String documentDesc = null;
 		String changeLog = null;
 		List<DLFileEntryType> fileEntryTypes;
-		
-		InputStream is = null;
-		
-		try {
-			fileEntryTypes = DLFileEntryTypeServiceUtil
-					.getFolderFileEntryTypes(
-							PortalUtil.getCurrentAndAncestorSiteGroupIds(
-									groupId),
-							folderId, true);
-		
 
-		DLFileEntryType mosipFileEntryType = null;
-		DDMStructure ddmStruct = null;
-		DDMFormValues ddmFormValues = null;
-		for (DLFileEntryType fileEntryType : fileEntryTypes) {
-			if (METADATA_SETS_NAME
-					.equalsIgnoreCase(fileEntryType.getName(Locale.US))) {
-				mosipFileEntryType = fileEntryType;
-				break;
-			}
-		}
-		String preRegNo = null;
-		String regNo = null;
-		String idcsNo = null;
-		
-		if (null != mosipFileEntryType) {
-			
-			List<DDMStructure> structures = mosipFileEntryType
-					.getDDMStructures();
-			for (DDMStructure struct : structures) {
+		InputStream is = null;
+
+		try {
+			fileEntryTypes = DLFileEntryTypeServiceUtil.getFolderFileEntryTypes(
+					PortalUtil.getCurrentAndAncestorSiteGroupIds(groupId),
+					folderId, true);
+
+			DLFileEntryType mosipFileEntryType = null;
+			DDMStructure ddmStruct = null;
+			DDMFormValues ddmFormValues = null;
+			for (DLFileEntryType fileEntryType : fileEntryTypes) {
 				if (METADATA_SETS_NAME
-						.equalsIgnoreCase(struct.getName(Locale.US))) {
-					ddmStruct = struct;
+						.equalsIgnoreCase(fileEntryType.getName(Locale.US))) {
+					mosipFileEntryType = fileEntryType;
 					break;
 				}
 			}
+			String preRegNo = null;
+			String regNo = null;
+			String idcsNo = null;
 
-			if (null != ddmStruct) {
-			
-				DDMForm ddmForm = ddmStruct.getDDMForm();
-				List<DDMFormField> ddmFormFields = ddmForm
-						.getDDMFormFields();
+			if (null != mosipFileEntryType) {
 
-				List<DDMFormFieldValue> ddmFormFieldValues = new ArrayList<DDMFormFieldValue>();
-
-				int i = 0;
-				for (DDMFormField formField : ddmFormFields) {
-					Value value = new LocalizedValue();
-					DDMFormFieldValue ddmFormFieldValue = new DDMFormFieldValue();
-					i++;
-					if (PRE_REG_ID.equalsIgnoreCase(
-							formField.getLabel().getString(Locale.US))) {
-						System.out.println("PRE REG ID");
-						value.addString(Locale.US, preRegNo);
-						ddmFormFieldValue.setName(formField.getName());
-						ddmFormFieldValue.setValue(value);
-						ddmFormFieldValues.add(ddmFormFieldValue);
-					} else if (REG_ID.equalsIgnoreCase(
-							formField.getLabel().getString(Locale.US))) {
-						System.out.println("REG ID");
-						value.addString(Locale.US, regNo);
-						ddmFormFieldValue.setName(formField.getName());
-						ddmFormFieldValue.setValue(value);
-						ddmFormFieldValues.add(ddmFormFieldValue);
-					} else if (IDCS_ID.equalsIgnoreCase(
-							formField.getLabel().getString(Locale.US))) {
-						System.out.println("idcsNo: " + idcsNo);
-						value.addString(Locale.US, idcsNo);
-						ddmFormFieldValue.setName(formField.getName());
-						ddmFormFieldValue.setValue(value);
-						ddmFormFieldValues.add(ddmFormFieldValue);
+				List<DDMStructure> structures = mosipFileEntryType
+						.getDDMStructures();
+				for (DDMStructure struct : structures) {
+					if (METADATA_SETS_NAME
+							.equalsIgnoreCase(struct.getName(Locale.US))) {
+						ddmStruct = struct;
+						break;
 					}
-					System.out.println(i);
 				}
 
-				// Set the name of value you need to set
-				Set<Locale> localeSet = new HashSet<Locale>();
-				localeSet.add(Locale.US);
-				ddmFormValues = new DDMFormValues(ddmForm);
-				ddmFormValues.setAvailableLocales(localeSet);
-				ddmFormValues.setDefaultLocale(Locale.US);
-				ddmFormValues.setDDMFormFieldValues(ddmFormFieldValues);
+				if (null != ddmStruct) {
 
-				Map<String, DDMFormValues> ddmFormValuesMap = new HashMap<String, DDMFormValues>();
-				ddmFormValuesMap.put(ddmStruct.getStructureKey(),
-						ddmFormValues);
+					DDMForm ddmForm = ddmStruct.getDDMForm();
+					List<DDMFormField> ddmFormFields = ddmForm
+							.getDDMFormFields();
 
-				
-				MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
-				String mimeType = fileTypeMap.getContentType(file.getName());
-				
-				is = new FileInputStream(file);
-				
-				DLFileEntry dlFileEntry = DLFileEntryLocalServiceUtil.addFileEntry(
-						userId,
-						groupId, groupId,
-						folderId, documentTitle, mimeType, documentTitle,
-						documentDesc, changeLog,
-						mosipFileEntryType.getFileEntryTypeId(),
-						ddmFormValuesMap, file, is, file.length(),
-						serviceContext);
-				System.out.println("File Added");
+					List<DDMFormFieldValue> ddmFormFieldValues = new ArrayList<DDMFormFieldValue>();
 
-				/*DLAppServiceUtil.updateFileEntry(
-						dlFileEntry.getFileEntryId(),
-						dlFileEntry.getFileName(), mimeType, title,
-						description, changeLog, false, null,
-						dlFileEntry.getSize(), serviceContext);*/
+					int i = 0;
+					for (DDMFormField formField : ddmFormFields) {
+						Value value = new LocalizedValue();
+						DDMFormFieldValue ddmFormFieldValue = new DDMFormFieldValue();
+						i++;
+						if (PRE_REG_ID.equalsIgnoreCase(
+								formField.getLabel().getString(Locale.US))) {
+							System.out.println("PRE REG ID");
+							value.addString(Locale.US, preRegNo);
+							ddmFormFieldValue.setName(formField.getName());
+							ddmFormFieldValue.setValue(value);
+							ddmFormFieldValues.add(ddmFormFieldValue);
+						} else if (REG_ID.equalsIgnoreCase(
+								formField.getLabel().getString(Locale.US))) {
+							System.out.println("REG ID");
+							value.addString(Locale.US, regNo);
+							ddmFormFieldValue.setName(formField.getName());
+							ddmFormFieldValue.setValue(value);
+							ddmFormFieldValues.add(ddmFormFieldValue);
+						} else if (IDCS_ID.equalsIgnoreCase(
+								formField.getLabel().getString(Locale.US))) {
+							System.out.println("idcsNo: " + idcsNo);
+							value.addString(Locale.US, idcsNo);
+							ddmFormFieldValue.setName(formField.getName());
+							ddmFormFieldValue.setValue(value);
+							ddmFormFieldValues.add(ddmFormFieldValue);
+						}
+					}
 
-				
+					// Set the name of value you need to set
+					Set<Locale> localeSet = new HashSet<Locale>();
+					localeSet.add(Locale.US);
+					ddmFormValues = new DDMFormValues(ddmForm);
+					ddmFormValues.setAvailableLocales(localeSet);
+					ddmFormValues.setDefaultLocale(Locale.US);
+					ddmFormValues.setDDMFormFieldValues(ddmFormFieldValues);
+
+					Map<String, DDMFormValues> ddmFormValuesMap = new HashMap<String, DDMFormValues>();
+					ddmFormValuesMap.put(ddmStruct.getStructureKey(),
+							ddmFormValues);
+
+					MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
+					String mimeType = fileTypeMap
+							.getContentType(file.getName());
+
+					is = new FileInputStream(file);
+
+					MosipValidator.updateTraceComment(
+							"Starting file upload for Module type  "
+									+ moduleType + " and Identifier :"
+									+ identifier,
+							moiTraceRequest);
+
+					MosipValidator.updateTraceComment(
+							"Starting file upload in Folder ID " + folderId,
+							moiTraceRequest);
+					MosipValidator.updateTraceComment(
+							"Starting file upload with title " + documentTitle,
+							moiTraceRequest);
+					MosipValidator.updateTraceComment(
+							"Starting file upload Document Type "
+									+ documentType,
+							moiTraceRequest);
+
+					DLFileEntry dlFileEntry = DLFileEntryLocalServiceUtil
+							.addFileEntry(userId, groupId, groupId, folderId,
+									documentTitle, mimeType, documentTitle,
+									documentDesc, changeLog,
+									mosipFileEntryType.getFileEntryTypeId(),
+									ddmFormValuesMap, file, is, file.length(),
+									serviceContext);
+					MosipValidator.updateTraceComment(
+							"File Added Draft Status with File Entry ID "
+									+ dlFileEntry.getFileEntryId()
+									+ " and Identifier :" + identifier,
+							moiTraceRequest);
+
 					DLAppServiceUtil.updateFileEntry(
 							dlFileEntry.getFileEntryId(),
 							dlFileEntry.getFileName(), mimeType, documentTitle,
 							documentDesc, changeLog,
 							DLVersionNumberIncrease.NONE, file, serviceContext);
-				
-				System.out.println("File Status Updated");
+
+					MosipValidator.updateTraceComment(
+							"File Updated Published Status with File Entry ID "
+									+ dlFileEntry.getFileEntryId()
+									+ " and Identifier :" + identifier,
+							moiTraceRequest);
+					MosipValidator.updateTraceRequest(
+							"File Uploaded with Document Type :" + documentType
+									+ " and Identifier :" + identifier,
+							moiTraceRequest, true);
+				}
+
 			}
-			
-		}
 		} catch (PortalException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			_log.error(e);
+			MosipValidator.updateTraceComment(
+					"Error uploading File "+e.getMessage(),
+					moiTraceRequest);
+			MosipValidator.updateTraceRequest(
+					"Error uploading File " + e.getMessage()
+							+ " and Identifier :" + identifier,
+					moiTraceRequest, true);
+			return GenerateDocumentResult
+					.generateDocumentResult(moiTraceRequest.getRequestId(),
+							APIConstants.FAILURE,
+							"DMS Portal Error uploading "+documentType+": Please contact DMS Administrator",
+							null);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally {
-			if(is!=null) {
+			_log.error(e);
+			MosipValidator.updateTraceComment(
+					"Error uploading File "+e.getMessage(),
+					moiTraceRequest);
+			MosipValidator.updateTraceRequest(
+					"Error uploading File " + e.getMessage()
+							+ " and Identifier :" + identifier,
+					moiTraceRequest, true);
+			return GenerateDocumentResult
+					.generateDocumentResult(moiTraceRequest.getRequestId(),
+							APIConstants.FAILURE,
+							"DMS File Error uploading "+documentType+": Please contact DMS Administrator",
+							null);
+		} finally {
+			if (is != null) {
 				try {
 					is.close();
 				} catch (IOException e) {
+					_log.error(e);
 				}
 			}
 		}
-		
-		/*Validate Document Title, Should be added If not added. If already added, then Throw Exception*/
-		
-		return null;
+
+		/*
+		 * Validate Document Title, Should be added If not added. If already
+		 * added, then Throw Exception
+		 */
+
+		return GenerateDocumentResult
+				.generateDocumentResult(moiTraceRequest.getRequestId(),
+						APIConstants.SUCCESS,
+						"Document Type :"+documentType +" Successfully uploaded ",
+						null);
 	}
 	
 	/**
@@ -489,9 +551,10 @@ public class MosipAPIHandlerResourceImpl
 	 */
 	private void processIdentifier(String identifierNumber, String previousModule , String previousIdentifier,
 			MOITraceRequest moiTraceRequest,String documentType,String ModuleType, Group group,long userId) {
-		moiTraceRequest.setComment("No Id Found for Identifier :"
+
+		MosipValidator.updateTraceComment("No Id Found for Identifier :"
 				+ identifierNumber + "and Phase " + ModuleType
-				+ ". Therefore Adding into Mapper");
+				+ ". Therefore Adding into Mapper", moiTraceRequest);
 
 		try {
 			MOIIdMapper moiIdMapper = MOIIdMapperLocalServiceUtil

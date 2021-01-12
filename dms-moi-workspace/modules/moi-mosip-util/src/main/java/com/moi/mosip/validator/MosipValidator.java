@@ -47,7 +47,7 @@ public class MosipValidator {
 					INVALID_REQUEST,
 					moiTraceRequest);
 			updateTraceRequest(MosipErrorConstants.MOSIP_INVALID_MODULE_TYPE,
-					moiTraceRequest);
+					moiTraceRequest,false);
 			return MosipErrorConstants.MOSIP_INVALID_MODULE_TYPE;
 		}
 		/* End : moduleType */
@@ -60,7 +60,7 @@ public class MosipValidator {
 			updateTraceComment(
 					INVALID_REQUEST,
 					moiTraceRequest);
-			updateTraceRequest(identifierResult, moiTraceRequest);
+			updateTraceRequest(identifierResult, moiTraceRequest,false);
 			return identifierResult;
 		}
 
@@ -77,7 +77,7 @@ public class MosipValidator {
 					moiTraceRequest);
 			updateTraceRequest(
 					MosipErrorConstants.MOSIP_INVALID_CONSUMER_CODE_OR_DOCUMENT_TYPE,
-					moiTraceRequest);
+					moiTraceRequest,false);
 			return MosipErrorConstants.MOSIP_INVALID_CONSUMER_CODE_OR_DOCUMENT_TYPE;
 		}
 		/* End : Consumer and Document Type */
@@ -90,7 +90,7 @@ public class MosipValidator {
 			updateTraceComment(
 					INVALID_REQUEST,
 					moiTraceRequest);
-			updateTraceRequest(documentValidation, moiTraceRequest);
+			updateTraceRequest(documentValidation, moiTraceRequest,false);
 			return documentValidation;
 		}
 		/* End : Validating Document */
@@ -104,7 +104,7 @@ public class MosipValidator {
 					moiTraceRequest);
 			updateTraceRequest(
 					MosipErrorConstants.MOSIP_AUTHORIZATION_LEVEL_MESSAGE,
-					moiTraceRequest);
+					moiTraceRequest,false);
 			return MosipErrorConstants.MOSIP_AUTHORIZATION_LEVEL_MESSAGE;
 		}
 		/* End : Validating Authority */
@@ -149,7 +149,7 @@ public class MosipValidator {
 					moiTraceRequest);
 			updateTraceRequest(
 					MosipErrorConstants.MOSIP_INVALID_PREVIOUS_MODULE_TYPE_OR_IDENTIFIER,
-					moiTraceRequest);
+					moiTraceRequest,false);
 			return MosipErrorConstants.MOSIP_INVALID_PREVIOUS_MODULE_TYPE_OR_IDENTIFIER;
 		}else if(!MosipPhase.getPreviousPhaseOptions().contains(previousModuleType)) {
 			updateTraceComment(
@@ -157,7 +157,7 @@ public class MosipValidator {
 					moiTraceRequest);
 			updateTraceRequest(
 					MosipErrorConstants.MOSIP_INVALID_PREVIOUS_MODULE_TYPE_OR_IDENTIFIER,
-					moiTraceRequest);
+					moiTraceRequest,false);
 		}
 		
 		switch (moduleType) {
@@ -175,7 +175,7 @@ public class MosipValidator {
 								.equals(MosipPhase.NO_PREVIOUS_IDENTIFIER)) {
 					updateTraceRequest(
 							MosipErrorConstants.MOSIP_INVALID_PREVIOUS_MODULE_TYPE_OR_IDENTIFIER,
-							moiTraceRequest);
+							moiTraceRequest,false);
 					return MosipErrorConstants.MOSIP_INVALID_PREVIOUS_MODULE_TYPE_OR_IDENTIFIER;
 				}
 				updateTraceComment(
@@ -205,7 +205,7 @@ public class MosipValidator {
 							.equals(MosipPhase.NO_PREVIOUS_IDENTIFIER)) {
 						updateTraceRequest(
 								"No Previous Module Should have No Previous Identifier, Please make sure parameters are correct",
-								moiTraceRequest);
+								moiTraceRequest,false);
 						return "No Previous Module Should have No Previous Identifier, Please make sure parameters are correct";
 					}
 
@@ -224,14 +224,14 @@ public class MosipValidator {
 					if(!previousModuleType.equals(MosipPhase.PRE_REGISTRATION_PHASE)) {
 						updateTraceRequest(
 								"Invalid Previous Module :"+previousModuleType,
-								moiTraceRequest);
+								moiTraceRequest,false);
 						return "Invalid Previous Module :"+previousModuleType;
 					}
 					
 					if(!previousIdentifier.equals(MosipPhase.NO_PREVIOUS_IDENTIFIER) || !previousIdentifier.equals(MosipPhase.NOT_APPLICABLE)) {
 						updateTraceRequest(
 								"Invalid Previous Identifier :"+previousIdentifier,
-								moiTraceRequest);
+								moiTraceRequest,false);
 						return "Invalid Previous Identifier :"+previousIdentifier;
 					}
 					
@@ -245,14 +245,14 @@ public class MosipValidator {
 				if(!previousModuleType.equals(MosipPhase.REGISTRATION_PHASE)) {
 					updateTraceRequest(
 							"Invalid Previous Module :"+previousModuleType,
-							moiTraceRequest);
+							moiTraceRequest,false);
 					return "Invalid Previous Module :"+previousModuleType;
 				}
 				
 				if(!previousIdentifier.equals(MosipPhase.NO_PREVIOUS_IDENTIFIER) || !previousIdentifier.equals(MosipPhase.NOT_APPLICABLE)) {
 					updateTraceRequest(
 							"Invalid Previous Identifier :"+previousIdentifier,
-							moiTraceRequest);
+							moiTraceRequest,false);
 					return "Invalid Previous Identifier :"+previousIdentifier;
 				}
 				updateTraceComment(
@@ -263,7 +263,7 @@ public class MosipValidator {
 				if(!previousModuleType.equals(MosipPhase.NOT_APPLICABLE) || !previousIdentifier.equals(MosipPhase.NOT_APPLICABLE)) {
 					updateTraceRequest(
 							"Previous Module Type and Previous Identifier is not applicable for Module Type"+MosipPhase.PORTAL_FOR_AGENT,
-							moiTraceRequest);
+							moiTraceRequest,false);
 					return "Previous Module Type and Previous Identifier is not applicable for Module Type"+MosipPhase.PORTAL_FOR_AGENT;
 				}
 				updateTraceComment(
@@ -274,7 +274,7 @@ public class MosipValidator {
 				if(!previousModuleType.equals(MosipPhase.NOT_APPLICABLE) || !previousIdentifier.equals(MosipPhase.NOT_APPLICABLE)) {
 					updateTraceRequest(
 							"Previous Module Type and Previous Identifier is not applicable for Module Type"+MosipPhase.PORTAL_FOR_RESIDENT,
-							moiTraceRequest);
+							moiTraceRequest,false);
 					return "Previous Module Type and Previous Identifier is not applicable for Module Type"+MosipPhase.PORTAL_FOR_RESIDENT;
 				}
 				updateTraceComment(
@@ -293,7 +293,7 @@ public class MosipValidator {
 	 * @param comment
 	 * @param traceRequest : 
 	 */
-	private static void updateTraceComment(String comment,
+	public static void updateTraceComment(String comment,
 			MOITraceRequest traceRequest) {
 		if (Validator.isNotNull(traceRequest)) {
 			if (Validator.isNotNull(traceRequest.getComment())) {
@@ -311,11 +311,12 @@ public class MosipValidator {
 	 * @param moiTraceRequest :
 	 */
 	public static void updateTraceRequest(String result,
-			MOITraceRequest moiTraceRequest) {
+			MOITraceRequest moiTraceRequest,boolean requestValid) {
 
 		if (Validator.isNotNull(moiTraceRequest)) {
 			moiTraceRequest.setRequestResult(result);
 			moiTraceRequest.setRequestResultDate(new Date());
+			moiTraceRequest.setRequestValid(requestValid);
 			MOITraceRequestLocalServiceUtil
 					.updateMOITraceRequest(moiTraceRequest);
 		}
