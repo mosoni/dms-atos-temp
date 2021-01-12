@@ -39,6 +39,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.vulcan.multipart.MultipartBody;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.moi.api.handler.dto.v1_0.DocumentResult;
+import com.moi.api.handler.dto.v1_0.MosipAPIHandler;
 import com.moi.api.handler.internal.result.APIConstants;
 import com.moi.api.handler.internal.result.GenerateDocumentResult;
 import com.moi.api.handler.resource.v1_0.MosipAPIHandlerResource;
@@ -55,7 +56,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -65,9 +68,12 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.activation.MimetypesFileTypeMap;
+import javax.ws.rs.QueryParam;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
+
+import io.swagger.v3.oas.annotations.Parameter;
 
 /**
  * @author Mohit
@@ -117,7 +123,7 @@ public class MosipAPIHandlerResourceImpl
 
 		String validationResult = MosipValidator.validateRequest(ModuleType,
 				ConsumerCode, DocumentType, IdentifierNumber, userId, file,
-				moiTraceRequest, true);
+				moiTraceRequest,PreviousModuleType,PreviousIdentifier, true);
 
 		if (Validator.isNotNull(validationResult)) {
 			return GenerateDocumentResult.generateDocumentResult(
@@ -166,6 +172,10 @@ public class MosipAPIHandlerResourceImpl
 			String Metadata, String PreviousModuleType,
 			String PreviousIdentifier, MultipartBody multipartBody)
 			throws Exception {
+		
+		
+		
+		
 		return super.updateMosipDocument(ModuleType, ConsumerCode, DocumentType,
 				IdentifierNumber, Metadata, PreviousModuleType, PreviousIdentifier,
 				multipartBody);
@@ -581,13 +591,15 @@ public class MosipAPIHandlerResourceImpl
 		}
 		return fileEntry;
 	}
-
 	private static void debugLog(Object msg) {
 		//if(_log.isDebugEnabled()) {
 			_log.debug(msg);
 		//}
 	}
 
+	
+	
+	
 	private static final Log _log = LogFactoryUtil.getLog(
 			MosipAPIHandlerResourceImpl.class);
 }

@@ -49,6 +49,11 @@ public class MosipErrorConstants {
 			+ MosipPhase.getPhases();
 
 	/**
+	 * Message to be displayed when Mosip Previous Module Type/Identifier is invalid
+	 */
+	public static final String MOSIP_INVALID_PREVIOUS_MODULE_TYPE_OR_IDENTIFIER = "Previous Module Type/Identifier is invalid, Please provide correct details.";
+	
+	/**
 	 * Message to be displayed when Mosip Document extension is invalid
 	 */
 	public static final String JIRA_INVALID_DOCUMENT_EXTENSION = "Document Extension is invalid. Please upload document with valid extension";
