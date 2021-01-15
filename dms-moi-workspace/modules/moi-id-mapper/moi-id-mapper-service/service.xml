@@ -35,6 +35,10 @@
 		<finder name="RegistrationId" return-type="Collection">
 			<finder-column name="registrationId"></finder-column>
 		</finder>
+		<finder name="RegistrationIdCurrentState" return-type="MOIIdMapper">
+			<finder-column name="registrationId"></finder-column>
+			<finder-column name="mosipCurrentState"></finder-column>
+		</finder>
 		<finder name="ResourceId" return-type="Collection">
 			<finder-column name="resourceId"></finder-column>
 		</finder>

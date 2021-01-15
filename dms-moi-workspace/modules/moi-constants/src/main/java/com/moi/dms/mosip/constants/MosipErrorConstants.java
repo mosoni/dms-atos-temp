@@ -49,10 +49,11 @@ public class MosipErrorConstants {
 			+ MosipPhase.getPhases();
 
 	/**
-	 * Message to be displayed when Mosip Previous Module Type/Identifier is invalid
+	 * Message to be displayed when Mosip Previous Module Type/Identifier is
+	 * invalid
 	 */
 	public static final String MOSIP_INVALID_PREVIOUS_MODULE_TYPE_OR_IDENTIFIER = "Previous Module Type/Identifier is invalid, Please provide correct details.";
-	
+
 	/**
 	 * Message to be displayed when Mosip Document extension is invalid
 	 */
@@ -103,4 +104,45 @@ public class MosipErrorConstants {
 	 * Message to be displayed when JIRA document title is invalid
 	 */
 	public static final String JIRA_COMMON_ERROR = "Internal Error occured: ";
+
+	/**
+	 * Message to be displayed when Unable to proceed Mapping
+	 */
+	public static final String IDENTIFIER_UNABLE_TO_PROCESS_MAPPING = "DMS Error : Unable to Proceed Mapping , Please contact DMS Support with Reference Number "
+			+ MosipConstants.TRACE_REFERNCE_NUMBER_DYNAMIC_PARAMETER;
+
+	/**
+	 * Message to be displayed when Unable to proceed Mapping
+	 */
+	public static final String PRE_REGISTRATION_ID_DOESNT_EXIST = "DMS Error : Incorrect Identifier - Pre Registration ID "+MosipConstants.PRE_REGISTRATION_ID_DYNAMIC_PARAMETER
+			+ " doesn not exist, please contact DMS Support with Reference Number "+MosipConstants.TRACE_REFERNCE_NUMBER_DYNAMIC_PARAMETER;
+
+	/**
+	 * Message to be displayed when Unable to proceed Mapping
+	 */
+	public static final String REGISTRATION_ID_DOESNT_EXIST = "DMS Error : Incorrect Identifier - Pre Registration ID "+MosipConstants.REGISTRATION_ID_DYNAMIC_PARAMETER
+			+ " doesn not exist, please contact DMS Support with Reference Number "+MosipConstants.TRACE_REFERNCE_NUMBER_DYNAMIC_PARAMETER;
+
+	
+	/**
+	 * Message to be displayed when Unable to proceed Mapping
+	 */
+	public static final String IDCS_ID_DOESNT_EXIST = "DMS Error : Incorrect Identifier - IDCS ID "+MosipConstants.IDCS_ID_DYNAMIC_PARAMETER
+			+ " doesn not exist, please contact DMS Support with Reference Number "+MosipConstants.TRACE_REFERNCE_NUMBER_DYNAMIC_PARAMETER;
+	
+	/**
+	 * Internal Constant
+	 */
+	public static final String ADD_REGISTRATION_NUMBER = "ADD_REGISTRATION_NUMBER";
+	
+	/**
+	 * Internal Constant
+	 */
+	public static final String ADD_PRE_REGISTRATION_NUMBER = "ADD_PRE_REGISTRATION_NUMBER";
+	
+	/**
+	 * Internal Constant
+	 */
+	public static final String ADD_IDCS_NUMBER = "ADD_IDCS_NUMBER";
+
 }

@@ -31,6 +31,7 @@ import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.ProxyUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 
 import com.moi.dms.id.mapper.exception.NoSuchMOIIdMapperException;
 import com.moi.dms.id.mapper.model.MOIIdMapper;
@@ -45,6 +46,7 @@ import java.lang.reflect.InvocationHandler;
 
 import java.sql.Timestamp;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -2102,6 +2104,331 @@ public class MOIIdMapperPersistenceImpl
 
 	private static final String _FINDER_COLUMN_REGISTRATIONID_REGISTRATIONID_3 =
 		"(moiIdMapper.registrationId IS NULL OR moiIdMapper.registrationId = '')";
+
+	private FinderPath _finderPathFetchByRegistrationIdCurrentState;
+	private FinderPath _finderPathCountByRegistrationIdCurrentState;
+
+	/**
+	 * Returns the moi ID mapper where registrationId = &#63; and mosipCurrentState = &#63; or throws a <code>NoSuchMOIIdMapperException</code> if it could not be found.
+	 *
+	 * @param registrationId the registration ID
+	 * @param mosipCurrentState the mosip current state
+	 * @return the matching moi ID mapper
+	 * @throws NoSuchMOIIdMapperException if a matching moi ID mapper could not be found
+	 */
+	@Override
+	public MOIIdMapper findByRegistrationIdCurrentState(
+			String registrationId, String mosipCurrentState)
+		throws NoSuchMOIIdMapperException {
+
+		MOIIdMapper moiIdMapper = fetchByRegistrationIdCurrentState(
+			registrationId, mosipCurrentState);
+
+		if (moiIdMapper == null) {
+			StringBundler sb = new StringBundler(6);
+
+			sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			sb.append("registrationId=");
+			sb.append(registrationId);
+
+			sb.append(", mosipCurrentState=");
+			sb.append(mosipCurrentState);
+
+			sb.append("}");
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(sb.toString());
+			}
+
+			throw new NoSuchMOIIdMapperException(sb.toString());
+		}
+
+		return moiIdMapper;
+	}
+
+	/**
+	 * Returns the moi ID mapper where registrationId = &#63; and mosipCurrentState = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param registrationId the registration ID
+	 * @param mosipCurrentState the mosip current state
+	 * @return the matching moi ID mapper, or <code>null</code> if a matching moi ID mapper could not be found
+	 */
+	@Override
+	public MOIIdMapper fetchByRegistrationIdCurrentState(
+		String registrationId, String mosipCurrentState) {
+
+		return fetchByRegistrationIdCurrentState(
+			registrationId, mosipCurrentState, true);
+	}
+
+	/**
+	 * Returns the moi ID mapper where registrationId = &#63; and mosipCurrentState = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param registrationId the registration ID
+	 * @param mosipCurrentState the mosip current state
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching moi ID mapper, or <code>null</code> if a matching moi ID mapper could not be found
+	 */
+	@Override
+	public MOIIdMapper fetchByRegistrationIdCurrentState(
+		String registrationId, String mosipCurrentState,
+		boolean useFinderCache) {
+
+		registrationId = Objects.toString(registrationId, "");
+		mosipCurrentState = Objects.toString(mosipCurrentState, "");
+
+		Object[] finderArgs = null;
+
+		if (useFinderCache) {
+			finderArgs = new Object[] {registrationId, mosipCurrentState};
+		}
+
+		Object result = null;
+
+		if (useFinderCache) {
+			result = finderCache.getResult(
+				_finderPathFetchByRegistrationIdCurrentState, finderArgs, this);
+		}
+
+		if (result instanceof MOIIdMapper) {
+			MOIIdMapper moiIdMapper = (MOIIdMapper)result;
+
+			if (!Objects.equals(
+					registrationId, moiIdMapper.getRegistrationId()) ||
+				!Objects.equals(
+					mosipCurrentState, moiIdMapper.getMosipCurrentState())) {
+
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler sb = new StringBundler(4);
+
+			sb.append(_SQL_SELECT_MOIIDMAPPER_WHERE);
+
+			boolean bindRegistrationId = false;
+
+			if (registrationId.isEmpty()) {
+				sb.append(
+					_FINDER_COLUMN_REGISTRATIONIDCURRENTSTATE_REGISTRATIONID_3);
+			}
+			else {
+				bindRegistrationId = true;
+
+				sb.append(
+					_FINDER_COLUMN_REGISTRATIONIDCURRENTSTATE_REGISTRATIONID_2);
+			}
+
+			boolean bindMosipCurrentState = false;
+
+			if (mosipCurrentState.isEmpty()) {
+				sb.append(
+					_FINDER_COLUMN_REGISTRATIONIDCURRENTSTATE_MOSIPCURRENTSTATE_3);
+			}
+			else {
+				bindMosipCurrentState = true;
+
+				sb.append(
+					_FINDER_COLUMN_REGISTRATIONIDCURRENTSTATE_MOSIPCURRENTSTATE_2);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindRegistrationId) {
+					queryPos.add(registrationId);
+				}
+
+				if (bindMosipCurrentState) {
+					queryPos.add(mosipCurrentState);
+				}
+
+				List<MOIIdMapper> list = query.list();
+
+				if (list.isEmpty()) {
+					if (useFinderCache) {
+						finderCache.putResult(
+							_finderPathFetchByRegistrationIdCurrentState,
+							finderArgs, list);
+					}
+				}
+				else {
+					if (list.size() > 1) {
+						Collections.sort(list, Collections.reverseOrder());
+
+						if (_log.isWarnEnabled()) {
+							if (!useFinderCache) {
+								finderArgs = new Object[] {
+									registrationId, mosipCurrentState
+								};
+							}
+
+							_log.warn(
+								"MOIIdMapperPersistenceImpl.fetchByRegistrationIdCurrentState(String, String, boolean) with parameters (" +
+									StringUtil.merge(finderArgs) +
+										") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+						}
+					}
+
+					MOIIdMapper moiIdMapper = list.get(0);
+
+					result = moiIdMapper;
+
+					cacheResult(moiIdMapper);
+				}
+			}
+			catch (Exception exception) {
+				if (useFinderCache) {
+					finderCache.removeResult(
+						_finderPathFetchByRegistrationIdCurrentState,
+						finderArgs);
+				}
+
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (MOIIdMapper)result;
+		}
+	}
+
+	/**
+	 * Removes the moi ID mapper where registrationId = &#63; and mosipCurrentState = &#63; from the database.
+	 *
+	 * @param registrationId the registration ID
+	 * @param mosipCurrentState the mosip current state
+	 * @return the moi ID mapper that was removed
+	 */
+	@Override
+	public MOIIdMapper removeByRegistrationIdCurrentState(
+			String registrationId, String mosipCurrentState)
+		throws NoSuchMOIIdMapperException {
+
+		MOIIdMapper moiIdMapper = findByRegistrationIdCurrentState(
+			registrationId, mosipCurrentState);
+
+		return remove(moiIdMapper);
+	}
+
+	/**
+	 * Returns the number of moi ID mappers where registrationId = &#63; and mosipCurrentState = &#63;.
+	 *
+	 * @param registrationId the registration ID
+	 * @param mosipCurrentState the mosip current state
+	 * @return the number of matching moi ID mappers
+	 */
+	@Override
+	public int countByRegistrationIdCurrentState(
+		String registrationId, String mosipCurrentState) {
+
+		registrationId = Objects.toString(registrationId, "");
+		mosipCurrentState = Objects.toString(mosipCurrentState, "");
+
+		FinderPath finderPath = _finderPathCountByRegistrationIdCurrentState;
+
+		Object[] finderArgs = new Object[] {registrationId, mosipCurrentState};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_COUNT_MOIIDMAPPER_WHERE);
+
+			boolean bindRegistrationId = false;
+
+			if (registrationId.isEmpty()) {
+				sb.append(
+					_FINDER_COLUMN_REGISTRATIONIDCURRENTSTATE_REGISTRATIONID_3);
+			}
+			else {
+				bindRegistrationId = true;
+
+				sb.append(
+					_FINDER_COLUMN_REGISTRATIONIDCURRENTSTATE_REGISTRATIONID_2);
+			}
+
+			boolean bindMosipCurrentState = false;
+
+			if (mosipCurrentState.isEmpty()) {
+				sb.append(
+					_FINDER_COLUMN_REGISTRATIONIDCURRENTSTATE_MOSIPCURRENTSTATE_3);
+			}
+			else {
+				bindMosipCurrentState = true;
+
+				sb.append(
+					_FINDER_COLUMN_REGISTRATIONIDCURRENTSTATE_MOSIPCURRENTSTATE_2);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindRegistrationId) {
+					queryPos.add(registrationId);
+				}
+
+				if (bindMosipCurrentState) {
+					queryPos.add(mosipCurrentState);
+				}
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				finderCache.removeResult(finderPath, finderArgs);
+
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String
+		_FINDER_COLUMN_REGISTRATIONIDCURRENTSTATE_REGISTRATIONID_2 =
+			"moiIdMapper.registrationId = ? AND ";
+
+	private static final String
+		_FINDER_COLUMN_REGISTRATIONIDCURRENTSTATE_REGISTRATIONID_3 =
+			"(moiIdMapper.registrationId IS NULL OR moiIdMapper.registrationId = '') AND ";
+
+	private static final String
+		_FINDER_COLUMN_REGISTRATIONIDCURRENTSTATE_MOSIPCURRENTSTATE_2 =
+			"moiIdMapper.mosipCurrentState = ?";
+
+	private static final String
+		_FINDER_COLUMN_REGISTRATIONIDCURRENTSTATE_MOSIPCURRENTSTATE_3 =
+			"(moiIdMapper.mosipCurrentState IS NULL OR moiIdMapper.mosipCurrentState = '')";
 
 	private FinderPath _finderPathWithPaginationFindByResourceId;
 	private FinderPath _finderPathWithoutPaginationFindByResourceId;
@@ -4806,6 +5133,14 @@ public class MOIIdMapperPersistenceImpl
 			entityCacheEnabled, MOIIdMapperImpl.class,
 			moiIdMapper.getPrimaryKey(), moiIdMapper);
 
+		finderCache.putResult(
+			_finderPathFetchByRegistrationIdCurrentState,
+			new Object[] {
+				moiIdMapper.getRegistrationId(),
+				moiIdMapper.getMosipCurrentState()
+			},
+			moiIdMapper);
+
 		moiIdMapper.resetOriginalValues();
 	}
 
@@ -4860,6 +5195,8 @@ public class MOIIdMapperPersistenceImpl
 
 		finderCache.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		finderCache.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache((MOIIdMapperModelImpl)moiIdMapper, true);
 	}
 
 	@Override
@@ -4871,6 +5208,8 @@ public class MOIIdMapperPersistenceImpl
 			entityCache.removeResult(
 				entityCacheEnabled, MOIIdMapperImpl.class,
 				moiIdMapper.getPrimaryKey());
+
+			clearUniqueFindersCache((MOIIdMapperModelImpl)moiIdMapper, true);
 		}
 	}
 
@@ -4882,6 +5221,53 @@ public class MOIIdMapperPersistenceImpl
 		for (Serializable primaryKey : primaryKeys) {
 			entityCache.removeResult(
 				entityCacheEnabled, MOIIdMapperImpl.class, primaryKey);
+		}
+	}
+
+	protected void cacheUniqueFindersCache(
+		MOIIdMapperModelImpl moiIdMapperModelImpl) {
+
+		Object[] args = new Object[] {
+			moiIdMapperModelImpl.getRegistrationId(),
+			moiIdMapperModelImpl.getMosipCurrentState()
+		};
+
+		finderCache.putResult(
+			_finderPathCountByRegistrationIdCurrentState, args, Long.valueOf(1),
+			false);
+		finderCache.putResult(
+			_finderPathFetchByRegistrationIdCurrentState, args,
+			moiIdMapperModelImpl, false);
+	}
+
+	protected void clearUniqueFindersCache(
+		MOIIdMapperModelImpl moiIdMapperModelImpl, boolean clearCurrent) {
+
+		if (clearCurrent) {
+			Object[] args = new Object[] {
+				moiIdMapperModelImpl.getRegistrationId(),
+				moiIdMapperModelImpl.getMosipCurrentState()
+			};
+
+			finderCache.removeResult(
+				_finderPathCountByRegistrationIdCurrentState, args);
+			finderCache.removeResult(
+				_finderPathFetchByRegistrationIdCurrentState, args);
+		}
+
+		if ((moiIdMapperModelImpl.getColumnBitmask() &
+			 _finderPathFetchByRegistrationIdCurrentState.getColumnBitmask()) !=
+				 0) {
+
+			Object[] args = new Object[] {
+				moiIdMapperModelImpl.getOriginalRegistrationId(),
+				moiIdMapperModelImpl.getOriginalMosipCurrentState()
+			};
+
+			finderCache.removeResult(
+				_finderPathCountByRegistrationIdCurrentState, args);
+			finderCache.removeResult(
+				_finderPathFetchByRegistrationIdCurrentState, args);
 		}
 	}
 
@@ -5281,6 +5667,9 @@ public class MOIIdMapperPersistenceImpl
 			entityCacheEnabled, MOIIdMapperImpl.class,
 			moiIdMapper.getPrimaryKey(), moiIdMapper, false);
 
+		clearUniqueFindersCache(moiIdMapperModelImpl, false);
+		cacheUniqueFindersCache(moiIdMapperModelImpl);
+
 		moiIdMapper.resetOriginalValues();
 
 		return moiIdMapper;
@@ -5639,6 +6028,19 @@ public class MOIIdMapperPersistenceImpl
 			entityCacheEnabled, finderCacheEnabled, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByRegistrationId",
 			new String[] {String.class.getName()});
+
+		_finderPathFetchByRegistrationIdCurrentState = new FinderPath(
+			entityCacheEnabled, finderCacheEnabled, MOIIdMapperImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByRegistrationIdCurrentState",
+			new String[] {String.class.getName(), String.class.getName()},
+			MOIIdMapperModelImpl.REGISTRATIONID_COLUMN_BITMASK |
+			MOIIdMapperModelImpl.MOSIPCURRENTSTATE_COLUMN_BITMASK);
+
+		_finderPathCountByRegistrationIdCurrentState = new FinderPath(
+			entityCacheEnabled, finderCacheEnabled, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByRegistrationIdCurrentState",
+			new String[] {String.class.getName(), String.class.getName()});
 
 		_finderPathWithPaginationFindByResourceId = new FinderPath(
 			entityCacheEnabled, finderCacheEnabled, MOIIdMapperImpl.class,

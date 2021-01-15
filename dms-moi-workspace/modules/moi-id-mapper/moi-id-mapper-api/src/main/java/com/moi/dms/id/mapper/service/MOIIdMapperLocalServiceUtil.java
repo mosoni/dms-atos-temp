@@ -289,6 +289,19 @@ public class MOIIdMapperLocalServiceUtil {
 	}
 
 	/**
+	 * Finder method for MOIIdMapper by registrationId.
+	 *
+	 * @return List<MOIIdMapper>
+	 */
+	public static com.moi.dms.id.mapper.model.MOIIdMapper
+		findByRegistrationIdCurrentState(
+			String registrationId, String currentState) {
+
+		return getService().findByRegistrationIdCurrentState(
+			registrationId, currentState);
+	}
+
+	/**
 	 * Finder method for MOIIdMapper by resourceId.
 	 *
 	 * @return List<MOIIdMapper>

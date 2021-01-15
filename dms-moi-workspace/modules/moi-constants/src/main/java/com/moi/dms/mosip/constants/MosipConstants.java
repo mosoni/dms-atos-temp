@@ -35,5 +35,32 @@ public class MosipConstants {
 	 * This parameter is dynamic and will be replaced with actual content during render
 	 */
 	public static final String DOCUMENT_SIZE_DYNAMIC_PARAMETER="{documentSize}";
-
+	
+	/**
+	 * This parameter is dynamic and will be replaced with actual content during render
+	 */
+	public static final String TRACE_REFERNCE_NUMBER_DYNAMIC_PARAMETER="{traceReferenceNumber}";
+	
+	/**
+	 * This parameter is dynamic and will be replaced with actual content during render
+	 */
+	public static final String ERROR="Error";
+	
+	/**
+	 * This parameter is dynamic and will be replaced with actual content during render
+	 */
+	public static final String SUCCESS="Success";
+	
+	/**
+	 * This parameter is dynamic and will be replaced with actual content during render
+	 */
+	public static final String PRE_REGISTRATION_ID_DYNAMIC_PARAMETER="{preRegistrationId}";
+	/**
+	 * This parameter is dynamic and will be replaced with actual content during render
+	 */
+	public static final String REGISTRATION_ID_DYNAMIC_PARAMETER="{registrationId}";
+	/**
+	 * This parameter is dynamic and will be replaced with actual content during render
+	 */
+	public static final String IDCS_ID_DYNAMIC_PARAMETER="{IDCSId}";
 }

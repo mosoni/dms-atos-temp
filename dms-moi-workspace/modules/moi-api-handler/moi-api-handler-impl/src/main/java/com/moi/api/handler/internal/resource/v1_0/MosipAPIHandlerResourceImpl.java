@@ -128,14 +128,8 @@ public class MosipAPIHandlerResourceImpl
 		}
 
 		/* Identifier Check */
-		List<MOIIdMapper> idMapperList = MOIIdMapperLocalServiceUtil
-				.findByRegistrationId(IdentifierNumber);
-
-		MosipValidator.updateTraceComment(
-				"Mapping list Size :" + idMapperList.size() + " : For Phase :"
-						+ ModuleType + ": and Identifier :" + IdentifierNumber,
-				moiTraceRequest);
-
+			
+				
 		Group group = GroupLocalServiceUtil.fetchFriendlyURLGroup(
 				CompanyThreadLocal.getCompanyId(), MOSIP_SITE_FRIENDLY_URL);
 
@@ -149,27 +143,20 @@ public class MosipAPIHandlerResourceImpl
 					GROUP_NOT_FOUND, null);
 		}
 
-		if (Validator.isNull(idMapperList)) {
+	
+		
+	Map<String, String> idMapperResult =	MosipValidator.validateIDMapper(group.getGroupId(), group.getCompanyId(),
+				userId, IdentifierNumber, ModuleType, PreviousIdentifier, DocumentType, PreviousModuleType, moiTraceRequest);
 
-			/*
-			 * Assuming Request is coming for the first time with
-			 * IdentifierNumber
-			 */
-			processIdentifier(IdentifierNumber, PreviousModuleType,
-					PreviousIdentifier, moiTraceRequest, DocumentType,
-					ModuleType, group, userId);
-		}
-
+	System.out.println("idMapperResult=="+idMapperResult);
 		ServiceContext serviceContext = ServiceContextThreadLocal
 				.getServiceContext();
-		processDocument(IdentifierNumber, group.getGroupId(), userId,
+		return processDocument(IdentifierNumber, group.getGroupId(), userId,
 				ModuleType, serviceContext, file, DocumentType,
 				IdentifierNumber, moiTraceRequest);
-
-		return super.uploadMosipDocument(ModuleType, ConsumerCode, DocumentType,
-				IdentifierNumber, Metadata, PreviousModuleType,
-				PreviousIdentifier, multipartBody);
 	}
+
+	
 
 	@Override
 	public Page<DocumentResult> updateMosipDocument(String ModuleType,

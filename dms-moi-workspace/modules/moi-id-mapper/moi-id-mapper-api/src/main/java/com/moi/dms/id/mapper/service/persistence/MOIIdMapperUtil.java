@@ -805,6 +805,81 @@ public class MOIIdMapperUtil {
 	}
 
 	/**
+	 * Returns the moi ID mapper where registrationId = &#63; and mosipCurrentState = &#63; or throws a <code>NoSuchMOIIdMapperException</code> if it could not be found.
+	 *
+	 * @param registrationId the registration ID
+	 * @param mosipCurrentState the mosip current state
+	 * @return the matching moi ID mapper
+	 * @throws NoSuchMOIIdMapperException if a matching moi ID mapper could not be found
+	 */
+	public static MOIIdMapper findByRegistrationIdCurrentState(
+			String registrationId, String mosipCurrentState)
+		throws com.moi.dms.id.mapper.exception.NoSuchMOIIdMapperException {
+
+		return getPersistence().findByRegistrationIdCurrentState(
+			registrationId, mosipCurrentState);
+	}
+
+	/**
+	 * Returns the moi ID mapper where registrationId = &#63; and mosipCurrentState = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param registrationId the registration ID
+	 * @param mosipCurrentState the mosip current state
+	 * @return the matching moi ID mapper, or <code>null</code> if a matching moi ID mapper could not be found
+	 */
+	public static MOIIdMapper fetchByRegistrationIdCurrentState(
+		String registrationId, String mosipCurrentState) {
+
+		return getPersistence().fetchByRegistrationIdCurrentState(
+			registrationId, mosipCurrentState);
+	}
+
+	/**
+	 * Returns the moi ID mapper where registrationId = &#63; and mosipCurrentState = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param registrationId the registration ID
+	 * @param mosipCurrentState the mosip current state
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching moi ID mapper, or <code>null</code> if a matching moi ID mapper could not be found
+	 */
+	public static MOIIdMapper fetchByRegistrationIdCurrentState(
+		String registrationId, String mosipCurrentState,
+		boolean useFinderCache) {
+
+		return getPersistence().fetchByRegistrationIdCurrentState(
+			registrationId, mosipCurrentState, useFinderCache);
+	}
+
+	/**
+	 * Removes the moi ID mapper where registrationId = &#63; and mosipCurrentState = &#63; from the database.
+	 *
+	 * @param registrationId the registration ID
+	 * @param mosipCurrentState the mosip current state
+	 * @return the moi ID mapper that was removed
+	 */
+	public static MOIIdMapper removeByRegistrationIdCurrentState(
+			String registrationId, String mosipCurrentState)
+		throws com.moi.dms.id.mapper.exception.NoSuchMOIIdMapperException {
+
+		return getPersistence().removeByRegistrationIdCurrentState(
+			registrationId, mosipCurrentState);
+	}
+
+	/**
+	 * Returns the number of moi ID mappers where registrationId = &#63; and mosipCurrentState = &#63;.
+	 *
+	 * @param registrationId the registration ID
+	 * @param mosipCurrentState the mosip current state
+	 * @return the number of matching moi ID mappers
+	 */
+	public static int countByRegistrationIdCurrentState(
+		String registrationId, String mosipCurrentState) {
+
+		return getPersistence().countByRegistrationIdCurrentState(
+			registrationId, mosipCurrentState);
+	}
+
+	/**
 	 * Returns all the moi ID mappers where resourceId = &#63;.
 	 *
 	 * @param resourceId the resource ID

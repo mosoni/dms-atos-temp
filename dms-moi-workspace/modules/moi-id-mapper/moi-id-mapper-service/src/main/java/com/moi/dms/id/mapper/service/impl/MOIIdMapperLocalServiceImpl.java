@@ -206,6 +206,15 @@ public class MOIIdMapperLocalServiceImpl
 		return moiIdMapperPersistence.findByRegistrationId(registrationId);
 	}
 
+	
+	/**
+	 * Finder method for MOIIdMapper by registrationId.
+	 * 
+	 * @return List<MOIIdMapper>
+	 */
+	public MOIIdMapper findByRegistrationIdCurrentState(String registrationId,String currentState) {
+		return moiIdMapperPersistence.fetchByRegistrationIdCurrentState(registrationId, currentState);
+	}
 	/**
 	 * Finder method for MOIIdMapper by resourceId.
 	 * 

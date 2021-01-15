@@ -301,6 +301,20 @@ public class MOIIdMapperLocalServiceWrapper
 	}
 
 	/**
+	 * Finder method for MOIIdMapper by registrationId.
+	 *
+	 * @return List<MOIIdMapper>
+	 */
+	@Override
+	public com.moi.dms.id.mapper.model.MOIIdMapper
+		findByRegistrationIdCurrentState(
+			String registrationId, String currentState) {
+
+		return _moiIdMapperLocalService.findByRegistrationIdCurrentState(
+			registrationId, currentState);
+	}
+
+	/**
 	 * Finder method for MOIIdMapper by resourceId.
 	 *
 	 * @return List<MOIIdMapper>
