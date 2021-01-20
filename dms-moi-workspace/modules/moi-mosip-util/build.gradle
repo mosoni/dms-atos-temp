@@ -21,6 +21,7 @@ dependencies {
 	compileOnly project(":modules:moi-id-mapper:moi-id-mapper-api")
 	compileOnly project(":modules:moi-trace-request:moi-trace-request-api")
 	compileOnly project(":modules:moi-audit:moi-audit-api")
+	compileOnly group: "com.liferay", name: "com.liferay.portal.vulcan.api", version: "7.7.1"
 	
 	
 }

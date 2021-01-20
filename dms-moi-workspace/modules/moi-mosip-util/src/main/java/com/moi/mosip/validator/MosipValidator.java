@@ -5,6 +5,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.vulcan.multipart.BinaryFile;
 import com.moi.dms.consumer.registration.service.ConsumerRegistrationLocalServiceUtil;
 import com.moi.dms.id.mapper.model.MOIIdMapper;
 import com.moi.dms.id.mapper.service.MOIIdMapperLocalServiceUtil;
@@ -39,7 +40,7 @@ public class MosipValidator {
 	 */
 	public static String validateRequest(String moduleType, String consumerCode,
 			String documentType, String identifierNumber, long userId,
-			File file, MOITraceRequest moiTraceRequest,String previousModuleType,String previousidentifier,
+			BinaryFile file, MOITraceRequest moiTraceRequest,String previousModuleType,String previousidentifier,
 			boolean isNewUpload) {
 
 		String requestedOperation = MosipUtil.getAction(documentType,
@@ -48,6 +49,7 @@ public class MosipValidator {
 				"requestedOperation is :" + requestedOperation,
 				moiTraceRequest);
 		/* Start : moduleType */
+		_log.info("Module Type Validation Start :");
 		if (Validator.isNull(moduleType)
 				|| !MosipPhase.getPhases().contains(moduleType)) {
 			updateTraceComment(
@@ -57,10 +59,12 @@ public class MosipValidator {
 					moiTraceRequest,false);
 			return MosipErrorConstants.MOSIP_INVALID_MODULE_TYPE;
 		}
+		_log.info("Module Type Validation End :");
 		/* End : moduleType */
 
+		_log.info("Identifier Validation Start :");
 		String identifierResult = validateIdentifier(previousModuleType,
-				previousidentifier, moiTraceRequest, previousModuleType,
+				previousidentifier, moiTraceRequest, moduleType,
 				identifierNumber);
 
 		if (Validator.isNotNull(identifierResult)) {
@@ -70,10 +74,11 @@ public class MosipValidator {
 			updateTraceRequest(identifierResult, moiTraceRequest,false);
 			return identifierResult;
 		}
-
+		_log.info("Identifier Validation End :");
 		/* End : Previous Module/Identifier */
 
 		/* Start : Consumer and Document Type */
+		_log.info("Consumer Code Validation Start :");
 		if (!isConsumerCodeValid(consumerCode, documentType)) {
 			/* Update Trace Request */
 			updateTraceComment(
@@ -87,11 +92,14 @@ public class MosipValidator {
 					moiTraceRequest,false);
 			return MosipErrorConstants.MOSIP_INVALID_CONSUMER_CODE_OR_DOCUMENT_TYPE;
 		}
+		_log.info("Consumer Code Validation End :");
 		/* End : Consumer and Document Type */
 
 		/* Start : Validating Document */
+		_log.info("Document Validation Start :");
 		String documentValidation = MosipDocumentValidator
 				.isDocumentValid(file,moiTraceRequest);
+		
 		if (Validator.isNotNull(documentValidation)) {
 			/* Update Trace Request */
 			updateTraceComment(
@@ -100,9 +108,11 @@ public class MosipValidator {
 			updateTraceRequest(documentValidation, moiTraceRequest,false);
 			return documentValidation;
 		}
+		_log.info("Document Validation End :");
 		/* End : Validating Document */
 
 		/* Start : Validating Authority */
+		_log.info("Resource Authorization Validation Start :");
 		if (!MosipAuthorizationValidator.isRequestAuthorized(moduleType,
 				requestedOperation,moiTraceRequest)) {
 			/* Update Trace Request */
@@ -114,6 +124,7 @@ public class MosipValidator {
 					moiTraceRequest,false);
 			return MosipErrorConstants.MOSIP_AUTHORIZATION_LEVEL_MESSAGE;
 		}
+		_log.info("Resource Authorization Validation End :");
 		/* End : Validating Authority */
 
 		return null;

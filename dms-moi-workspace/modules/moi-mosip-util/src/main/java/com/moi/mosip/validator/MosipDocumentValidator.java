@@ -6,6 +6,7 @@ package com.moi.mosip.validator;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.vulcan.multipart.BinaryFile;
 import com.moi.dms.mosip.constants.MOIProperties;
 import com.moi.dms.mosip.constants.MosipConstants;
 import com.moi.dms.mosip.constants.MosipErrorConstants;
@@ -26,22 +27,16 @@ public class MosipDocumentValidator {
 	 * 
 	 * @return true if Document is valid
 	 */
-	public static String isDocumentValid(File file,MOITraceRequest moiTraceRequest) {
+	public static String isDocumentValid(BinaryFile file,MOITraceRequest moiTraceRequest) {
 
-		/* Start : Check file */
-		if(Validator.isNull(file)) {
-			updateTraceComment(
-					"Document is blank/Empty" ,
-					moiTraceRequest);
-			return MosipErrorConstants.MOSIP_BLANK_DOCUMENT;
-		}
+		
 		/* End : Check file */
 		
 		/* Start : Check file extension */
 		String availableExtension = PropsUtil
 				.get(MOIProperties.MOSIP_FILE_EXTENSION);
 
-		String fileExtension = FileUtil.getExtension(file.getName());
+		String fileExtension = FileUtil.getExtension(file.getFileName());
 
 		if (Validator.isNotNull(fileExtension)
 				&& Validator.isNotNull(availableExtension)) {
@@ -59,7 +54,7 @@ public class MosipDocumentValidator {
 		/* End : Check file extension */
 
 		/* Start : Check file size */
-		long length = file.length();
+		long length = file.getSize();
 		long mosipFileSize = Long
 				.valueOf(PropsUtil.get(MOIProperties.MOSIP_FILE_SIZE));
 

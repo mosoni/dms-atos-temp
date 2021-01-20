@@ -37,6 +37,7 @@ import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.vulcan.multipart.BinaryFile;
 import com.liferay.portal.vulcan.multipart.MultipartBody;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.moi.api.handler.dto.v1_0.DocumentResult;
@@ -106,7 +107,11 @@ public class MosipAPIHandlerResourceImpl
 			String PreviousIdentifier, MultipartBody multipartBody)
 			throws Exception {
 
-		File file = null;
+		BinaryFile file = multipartBody
+				.getBinaryFile(CommonConstants.JIRA_REQ_PARAM_DOCUMENT);
+
+		
+		
 		long userId = 0;
 
 		/*
@@ -125,10 +130,24 @@ public class MosipAPIHandlerResourceImpl
 			_log.error(e);
 		}
 
+		
+		/* Start : Check file */
+		if(Validator.isNull(file)) {
+			MosipValidator.updateTraceComment(
+					"Document is blank/Empty" ,
+					moiTraceRequest);
+			return GenerateDocumentResult.generateDocumentResult(
+					moiTraceRequest.getRequestId(), APIConstants.FAILURE,
+					MosipErrorConstants.MOSIP_BLANK_DOCUMENT, null);
+		}
+		
+		
+		
 		String validationResult = MosipValidator.validateRequest(ModuleType,
 				ConsumerCode, DocumentType, IdentifierNumber, userId, file,
 				moiTraceRequest, PreviousModuleType, PreviousIdentifier, true);
 
+		_log.info(" validationResult  :"+validationResult);
 		if (Validator.isNotNull(validationResult)) {
 			return GenerateDocumentResult.generateDocumentResult(
 					moiTraceRequest.getRequestId(), APIConstants.FAILURE,
@@ -342,7 +361,7 @@ public class MosipAPIHandlerResourceImpl
 	 * @return :
 	 */
 	private Page<DocumentResult> processNewDocument(String folderName, long groupId, long userId,
-			String moduleType, ServiceContext serviceContext, File file,String documentType,String identifier,
+			String moduleType, ServiceContext serviceContext, BinaryFile file,String documentType,String identifier,
 			MOITraceRequest moiTraceRequest,
 			Map<String, String> idMapperResult) {
 
@@ -422,7 +441,7 @@ public class MosipAPIHandlerResourceImpl
 	 * @return :
 	 */
 	private Page<DocumentResult> uploadNewDocument(long folderId, long groupId, long userId,
-			String moduleType, ServiceContext serviceContext, File file,String documentType,String identifier,
+			String moduleType, ServiceContext serviceContext, BinaryFile file,String documentType,String identifier,
 			MOITraceRequest moiTraceRequest,
 			Map<String, String> idMapperResult) {
 
@@ -464,125 +483,130 @@ public class MosipAPIHandlerResourceImpl
 				}
 			}
 
-			if (null != mosipFileEntryType) {
+			if (Validator.isNull(mosipFileEntryType)) {
+				MosipValidator.updateTraceComment("File Entry Type is null ",
+						moiTraceRequest);
+				return GenerateDocumentResult
+						.generateDocumentResult(moiTraceRequest.getRequestId(),
+								APIConstants.FAILURE,
+								"File Entry Type is null " + documentType
+										+ ": Please contact DMS Administrator",
+								null);
+			}
 
-				List<DDMStructure> structures = mosipFileEntryType
-						.getDDMStructures();
-				for (DDMStructure struct : structures) {
-					if (METADATA_SETS_NAME
-							.equalsIgnoreCase(struct.getName(Locale.US))) {
-						ddmStruct = struct;
-						break;
-					}
+			List<DDMStructure> structures = mosipFileEntryType
+					.getDDMStructures();
+			for (DDMStructure struct : structures) {
+				if (METADATA_SETS_NAME
+						.equalsIgnoreCase(struct.getName(Locale.US))) {
+					ddmStruct = struct;
+					break;
 				}
+			}
 
-				if (null != ddmStruct) {
+			if (Validator.isNull(ddmStruct)) {
+				MosipValidator.updateTraceComment("DMS Structure ",
+						moiTraceRequest);
+				return GenerateDocumentResult
+						.generateDocumentResult(moiTraceRequest.getRequestId(),
+								APIConstants.FAILURE,
+								"DMS Structure is null " + documentType
+										+ ": Please contact DMS Administrator",
+								null);
+			}
 
-					DDMForm ddmForm = ddmStruct.getDDMForm();
-					List<DDMFormField> ddmFormFields = ddmForm
-							.getDDMFormFields();
+			DDMForm ddmForm = ddmStruct.getDDMForm();
+			List<DDMFormField> ddmFormFields = ddmForm.getDDMFormFields();
 
-					List<DDMFormFieldValue> ddmFormFieldValues = new ArrayList<DDMFormFieldValue>();
+			List<DDMFormFieldValue> ddmFormFieldValues = new ArrayList<DDMFormFieldValue>();
 
-					int i = 0;
-					for (DDMFormField formField : ddmFormFields) {
-						Value value = new LocalizedValue();
-						DDMFormFieldValue ddmFormFieldValue = new DDMFormFieldValue();
-						i++;
-						if (PRE_REG_ID.equalsIgnoreCase(
-								formField.getLabel().getString(Locale.US))
-								&& moduleType.equals(
-										MosipPhase.PRE_REGISTRATION_PHASE)) {
-							value.addString(Locale.US, identifier);
-							ddmFormFieldValue.setName(formField.getName());
-							ddmFormFieldValue.setValue(value);
-							ddmFormFieldValues.add(ddmFormFieldValue);
-						} else if (REG_ID.equalsIgnoreCase(
-								formField.getLabel().getString(Locale.US))
-								&& moduleType.equals(
-										MosipPhase.REGISTRATION_PHASE)) {
-							value.addString(Locale.US, identifier);
-							ddmFormFieldValue.setName(formField.getName());
-							ddmFormFieldValue.setValue(value);
-							ddmFormFieldValues.add(ddmFormFieldValue);
-						} else if (IDCS_ID.equalsIgnoreCase(
-								formField.getLabel().getString(Locale.US))
-								&& moduleType
-										.equals(MosipPhase.FREEZED_PHASE)) {
-							value.addString(Locale.US, identifier);
-							ddmFormFieldValue.setName(formField.getName());
-							ddmFormFieldValue.setValue(value);
-							ddmFormFieldValues.add(ddmFormFieldValue);
-						}
-					}
+			int i = 0;
+			for (DDMFormField formField : ddmFormFields) {
+				Value value = new LocalizedValue();
+				DDMFormFieldValue ddmFormFieldValue = new DDMFormFieldValue();
+				i++;
+				if (PRE_REG_ID.equalsIgnoreCase(
+						formField.getLabel().getString(Locale.US))
+						&& moduleType
+								.equals(MosipPhase.PRE_REGISTRATION_PHASE)) {
+					value.addString(Locale.US, identifier);
+					ddmFormFieldValue.setName(formField.getName());
+					ddmFormFieldValue.setValue(value);
+					ddmFormFieldValues.add(ddmFormFieldValue);
+				} else if (REG_ID.equalsIgnoreCase(
+						formField.getLabel().getString(Locale.US))
+						&& moduleType.equals(MosipPhase.REGISTRATION_PHASE)) {
+					value.addString(Locale.US, identifier);
+					ddmFormFieldValue.setName(formField.getName());
+					ddmFormFieldValue.setValue(value);
+					ddmFormFieldValues.add(ddmFormFieldValue);
+				} else if (IDCS_ID.equalsIgnoreCase(
+						formField.getLabel().getString(Locale.US))
+						&& moduleType.equals(MosipPhase.FREEZED_PHASE)) {
+					value.addString(Locale.US, identifier);
+					ddmFormFieldValue.setName(formField.getName());
+					ddmFormFieldValue.setValue(value);
+					ddmFormFieldValues.add(ddmFormFieldValue);
+				}
+			}
 
-					// Set the name of value you need to set
-					Set<Locale> localeSet = new HashSet<Locale>();
-					localeSet.add(Locale.US);
-					ddmFormValues = new DDMFormValues(ddmForm);
-					ddmFormValues.setAvailableLocales(localeSet);
-					ddmFormValues.setDefaultLocale(Locale.US);
-					ddmFormValues.setDDMFormFieldValues(ddmFormFieldValues);
+			// Set the name of value you need to set
+			Set<Locale> localeSet = new HashSet<Locale>();
+			localeSet.add(Locale.US);
+			ddmFormValues = new DDMFormValues(ddmForm);
+			ddmFormValues.setAvailableLocales(localeSet);
+			ddmFormValues.setDefaultLocale(Locale.US);
+			ddmFormValues.setDDMFormFieldValues(ddmFormFieldValues);
 
-					Map<String, DDMFormValues> ddmFormValuesMap = new HashMap<String, DDMFormValues>();
-					ddmFormValuesMap.put(ddmStruct.getStructureKey(),
-							ddmFormValues);
+			Map<String, DDMFormValues> ddmFormValuesMap = new HashMap<String, DDMFormValues>();
+			ddmFormValuesMap.put(ddmStruct.getStructureKey(), ddmFormValues);
 
-					MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
-					String mimeType = fileTypeMap
-							.getContentType(file.getName());
+			MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
+			String mimeType = fileTypeMap.getContentType(file.getFileName());
 
-					is = new FileInputStream(file);
+			is = file.getInputStream();
 
-					MosipValidator.updateTraceComment(
-							"Starting file upload for Module type  "
-									+ moduleType + " and Identifier :"
-									+ identifier,
-							moiTraceRequest);
 
-					MosipValidator.updateTraceComment(
-							"Starting file upload in Folder ID " + folderId,
-							moiTraceRequest);
-					MosipValidator.updateTraceComment(
-							"Starting file upload with title " + documentTitle,
-							moiTraceRequest);
-					MosipValidator.updateTraceComment(
-							"Starting file upload Document Type "
-									+ documentType,
-							moiTraceRequest);
+			MosipValidator.updateTraceComment(
+					"Starting file upload for Module type  " + moduleType
+							+ " and Identifier :" + identifier,
+					moiTraceRequest);
 
-					
-					DLFileEntry dlFileEntry = DLFileEntryLocalServiceUtil
-							.addFileEntry(userId, groupId, groupId, folderId,
-									documentTitle, mimeType, documentTitle,
-									documentDesc, changeLog,
-									mosipFileEntryType.getFileEntryTypeId(),
-									ddmFormValuesMap, file, is, file.length(),
-									serviceContext);
-					MosipValidator.updateTraceComment(
+			MosipValidator.updateTraceComment(
+					"Starting file upload in Folder ID " + folderId,
+					moiTraceRequest);
+			MosipValidator.updateTraceComment(
+					"Starting file upload with title " + documentTitle,
+					moiTraceRequest);
+			MosipValidator.updateTraceComment(
+					"Starting file upload Document Type " + documentType,
+					moiTraceRequest);
+
+			DLFileEntry dlFileEntry = DLFileEntryLocalServiceUtil.addFileEntry(
+					userId, groupId, groupId, folderId, documentTitle, mimeType,
+					documentTitle, documentDesc, changeLog,
+					mosipFileEntryType.getFileEntryTypeId(), ddmFormValuesMap,
+					null, is, file.getSize(), serviceContext);
+			MosipValidator
+					.updateTraceComment(
 							"File Added Draft Status with File Entry ID "
 									+ dlFileEntry.getFileEntryId()
 									+ " and Identifier :" + identifier,
 							moiTraceRequest);
 
-					DLAppServiceUtil.updateFileEntry(
-							dlFileEntry.getFileEntryId(),
-							dlFileEntry.getFileName(), mimeType, documentTitle,
-							documentDesc, changeLog,
-							DLVersionNumberIncrease.NONE, file, serviceContext);
+			DLAppServiceUtil.updateFileEntry(dlFileEntry.getFileEntryId(),dlFileEntry.getFileName(),dlFileEntry.getMimeType(),
+					dlFileEntry.getTitle(),dlFileEntry.getDescription(),null,DLVersionNumberIncrease.NONE,is,file.getSize(),serviceContext);
 
-					MosipValidator.updateTraceComment(
+			MosipValidator
+					.updateTraceComment(
 							"File Updated Published Status with File Entry ID "
 									+ dlFileEntry.getFileEntryId()
 									+ " and Identifier :" + identifier,
 							moiTraceRequest);
-					MosipValidator.updateTraceRequest(
-							"File Uploaded with Document Type :" + documentType
-									+ " and Identifier :" + identifier,
-							moiTraceRequest, true);
-				}
-
-			}
+			MosipValidator.updateTraceRequest(
+					"File Uploaded with Document Type :" + documentType
+							+ " and Identifier :" + identifier,
+					moiTraceRequest, true);
 		} catch (PortalException e) {
 			_log.error(e);
 			MosipValidator.updateTraceComment(
@@ -597,7 +621,7 @@ public class MosipAPIHandlerResourceImpl
 							"DMS Portal Error uploading " + documentType
 									+ ": Please contact DMS Administrator",
 							null);
-		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 			_log.error(e);
 			MosipValidator.updateTraceComment(
 					"Error uploading File " + e.getMessage(), moiTraceRequest);
