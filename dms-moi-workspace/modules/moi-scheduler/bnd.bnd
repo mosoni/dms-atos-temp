@@ -1,0 +1,4 @@
+Bundle-Name: moi-scheduler
+Bundle-SymbolicName: com.moi.dms.scheduler
+Bundle-Version: 1.0.0
+Export-Package: com.moi.dms.scheduler.constants
