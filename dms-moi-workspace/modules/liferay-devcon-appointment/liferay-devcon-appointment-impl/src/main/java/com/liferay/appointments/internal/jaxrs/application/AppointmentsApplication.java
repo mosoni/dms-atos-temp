@@ -14,9 +14,7 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"liferay.jackson=false", "osgi.jaxrs.application.base=/appointments",
 		"osgi.jaxrs.extension.select=(osgi.jaxrs.name=Liferay.Vulcan)",
-		"osgi.jaxrs.name=Liferay.Appointments",
-		"auth.verifier.guest.allowed=true",
-		"liferay.access.control.disable=true"
+		"osgi.jaxrs.name=Liferay.Appointments"
 	},
 	service = Application.class
 )

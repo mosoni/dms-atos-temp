@@ -1,6 +1,7 @@
 package com.liferay.appointments.internal.graphql.query.v1_0;
 
 import com.liferay.appointments.dto.v1_0.Appointment;
+import com.liferay.appointments.dto.v1_0.SiteDocument;
 import com.liferay.appointments.resource.v1_0.AppointmentResource;
 import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.function.UnsafeFunction;
@@ -56,6 +57,26 @@ public class Query {
 			appointmentResource -> new AppointmentPage(
 				appointmentResource.getSiteAppointmentsPage(
 					Long.valueOf(siteKey))));
+	}
+
+	/**
+	 * Invoke this method with the command line:
+	 *
+	 * curl -H 'Content-Type: text/plain; charset=utf-8' -X 'POST' 'http://localhost:8080/o/graphql' -d $'{"query": "query {appointmentDocument(DocumentType: ___, Identifier: ___, ModuleType: ___){id, name, mimeType, folderName, file}}"}' -u 'test@liferay.com:test'
+	 */
+	@GraphQLField
+	public SiteDocument appointmentDocument(
+			@GraphQLName("ModuleType") String ModuleType,
+			@GraphQLName("DocumentType") String DocumentType,
+			@GraphQLName("Identifier") String Identifier)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_appointmentResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			appointmentResource ->
+				appointmentResource.getSiteAppointmentDocument(
+					ModuleType, DocumentType, Identifier));
 	}
 
 	@GraphQLName("AppointmentPage")

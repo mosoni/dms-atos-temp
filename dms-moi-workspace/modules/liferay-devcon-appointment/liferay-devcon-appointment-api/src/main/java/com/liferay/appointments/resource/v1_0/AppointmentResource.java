@@ -48,6 +48,10 @@ public interface AppointmentResource {
 			Long siteId, MultipartBody multipartBody)
 		throws Exception;
 
+	public SiteDocument getSiteAppointmentDocument(
+			String ModuleType, String DocumentType, String Identifier)
+		throws Exception;
+
 	public default void setContextAcceptLanguage(
 		AcceptLanguage contextAcceptLanguage) {
 	}

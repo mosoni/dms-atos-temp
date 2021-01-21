@@ -19,6 +19,8 @@ import java.util.Set;
 
 import javax.annotation.Generated;
 
+import javax.validation.Valid;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -34,6 +36,33 @@ public class SiteDocument {
 	public static SiteDocument toDTO(String json) {
 		return ObjectMapperUtil.readValue(SiteDocument.class, json);
 	}
+
+	@Schema
+	@Valid
+	public Object getFile() {
+		return file;
+	}
+
+	public void setFile(Object file) {
+		this.file = file;
+	}
+
+	@JsonIgnore
+	public void setFile(UnsafeSupplier<Object, Exception> fileUnsafeSupplier) {
+		try {
+			file = fileUnsafeSupplier.get();
+		}
+		catch (RuntimeException re) {
+			throw re;
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@GraphQLField
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	protected Object file;
 
 	@Schema
 	public String getFolderName() {
@@ -169,6 +198,16 @@ public class SiteDocument {
 		StringBundler sb = new StringBundler();
 
 		sb.append("{");
+
+		if (file != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"file\": ");
+
+			sb.append(String.valueOf(file));
+		}
 
 		if (folderName != null) {
 			if (sb.length() > 1) {

@@ -24,6 +24,8 @@ components:
           type: string
         folderName:
           type: string
+        file:
+          type: object
       type: object
 info:
   description: ""
@@ -110,19 +112,33 @@ paths:
                   format: binary
                   type: string
               type: object
-#      requestBody:
-#        content:
-#          multipart/form-data:
-#            schema:
-#              $ref: "#/components/schemas/MultipartBody"
-#      requestBody:
-#        content:
-#          application/json:
-#            schema:
-#              $ref: "#/components/schemas/SiteDocument"
-#          application/xml:
-#            schema:
-#              $ref: "#/components/schemas/SiteDocument"
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SiteDocument"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/SiteDocument"
+          description: ""
+      tags: ["Appointment"]
+  "/sites/{siteId}/appointments/getDocument":
+    get:
+      operationId: getSiteAppointmentDocument
+      parameters:
+        - in: query
+          name: ModuleType
+          schema:
+            type: string
+        - in: query
+          name: DocumentType
+          schema:
+            type: string
+        - in: query
+          name: Identifier
+          schema:
+            type: string
       responses:
         200:
           content:

@@ -166,6 +166,35 @@ public abstract class BaseAppointmentResourceImpl
 		return new SiteDocument();
 	}
 
+	/**
+	 * Invoke this method with the command line:
+	 *
+	 * curl -X 'GET' 'http://localhost:8080/o/appointments/v1.0/sites/{siteId}/appointments/getDocument'  -u 'test@liferay.com:test'
+	 */
+	@Override
+	@GET
+	@Parameters(
+		value = {
+			@Parameter(in = ParameterIn.QUERY, name = "ModuleType"),
+			@Parameter(in = ParameterIn.QUERY, name = "DocumentType"),
+			@Parameter(in = ParameterIn.QUERY, name = "Identifier")
+		}
+	)
+	@Path("/sites/{siteId}/appointments/getDocument")
+	@Produces({"application/json", "application/xml"})
+	@Tags(value = {@Tag(name = "Appointment")})
+	public SiteDocument getSiteAppointmentDocument(
+			@Parameter(hidden = true) @QueryParam("ModuleType") String
+				ModuleType,
+			@Parameter(hidden = true) @QueryParam("DocumentType") String
+				DocumentType,
+			@Parameter(hidden = true) @QueryParam("Identifier") String
+				Identifier)
+		throws Exception {
+
+		return new SiteDocument();
+	}
+
 	@Override
 	@SuppressWarnings("PMD.UnusedLocalVariable")
 	public void create(
