@@ -1,0 +1,10 @@
+Bundle-Name: moi-delete-documents-api
+Bundle-SymbolicName: com.moi.dms.delete.documents.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.moi.dms.delete.documents.exception,\
+	com.moi.dms.delete.documents.model,\
+	com.moi.dms.delete.documents.service,\
+	com.moi.dms.delete.documents.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../moi-delete-documents-service/service.xml

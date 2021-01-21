@@ -1,0 +1,4 @@
+Bundle-Name: moi-delete-documents-control-panel
+Bundle-SymbolicName: com.moi.dms.delete.documents.web
+Bundle-Version: 1.0.0
+Export-Package: com.moi.dms.delete.documents.web.constants

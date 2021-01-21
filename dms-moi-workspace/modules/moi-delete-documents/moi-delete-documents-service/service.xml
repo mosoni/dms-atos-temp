@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_2_0.dtd">
+
+<service-builder dependency-injector="ds"
+	package-path="com.moi.dms.delete.documents">
+	<namespace>moidd</namespace>
+	<entity remote-service="false" local-service="true"
+		table="moi_deletedocuments" name="MOIDeleteDocuments" cache-enabled="false">
+		<column name="documentId" type="long" primary="true"></column>
+		<column name="fileEntryId" type="long"></column>
+		<column name="fileEntryName" type="String"></column>
+		<column name="consumerCode" type="String"></column>
+		<column name="moduleType" type="String"></column>
+		<column name="uploadedBy" type="String"></column>
+		<column name="uploadedDate" type="Date"></column>
+		<column name="status" type="String"></column>
+		<column name="comments" type="String"></column>
+		<column name="updatedBy" type="String"></column>
+		<column name="updatedDate" type="Date"></column>
+		<column name="pendingIdentifiers" type="String"></column>
+		<order by="asc">
+			<order-column name="documentId"></order-column>
+		</order>
+
+		<finder name="DocumentId" return-type="Collection">
+			<finder-column name="documentId"></finder-column>
+		</finder>
+		<finder name="FileEntryId" return-type="Collection">
+			<finder-column name="fileEntryId"></finder-column>
+		</finder>
+		<finder name="FileEntryName" return-type="Collection">
+			<finder-column name="fileEntryName"></finder-column>
+		</finder>
+		<finder name="ConsumerCode" return-type="Collection">
+			<finder-column name="consumerCode"></finder-column>
+		</finder>
+		<finder name="ModuleType" return-type="Collection">
+			<finder-column name="moduleType"></finder-column>
+		</finder>
+		<finder name="UploadedBy" return-type="Collection">
+			<finder-column name="uploadedBy"></finder-column>
+		</finder>
+		<finder name="UploadedDate" return-type="Collection">
+			<finder-column name="uploadedDate"></finder-column>
+		</finder>
+		<finder name="Status" return-type="Collection">
+			<finder-column name="status"></finder-column>
+		</finder>
+		<finder name="UpdatedBy" return-type="Collection">
+			<finder-column name="updatedBy"></finder-column>
+		</finder>
+		<finder name="UpdatedDate" return-type="Collection">
+			<finder-column name="updatedDate"></finder-column>
+		</finder>
+		<finder name="PendingIdentifiers" return-type="Collection">
+			<finder-column name="pendingIdentifiers"></finder-column>
+		</finder>
+	</entity>
+
+	<exceptions>
+		<exception>MOIDeleteDocumentsException</exception>
+	</exceptions>
+</service-builder>

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.moi.dms.delete.documents.model.MOIDeleteDocuments">
+		<field name="documentId" type="long" />
+		<field name="fileEntryId" type="long" />
+		<field name="fileEntryName" type="String" />
+		<field name="consumerCode" type="String" />
+		<field name="moduleType" type="String" />
+		<field name="uploadedBy" type="String" />
+		<field name="uploadedDate" type="Date" />
+		<field name="status" type="String" />
+		<field name="comments" type="String" />
+		<field name="updatedBy" type="String" />
+		<field name="updatedDate" type="Date" />
+		<field name="pendingIdentifiers" type="String" />
+	</model>
+</model-hints>

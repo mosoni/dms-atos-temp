@@ -1,0 +1,10 @@
+create index IX_817363B2 on moi_deletedocuments (consumerCode[$COLUMN_LENGTH:75$]);
+create index IX_BA69ED26 on moi_deletedocuments (fileEntryId);
+create index IX_D020BC56 on moi_deletedocuments (fileEntryName[$COLUMN_LENGTH:75$]);
+create index IX_BAC02F5 on moi_deletedocuments (moduleType[$COLUMN_LENGTH:75$]);
+create index IX_845405C2 on moi_deletedocuments (pendingIdentifiers[$COLUMN_LENGTH:75$]);
+create index IX_D2F82AA1 on moi_deletedocuments (status[$COLUMN_LENGTH:75$]);
+create index IX_D39DB007 on moi_deletedocuments (updatedBy[$COLUMN_LENGTH:75$]);
+create index IX_652C021E on moi_deletedocuments (updatedDate);
+create index IX_77017DC6 on moi_deletedocuments (uploadedBy[$COLUMN_LENGTH:75$]);
+create index IX_BED35C1D on moi_deletedocuments (uploadedDate);
