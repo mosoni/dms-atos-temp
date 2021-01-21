@@ -30,6 +30,26 @@ public class CommonConstants {
 	public static final String UPLOAD = "_UPLOAD";
 
 	/**
+	 * Constant for MOSIP ModuleType
+	 */
+	public static String MOSIP_REQ_PARAM_MODULE_TYPE = "ModuleType";
+
+	/**
+	 * Constant for MOSIP ConsumerCode
+	 */
+	public static String MOSIP_REQ_PARAM_CONSUMER_CODE = "ConsumerCode";
+
+	/**
+	 * Constant for document request parameter in MOSIP API
+	 */
+	public static String MOSIP_REQ_PARAM_DOCUMENT = "Document";
+
+	/**
+	 * Constant for MOSIP Parent Folder Id
+	 */
+	public static long MOSIP_PARENT_FOLDER_ID = DLFolderConstants.DEFAULT_PARENT_FOLDER_ID;
+
+	/**
 	 * Constant for JIRA Parent Folder Id
 	 */
 	public static long JIRA_PARENT_FOLDER_ID = DLFolderConstants.DEFAULT_PARENT_FOLDER_ID;
