@@ -55,7 +55,7 @@ public interface MosipAPIHandlerResource {
 		throws Exception;
 
 	public Page<DocumentResult> deleteMosipDocument(
-			String ModuleType, MultipartBody multipartBody)
+			String ModuleType, String ConsumerCode, MultipartBody multipartBody)
 		throws Exception;
 
 	public default void setContextAcceptLanguage(

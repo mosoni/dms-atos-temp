@@ -145,11 +145,12 @@ public class Mutation {
 
 	@GraphQLField
 	@GraphQLName(
-		value = "deleteMosipDocumentModuleTypeMultipartBody",
+		value = "deleteMosipDocumentModuleTypeConsumerCodeMultipartBody",
 		description = "null"
 	)
 	public java.util.Collection<DocumentResult> deleteMosipDocument(
 			@GraphQLName("ModuleType") String ModuleType,
+			@GraphQLName("ConsumerCode") String ConsumerCode,
 			@GraphQLName("multipartBody") MultipartBody multipartBody)
 		throws Exception {
 
@@ -159,7 +160,7 @@ public class Mutation {
 			mosipAPIHandlerResource -> {
 				Page paginationPage =
 					mosipAPIHandlerResource.deleteMosipDocument(
-						ModuleType, multipartBody);
+						ModuleType, ConsumerCode, multipartBody);
 
 				return paginationPage.getItems();
 			});

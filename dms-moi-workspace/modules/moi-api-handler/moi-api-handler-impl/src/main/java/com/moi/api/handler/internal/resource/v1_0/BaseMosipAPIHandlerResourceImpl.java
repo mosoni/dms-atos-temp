@@ -212,7 +212,10 @@ public abstract class BaseMosipAPIHandlerResourceImpl
 	@Consumes("multipart/form-data")
 	@POST
 	@Parameters(
-		value = {@Parameter(in = ParameterIn.QUERY, name = "ModuleType")}
+		value = {
+			@Parameter(in = ParameterIn.QUERY, name = "ModuleType"),
+			@Parameter(in = ParameterIn.QUERY, name = "ConsumerCode")
+		}
 	)
 	@Path("/deleteDocument")
 	@Produces({"application/json", "application/xml"})
@@ -220,6 +223,8 @@ public abstract class BaseMosipAPIHandlerResourceImpl
 	public Page<DocumentResult> deleteMosipDocument(
 			@Parameter(hidden = true) @QueryParam("ModuleType") String
 				ModuleType,
+			@Parameter(hidden = true) @QueryParam("ConsumerCode") String
+				ConsumerCode,
 			MultipartBody multipartBody)
 		throws Exception {
 

@@ -6,7 +6,6 @@ import com.liferay.document.library.kernel.model.DLFileEntryType;
 import com.liferay.document.library.kernel.model.DLFolder;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.model.DLVersionNumberIncrease;
-import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
 import com.liferay.document.library.kernel.service.DLAppServiceUtil;
 import com.liferay.document.library.kernel.service.DLFileEntryLocalServiceUtil;
 import com.liferay.document.library.kernel.service.DLFileEntryTypeServiceUtil;
@@ -34,8 +33,10 @@ import com.liferay.portal.kernel.service.ResourcePermissionServiceUtil;
 import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
+import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.vulcan.multipart.BinaryFile;
 import com.liferay.portal.vulcan.multipart.MultipartBody;
@@ -44,11 +45,12 @@ import com.moi.api.handler.dto.v1_0.DocumentResult;
 import com.moi.api.handler.internal.result.APIConstants;
 import com.moi.api.handler.internal.result.GenerateDocumentResult;
 import com.moi.api.handler.resource.v1_0.MosipAPIHandlerResource;
+import com.moi.dms.delete.documents.service.MOIDeleteDocumentsLocalServiceUtil;
 import com.moi.dms.id.mapper.model.MOIIdMapper;
 import com.moi.dms.id.mapper.service.MOIIdMapperLocalServiceUtil;
 import com.moi.dms.mosip.constants.CommonConstants;
+import com.moi.dms.mosip.constants.MOIProperties;
 import com.moi.dms.mosip.constants.MosipConstants;
-import com.moi.dms.mosip.constants.MosipDocumentType;
 import com.moi.dms.mosip.constants.MosipErrorConstants;
 import com.moi.dms.mosip.constants.MosipPhase;
 import com.moi.dms.trace.request.model.MOITraceRequest;
@@ -56,11 +58,9 @@ import com.moi.dms.trace.request.service.MOITraceRequestLocalServiceUtil;
 import com.moi.mosip.validator.MosipUtil;
 import com.moi.mosip.validator.MosipValidator;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -272,11 +272,112 @@ public class MosipAPIHandlerResourceImpl
 		}
 	}
 
+	/**
+	 * This API will fetch a csv file and store it in a predefined folder
+	 * location. This csv file will contain identifier number which would be
+	 * then deleted by DMS Admin.
+	 * 
+	 * @param ModuleType
+	 * @param ConsumerCode
+	 * @param multipartBody
+	 */
 	@Override
 	public Page<DocumentResult> deleteMosipDocument(String ModuleType,
-			MultipartBody multipartBody) throws Exception {
-		// TODO Auto-generated method stub
-		return super.deleteMosipDocument(ModuleType, multipartBody);
+			String ConsumerCode, MultipartBody multipartBody) throws Exception {
+
+		// Authorize and authenticate user - To be done by OAuth 2.0
+		// Get user id & serviceContext
+		ServiceContext serviceContext = ServiceContextThreadLocal
+				.getServiceContext();
+		long userId = serviceContext.getUserId();
+
+		// TODO: Remove in actual implementation.
+		if (0 == userId) {
+			userId = DEFAULT_USER_ID;
+		}
+
+		String moduleTypeParam = getMosipUploadDocParams(
+				CommonConstants.MOSIP_REQ_PARAM_MODULE_TYPE, ModuleType,
+				multipartBody);
+
+		String consumerCodeParam = getMosipUploadDocParams(
+				CommonConstants.MOSIP_REQ_PARAM_CONSUMER_CODE, ConsumerCode,
+				multipartBody);
+
+		debugLog("ModuleType: " + moduleTypeParam);
+		debugLog("ConsumerCode: " + consumerCodeParam);
+
+		BinaryFile binaryFile = multipartBody
+				.getBinaryFile(CommonConstants.MOSIP_REQ_PARAM_DOCUMENT);
+
+		// TODO: Mohit to check this part.
+		String DocumentType = "Bulk_Delete_File";
+
+		/*
+		 * Entry Point : Trace the request
+		 */
+		MOITraceRequest moiTraceRequest = null;
+		try {
+			moiTraceRequest = MOITraceRequestLocalServiceUtil
+					.addMOITraceRequest(String.valueOf(userId), new Date(),
+							consumerCodeParam, null,
+							MosipUtil.getAction(DocumentType, true),
+							DocumentType, false, null, null, StringPool.BLANK);
+		} catch (PortalException e) {
+			debugLog(e);
+		}
+
+		// TODO: Perform Validation.
+		String validationResult = "";
+
+		if (Validator.isNotNull(validationResult)) {
+			return GenerateDocumentResult.generateDocumentResult(
+					moiTraceRequest.getRequestId(), APIConstants.FAILURE,
+					validationResult, null);
+		}
+
+		// Fetch folder name from propertiees file.
+		// TODO: Add error string
+		String folderName = PropsUtil
+				.get(MOIProperties.MOSIP_DELETE_FOLDER_NAME);
+		if(Validator.isNull(folderName)) {
+			return GenerateDocumentResult.generateDocumentResult(
+					moiTraceRequest.getRequestId(), APIConstants.FAILURE,
+					"", null);
+		}
+
+		// Check Folder. If Folder not available, create new folder with
+		// ticket number
+		Folder uploadFolder = null;
+		try {
+			uploadFolder = getFolder(folderName, true, serviceContext);
+			debugLog("folderId: " + uploadFolder.getFolderId());
+
+			FileEntry fileEntry = uploadDeleteCSVFile(binaryFile, uploadFolder.getFolderId(),
+					serviceContext);
+
+			// Perform Custom Table entry
+			String userScreenName = UserLocalServiceUtil
+					.getUser(fileEntry.getUserId()).getScreenName();
+			MOIDeleteDocumentsLocalServiceUtil.addMOIDeleteDocuments(
+					fileEntry.getFileEntryId(), fileEntry.getFileName(),
+					consumerCodeParam, moduleTypeParam, userScreenName,
+					new Date(), "Pending", StringPool.BLANK, StringPool.BLANK,
+					null, StringPool.BLANK);
+
+		} catch (PortalException | IOException e) {
+			MosipUtil.updateTraceRequest(MosipErrorConstants.JIRA_COMMON_ERROR,
+					moiTraceRequest);
+			return GenerateDocumentResult.generateDocumentResult(
+					moiTraceRequest.getRequestId(), APIConstants.FAILURE,
+					MosipErrorConstants.JIRA_COMMON_ERROR, null);
+		}
+
+		MosipUtil.updateTraceRequest(MosipErrorConstants.JIRA_FILE_UPLOADED_MSG,
+				moiTraceRequest);
+		return GenerateDocumentResult.generateDocumentResult(
+				moiTraceRequest.getRequestId(), APIConstants.SUCCESS,
+				MosipErrorConstants.JIRA_FILE_UPLOADED_MSG, null);
 	}
 
 	@Override
@@ -774,15 +875,70 @@ public class MosipAPIHandlerResourceImpl
 		}
 		return fileEntry;
 	}
-	private static void debugLog(Object msg) {
-		//if(_log.isDebugEnabled()) {
-			_log.debug(msg);
-		//}
+
+	/**
+	 * This method uploads delete csv file to predefined folder.
+	 * 
+	 * @param binaryFile
+	 * @param uploadFolder
+	 * @param serviceContext
+	 * @throws PortalException
+	 * @throws IOException
+	 */
+	private FileEntry uploadDeleteCSVFile(BinaryFile binaryFile, long folderId,
+			ServiceContext serviceContext) throws PortalException, IOException {
+
+		SimpleDateFormat sdf = new SimpleDateFormat("ddMMMyyyy_HH:mm:ss:SSS");
+
+		FileEntry fileEntry = null;
+		String sourceFileName = binaryFile.getFileName();
+		String title = sdf.format(new Date()) + ".csv";
+		String description = sdf.format(new Date());
+		String mimeType = binaryFile.getContentType();
+		String changeLog = StringPool.BLANK;
+		long repositoryId = serviceContext.getScopeGroupId();
+		InputStream is = binaryFile.getInputStream();
+
+		debugLog("repositoryId: " + repositoryId);
+		debugLog("sourceFileName: " + sourceFileName);
+		debugLog("title: " + title);
+
+		// Add file object
+		fileEntry = DLAppServiceUtil.addFileEntry(repositoryId, folderId,
+				sourceFileName, mimeType, title, description, changeLog, is,
+				binaryFile.getSize(), serviceContext);
+		is.close();
+
+		debugLog("File Added with ID: " + fileEntry.getFileEntryId());
+		return fileEntry;
 	}
 
-	
-	
-	
-	private static final Log _log = LogFactoryUtil.getLog(
-			MosipAPIHandlerResourceImpl.class);
+	/**
+	 * Get parameter either from request URL or from request body
+	 * 
+	 * @param paramName
+	 * @param paramValue
+	 * @param multipartBody
+	 * @return String
+	 */
+	private String getMosipUploadDocParams(String paramName, String paramValue,
+			MultipartBody multipartBody) {
+
+		String value = null;
+		if (null == paramValue || paramValue.isEmpty()) {
+			value = multipartBody.getValueAsString(paramName);
+		} else {
+			value = paramValue;
+		}
+		return value;
+	}
+
+	private static void debugLog(Object msg) {
+		// if(_log.isDebugEnabled()) {
+		_log.debug(msg);
+		// }
+	}
+
+	private static final Log _log = LogFactoryUtil
+			.getLog(MosipAPIHandlerResourceImpl.class);
 }

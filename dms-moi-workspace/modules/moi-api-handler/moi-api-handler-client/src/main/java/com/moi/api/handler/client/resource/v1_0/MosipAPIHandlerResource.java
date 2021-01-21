@@ -76,13 +76,13 @@ public interface MosipAPIHandlerResource {
 		throws Exception;
 
 	public Page<DocumentResult> deleteMosipDocument(
-			String ModuleType, MosipAPIHandler mosipAPIHandler,
-			Map<String, File> multipartFiles)
+			String ModuleType, String ConsumerCode,
+			MosipAPIHandler mosipAPIHandler, Map<String, File> multipartFiles)
 		throws Exception;
 
 	public HttpInvoker.HttpResponse deleteMosipDocumentHttpResponse(
-			String ModuleType, MosipAPIHandler mosipAPIHandler,
-			Map<String, File> multipartFiles)
+			String ModuleType, String ConsumerCode,
+			MosipAPIHandler mosipAPIHandler, Map<String, File> multipartFiles)
 		throws Exception;
 
 	public static class Builder {
@@ -532,13 +532,14 @@ public interface MosipAPIHandlerResource {
 		}
 
 		public Page<DocumentResult> deleteMosipDocument(
-				String ModuleType, MosipAPIHandler mosipAPIHandler,
+				String ModuleType, String ConsumerCode,
+				MosipAPIHandler mosipAPIHandler,
 				Map<String, File> multipartFiles)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse =
 				deleteMosipDocumentHttpResponse(
-					ModuleType, mosipAPIHandler, multipartFiles);
+					ModuleType, ConsumerCode, mosipAPIHandler, multipartFiles);
 
 			String content = httpResponse.getContent();
 
@@ -561,7 +562,8 @@ public interface MosipAPIHandlerResource {
 		}
 
 		public HttpInvoker.HttpResponse deleteMosipDocumentHttpResponse(
-				String ModuleType, MosipAPIHandler mosipAPIHandler,
+				String ModuleType, String ConsumerCode,
+				MosipAPIHandler mosipAPIHandler,
 				Map<String, File> multipartFiles)
 			throws Exception {
 
@@ -598,6 +600,11 @@ public interface MosipAPIHandlerResource {
 
 			if (ModuleType != null) {
 				httpInvoker.parameter("ModuleType", String.valueOf(ModuleType));
+			}
+
+			if (ConsumerCode != null) {
+				httpInvoker.parameter(
+					"ConsumerCode", String.valueOf(ConsumerCode));
 			}
 
 			httpInvoker.path(

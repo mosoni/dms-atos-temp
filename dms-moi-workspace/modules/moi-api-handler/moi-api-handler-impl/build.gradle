@@ -19,7 +19,8 @@ dependencies {
 	compileOnly project(":modules:moi-constants")
 	compileOnly project(":modules:moi-id-mapper:moi-id-mapper-api")
 	compileOnly project(":modules:moi-trace-request:moi-trace-request-api")
-	
+	compileOnly project(":modules:moi-delete-documents:moi-delete-documents-api")
+
 	compileOnly group: "com.fasterxml.jackson.core", name: "jackson-annotations", version: "2.10.3"
 	compileOnly group: "com.liferay", name: "com.liferay.petra.function"
 	compileOnly group: "com.liferay", name: "com.liferay.petra.string"

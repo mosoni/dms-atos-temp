@@ -233,6 +233,10 @@ paths:
           name: ModuleType
           schema:
             type: string
+        - in: query
+          name: ConsumerCode
+          schema:
+            type: string
       requestBody:
                 content:
                     multipart/form-data:
