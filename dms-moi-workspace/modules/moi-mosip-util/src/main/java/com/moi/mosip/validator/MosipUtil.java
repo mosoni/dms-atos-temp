@@ -5,6 +5,10 @@ package com.moi.mosip.validator;
 
 import com.liferay.portal.kernel.util.Validator;
 import com.moi.dms.mosip.constants.CommonConstants;
+import com.moi.dms.trace.request.model.MOITraceRequest;
+import com.moi.dms.trace.request.service.MOITraceRequestLocalServiceUtil;
+
+import java.util.Date;
 
 /**
  * The purpose of this class is to maintain utilities used for Mosip
@@ -78,5 +82,22 @@ public class MosipUtil {
 			String metadata) {
 		
 		return null;
+	}
+
+	/**
+	 * This method is used to Update trace request with result and date
+	 *
+	 * @param result
+	 * @param moiTraceRequest :
+	 */
+	public static void updateTraceRequest(String result,
+			MOITraceRequest moiTraceRequest) {
+
+		if (Validator.isNotNull(moiTraceRequest)) {
+			moiTraceRequest.setRequestResult(result);
+			moiTraceRequest.setRequestResultDate(new Date());
+			MOITraceRequestLocalServiceUtil
+					.updateMOITraceRequest(moiTraceRequest);
+		}
 	}
 }
