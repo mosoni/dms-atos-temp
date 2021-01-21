@@ -112,13 +112,18 @@ public class MosipAPIHandlerResourceImpl
 				.getBinaryFile(CommonConstants.JIRA_REQ_PARAM_DOCUMENT);
 
 		
-		
+		System.out.println("getFileName:::"+file.getFileName());
+		System.out.println("getContentType:::"+file.getContentType());
 		long userId = 0;
 		if(userId==0) {
-			User user = UserLocalServiceUtil.fetchUserByEmailAddress(CompanyThreadLocal.getCompanyId(), "mosipuser@liferay.com");
+			User user = UserLocalServiceUtil.fetchUserByEmailAddress(CompanyThreadLocal.getCompanyId(), "test@liferay.com");
 			userId = user.getUserId();
 		}
 
+		if(userId==0) {
+			
+		}
+		
 		/*
 		 * Entry Point : Trace the request
 		 */
@@ -197,7 +202,7 @@ public class MosipAPIHandlerResourceImpl
 		}
 		ServiceContext serviceContext = ServiceContextThreadLocal
 				.getServiceContext();
-		
+		serviceContext.setUserId(userId);
 		return processNewDocument(IdentifierNumber, group.getGroupId(), userId,
 				ModuleType, serviceContext, file, DocumentType,
 				IdentifierNumber, moiTraceRequest,idMapperResult);
@@ -505,7 +510,7 @@ public class MosipAPIHandlerResourceImpl
 
 		/* Generating Document Title */
 		String documentTitle = MosipUtil.generateDocumentTitle(documentType,
-				identifier);
+				identifier,file.getFileName());
 
 		/* Checking Existing Document */
 		DLFileEntry fileEntry = null;
@@ -556,7 +561,7 @@ public class MosipAPIHandlerResourceImpl
 
 		/* Generating Document Title */
 		String documentTitle = MosipUtil.generateDocumentTitle(documentType,
-				identifier);
+				identifier,file.getFileName());
 
 		/* Generating Document Description */
 		String documentDesc = MosipUtil.generateDocumentDescription(null,
@@ -688,6 +693,7 @@ public class MosipAPIHandlerResourceImpl
 					"Starting file upload Document Type " + documentType,
 					moiTraceRequest);
 
+			System.out.println("userId:::"+userId);
 			DLFileEntry dlFileEntry = DLFileEntryLocalServiceUtil.addFileEntry(
 					userId, groupId, groupId, folderId, documentTitle, mimeType,
 					documentTitle, documentDesc, changeLog,

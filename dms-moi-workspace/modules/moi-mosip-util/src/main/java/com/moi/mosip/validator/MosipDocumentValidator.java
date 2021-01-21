@@ -55,9 +55,18 @@ public class MosipDocumentValidator {
 
 		/* Start : Check file size */
 		long length = file.getSize();
-		long mosipFileSize = Long
+		
+		long mosipFileSize = 0;
+		if(PropsUtil.get(MOIProperties.MOSIP_FILE_SIZE)!=null) {
+		mosipFileSize = Long
 				.valueOf(PropsUtil.get(MOIProperties.MOSIP_FILE_SIZE));
+		}
 
+		/*Remove this code*/
+		if(mosipFileSize==0) {
+			mosipFileSize = 1000000;
+		}
+		
 		if (length > mosipFileSize) {
 			updateTraceComment(
 					"Incorrect file Size :"+length,

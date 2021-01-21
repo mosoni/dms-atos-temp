@@ -3,6 +3,7 @@
  */
 package com.moi.mosip.validator;
 
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.moi.dms.mosip.constants.CommonConstants;
 import com.moi.dms.trace.request.model.MOITraceRequest;
@@ -44,9 +45,9 @@ public class MosipUtil {
 	 * @param identifier
 	 * @return : document title
 	 */
-	public static String generateDocumentTitle(String documentType, String identifier) {
-		
-		return documentType+"_"+identifier;
+	public static String generateDocumentTitle(String documentType, String identifier,String fileName) {
+		String extension = FileUtil.getExtension(fileName);
+		return documentType+"_"+identifier+"."+extension;
 	}
 	
 	/**
