@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Role;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
@@ -113,6 +114,10 @@ public class MosipAPIHandlerResourceImpl
 		
 		
 		long userId = 0;
+		if(userId==0) {
+			User user = UserLocalServiceUtil.fetchUserByEmailAddress(CompanyThreadLocal.getCompanyId(), "mosipuser@liferay.com");
+			userId = user.getUserId();
+		}
 
 		/*
 		 * Entry Point : Trace the request
@@ -414,7 +419,7 @@ public class MosipAPIHandlerResourceImpl
 			ServiceContext serviceContext) {
 		try {
 			Folder folder = DLAppServiceUtil.addFolder(
-					serviceContext.getScopeGroupId(),
+					groupId,
 					DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, folderName,
 					folderName, serviceContext);
 			setPermission(folder.getCompanyId(), folder.getGroupId(),
