@@ -128,6 +128,11 @@ public class MOIBulkDeleteDocuments extends BaseMessageListener {
 			for (MOIDeleteDocuments deleteDocument : deleteDocumentList) {
 
 				StringBuilder pendingIdentifiers = new StringBuilder();
+				updateTraceComment(
+						"Deleting entries in "
+								+ deleteDocument.getFileEntryName()
+								+ " with status " + deleteDocument.getStatus(),
+						moiTraceRequest);
 				if (MOIBulkDeleteDocumentConstants.STATUS_APPROVED
 						.equals(deleteDocument.getStatus())) {
 					// Get the uploaded file and parse it.
@@ -152,7 +157,6 @@ public class MOIBulkDeleteDocuments extends BaseMessageListener {
 							// logic. Currently only one column per line is
 							// considered.
 							folderName = nextLine;
-							System.out.println("Folder Name: " + folderName);
 							try {
 								deleteFolder(repositoryId, folderName,
 										moiTraceRequest);
@@ -181,7 +185,6 @@ public class MOIBulkDeleteDocuments extends BaseMessageListener {
 						// logic. Currently only one column per line is
 						// considered.
 						folderName = existingIdentifier;
-						System.out.println("Folder Name 1: " + folderName);
 						try {
 							deleteFolder(repositoryId, folderName,
 									moiTraceRequest);
@@ -216,6 +219,8 @@ public class MOIBulkDeleteDocuments extends BaseMessageListener {
 			updateTraceComment(
 					MOIBulkDeleteDocumentConstants.DELETE_SCHEDULER_COMPLETED,
 					moiTraceRequest);
+			System.out.println(
+					"Final Comments: -----" + moiTraceRequest.getComment());
 			updateTraceRequest(
 					MOIBulkDeleteDocumentConstants.DELETE_SCHEDULER_COMPLETED,
 					moiTraceRequest, true);
@@ -265,12 +270,9 @@ public class MOIBulkDeleteDocuments extends BaseMessageListener {
 				DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, folderName);
 
 		if (null != folder && 0 != folder.getFolderId()) {
-			System.out.println("Here");
 			if (_log.isDebugEnabled()) {
 				_log.debug(folder.getName() + " deleted.");
 			}
-			_dlAppService.deleteFolder(folder.getFolderId());
-			System.out.println(folder.getName() + " deleted.");
 
 			List<FileEntry> fileEntries = _dlAppService
 					.getFileEntries(repositoryId, folder.getFolderId());
@@ -278,10 +280,12 @@ public class MOIBulkDeleteDocuments extends BaseMessageListener {
 				// TODO: Populate Audit table.
 			}
 
+			_dlAppService.deleteFolder(folder.getFolderId());
+			updateTraceComment(folder.getName() + " deleted", moiTraceRequest);
+
 		} else {
 			updateTraceComment(MOIBulkDeleteDocumentConstants.FOLDER_NOT_FOUND
 					+ folderName, moiTraceRequest);
-			System.out.println("Folder Not Found");
 		}
 	}
 
