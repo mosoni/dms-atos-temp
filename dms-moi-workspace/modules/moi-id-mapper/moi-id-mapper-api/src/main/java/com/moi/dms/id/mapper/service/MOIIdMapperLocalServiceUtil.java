@@ -282,8 +282,8 @@ public class MOIIdMapperLocalServiceUtil {
 	 *
 	 * @return List<MOIIdMapper>
 	 */
-	public static java.util.List<com.moi.dms.id.mapper.model.MOIIdMapper>
-		findByRegistrationId(String registrationId) {
+	public static com.moi.dms.id.mapper.model.MOIIdMapper findByRegistrationId(
+		String registrationId) {
 
 		return getService().findByRegistrationId(registrationId);
 	}

@@ -63,4 +63,15 @@ public class MosipConstants {
 	 * This parameter is dynamic and will be replaced with actual content during render
 	 */
 	public static final String IDCS_ID_DYNAMIC_PARAMETER="{IDCSId}";
+	
+	/**
+	 * This parameter is dynamic and will be replaced with actual content during render
+	 */
+	public static final String IDCS_NUMBER_IS_ALREADY_ACTIVE="IDCS Number is already Active";
+
+	/**
+	 * This parameter is dynamic and will be replaced with actual content during render
+	 */
+	public static final String IDCS_NUMBER_ADDED_IN_MAPPER="IDCS Number Added in Mapper";
+	
 }

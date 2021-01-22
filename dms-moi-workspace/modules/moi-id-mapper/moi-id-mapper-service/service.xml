@@ -32,7 +32,7 @@
 		<finder name="MosipDocumentType" return-type="Collection">
 			<finder-column name="mosipDocumentType"></finder-column>
 		</finder>
-		<finder name="RegistrationId" return-type="Collection">
+		<finder name="RegistrationId" return-type="MOIIdMapper">
 			<finder-column name="registrationId"></finder-column>
 		</finder>
 		<finder name="RegistrationIdCurrentState" return-type="MOIIdMapper">
@@ -54,6 +54,7 @@
 		<finder name="UpdatedBy" return-type="Collection">
 			<finder-column name="updatedBy"></finder-column>
 		</finder>
+		
 	</entity>
 
 	<exceptions>

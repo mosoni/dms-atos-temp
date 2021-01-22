@@ -286,46 +286,12 @@ public class MOIIdMapperServiceHttp {
 	}
 
 	public static java.util.List<com.moi.dms.id.mapper.model.MOIIdMapper>
-		findByRegistrationId(
-			HttpPrincipal httpPrincipal, String registrationId) {
-
-		try {
-			MethodKey methodKey = new MethodKey(
-				MOIIdMapperServiceUtil.class, "findByRegistrationId",
-				_findByRegistrationIdParameterTypes6);
-
-			MethodHandler methodHandler = new MethodHandler(
-				methodKey, registrationId);
-
-			Object returnObj = null;
-
-			try {
-				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
-			}
-			catch (Exception exception) {
-				throw new com.liferay.portal.kernel.exception.SystemException(
-					exception);
-			}
-
-			return (java.util.List<com.moi.dms.id.mapper.model.MOIIdMapper>)
-				returnObj;
-		}
-		catch (com.liferay.portal.kernel.exception.SystemException
-					systemException) {
-
-			_log.error(systemException, systemException);
-
-			throw systemException;
-		}
-	}
-
-	public static java.util.List<com.moi.dms.id.mapper.model.MOIIdMapper>
 		findByResourceId(HttpPrincipal httpPrincipal, long resourceId) {
 
 		try {
 			MethodKey methodKey = new MethodKey(
 				MOIIdMapperServiceUtil.class, "findByResourceId",
-				_findByResourceIdParameterTypes7);
+				_findByResourceIdParameterTypes6);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, resourceId);
@@ -358,7 +324,7 @@ public class MOIIdMapperServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				MOIIdMapperServiceUtil.class, "findByDocumentTitle",
-				_findByDocumentTitleParameterTypes8);
+				_findByDocumentTitleParameterTypes7);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, documentTitle);
@@ -391,7 +357,7 @@ public class MOIIdMapperServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				MOIIdMapperServiceUtil.class, "findByFileEntryId",
-				_findByFileEntryIdParameterTypes9);
+				_findByFileEntryIdParameterTypes8);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, fileEntryId);
@@ -425,7 +391,7 @@ public class MOIIdMapperServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				MOIIdMapperServiceUtil.class, "findByUpdateDate",
-				_findByUpdateDateParameterTypes10);
+				_findByUpdateDateParameterTypes9);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, updateDate);
@@ -458,7 +424,7 @@ public class MOIIdMapperServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				MOIIdMapperServiceUtil.class, "findByUpdatedBy",
-				_findByUpdatedByParameterTypes11);
+				_findByUpdatedByParameterTypes10);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, updatedBy);
@@ -508,17 +474,15 @@ public class MOIIdMapperServiceHttp {
 		new Class[] {Long.class};
 	private static final Class<?>[] _findByMosipDocumentTypeParameterTypes5 =
 		new Class[] {String.class};
-	private static final Class<?>[] _findByRegistrationIdParameterTypes6 =
-		new Class[] {String.class};
-	private static final Class<?>[] _findByResourceIdParameterTypes7 =
+	private static final Class<?>[] _findByResourceIdParameterTypes6 =
 		new Class[] {long.class};
-	private static final Class<?>[] _findByDocumentTitleParameterTypes8 =
+	private static final Class<?>[] _findByDocumentTitleParameterTypes7 =
 		new Class[] {String.class};
-	private static final Class<?>[] _findByFileEntryIdParameterTypes9 =
+	private static final Class<?>[] _findByFileEntryIdParameterTypes8 =
 		new Class[] {String.class};
-	private static final Class<?>[] _findByUpdateDateParameterTypes10 =
+	private static final Class<?>[] _findByUpdateDateParameterTypes9 =
 		new Class[] {java.util.Date.class};
-	private static final Class<?>[] _findByUpdatedByParameterTypes11 =
+	private static final Class<?>[] _findByUpdatedByParameterTypes10 =
 		new Class[] {String.class};
 
 }

@@ -202,8 +202,8 @@ public class MOIIdMapperLocalServiceImpl
 	 * 
 	 * @return List<MOIIdMapper>
 	 */
-	public List<MOIIdMapper> findByRegistrationId(String registrationId) {
-		return moiIdMapperPersistence.findByRegistrationId(registrationId);
+	public MOIIdMapper findByRegistrationId(String registrationId) {
+		return moiIdMapperPersistence.fetchByRegistrationId(registrationId);
 	}
 
 	

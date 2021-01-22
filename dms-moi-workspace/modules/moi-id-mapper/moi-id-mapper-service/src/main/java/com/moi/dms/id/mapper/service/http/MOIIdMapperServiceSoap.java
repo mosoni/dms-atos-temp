@@ -251,30 +251,6 @@ public class MOIIdMapperServiceSoap {
 	}
 
 	/**
-	 * Finder method for MOIIdMapper by registrationId.
-	 *
-	 * @return List<MOIIdMapper>
-	 */
-	public static com.moi.dms.id.mapper.model.MOIIdMapperSoap[]
-			findByRegistrationId(String registrationId)
-		throws RemoteException {
-
-		try {
-			java.util.List<com.moi.dms.id.mapper.model.MOIIdMapper>
-				returnValue = MOIIdMapperServiceUtil.findByRegistrationId(
-					registrationId);
-
-			return com.moi.dms.id.mapper.model.MOIIdMapperSoap.toSoapModels(
-				returnValue);
-		}
-		catch (Exception exception) {
-			_log.error(exception, exception);
-
-			throw new RemoteException(exception.getMessage());
-		}
-	}
-
-	/**
 	 * Finder method for MOIIdMapper by resourceId.
 	 *
 	 * @return List<MOIIdMapper>

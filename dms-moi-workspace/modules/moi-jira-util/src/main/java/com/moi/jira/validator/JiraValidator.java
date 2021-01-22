@@ -31,7 +31,6 @@ public class JiraValidator {
 				consumerCode, ticketNumber, documentTitle, metadata);
 		if (Validator.isNotNull(parameterValidation)) {
 			/* Update Trace Request */
-			JiraUtil.updateTraceRequest(parameterValidation, moiTraceRequest);
 			return parameterValidation;
 		}
 		/* End : Request Param validation */
@@ -39,9 +38,6 @@ public class JiraValidator {
 		/* Start : Consumer and Document Type */
 		if (!isConsumerCodeValid(consumerCode)) {
 			/* Update Trace Request */
-			JiraUtil.updateTraceRequest(
-					MosipErrorConstants.JIRA_INVALID_CONSUMER_CODE_MSG,
-					moiTraceRequest);
 			return MosipErrorConstants.JIRA_INVALID_CONSUMER_CODE_MSG;
 		}
 		/* End : Consumer and Document Type */
@@ -51,7 +47,6 @@ public class JiraValidator {
 				.isDocumentValid(binaryFile);
 		if (Validator.isNotNull(documentValidation)) {
 			/* Update Trace Request */
-			JiraUtil.updateTraceRequest(documentValidation, moiTraceRequest);
 			return documentValidation;
 		}
 		/* End : Validating Document */

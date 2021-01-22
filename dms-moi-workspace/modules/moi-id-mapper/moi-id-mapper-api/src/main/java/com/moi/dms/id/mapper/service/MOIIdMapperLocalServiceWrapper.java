@@ -294,8 +294,8 @@ public class MOIIdMapperLocalServiceWrapper
 	 * @return List<MOIIdMapper>
 	 */
 	@Override
-	public java.util.List<com.moi.dms.id.mapper.model.MOIIdMapper>
-		findByRegistrationId(String registrationId) {
+	public com.moi.dms.id.mapper.model.MOIIdMapper findByRegistrationId(
+		String registrationId) {
 
 		return _moiIdMapperLocalService.findByRegistrationId(registrationId);
 	}

@@ -460,140 +460,41 @@ public interface MOIIdMapperPersistence extends BasePersistence<MOIIdMapper> {
 	public int countByMosipDocumentType(String mosipDocumentType);
 
 	/**
-	 * Returns all the moi ID mappers where registrationId = &#63;.
+	 * Returns the moi ID mapper where registrationId = &#63; or throws a <code>NoSuchMOIIdMapperException</code> if it could not be found.
 	 *
 	 * @param registrationId the registration ID
-	 * @return the matching moi ID mappers
+	 * @return the matching moi ID mapper
+	 * @throws NoSuchMOIIdMapperException if a matching moi ID mapper could not be found
 	 */
-	public java.util.List<MOIIdMapper> findByRegistrationId(
-		String registrationId);
+	public MOIIdMapper findByRegistrationId(String registrationId)
+		throws NoSuchMOIIdMapperException;
 
 	/**
-	 * Returns a range of all the moi ID mappers where registrationId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>MOIIdMapperModelImpl</code>.
-	 * </p>
+	 * Returns the moi ID mapper where registrationId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
 	 *
 	 * @param registrationId the registration ID
-	 * @param start the lower bound of the range of moi ID mappers
-	 * @param end the upper bound of the range of moi ID mappers (not inclusive)
-	 * @return the range of matching moi ID mappers
+	 * @return the matching moi ID mapper, or <code>null</code> if a matching moi ID mapper could not be found
 	 */
-	public java.util.List<MOIIdMapper> findByRegistrationId(
-		String registrationId, int start, int end);
+	public MOIIdMapper fetchByRegistrationId(String registrationId);
 
 	/**
-	 * Returns an ordered range of all the moi ID mappers where registrationId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>MOIIdMapperModelImpl</code>.
-	 * </p>
+	 * Returns the moi ID mapper where registrationId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
 	 *
 	 * @param registrationId the registration ID
-	 * @param start the lower bound of the range of moi ID mappers
-	 * @param end the upper bound of the range of moi ID mappers (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching moi ID mappers
-	 */
-	public java.util.List<MOIIdMapper> findByRegistrationId(
-		String registrationId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator<MOIIdMapper>
-			orderByComparator);
-
-	/**
-	 * Returns an ordered range of all the moi ID mappers where registrationId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>MOIIdMapperModelImpl</code>.
-	 * </p>
-	 *
-	 * @param registrationId the registration ID
-	 * @param start the lower bound of the range of moi ID mappers
-	 * @param end the upper bound of the range of moi ID mappers (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @param useFinderCache whether to use the finder cache
-	 * @return the ordered range of matching moi ID mappers
+	 * @return the matching moi ID mapper, or <code>null</code> if a matching moi ID mapper could not be found
 	 */
-	public java.util.List<MOIIdMapper> findByRegistrationId(
-		String registrationId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator<MOIIdMapper>
-			orderByComparator,
-		boolean useFinderCache);
+	public MOIIdMapper fetchByRegistrationId(
+		String registrationId, boolean useFinderCache);
 
 	/**
-	 * Returns the first moi ID mapper in the ordered set where registrationId = &#63;.
+	 * Removes the moi ID mapper where registrationId = &#63; from the database.
 	 *
 	 * @param registrationId the registration ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching moi ID mapper
-	 * @throws NoSuchMOIIdMapperException if a matching moi ID mapper could not be found
+	 * @return the moi ID mapper that was removed
 	 */
-	public MOIIdMapper findByRegistrationId_First(
-			String registrationId,
-			com.liferay.portal.kernel.util.OrderByComparator<MOIIdMapper>
-				orderByComparator)
+	public MOIIdMapper removeByRegistrationId(String registrationId)
 		throws NoSuchMOIIdMapperException;
-
-	/**
-	 * Returns the first moi ID mapper in the ordered set where registrationId = &#63;.
-	 *
-	 * @param registrationId the registration ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching moi ID mapper, or <code>null</code> if a matching moi ID mapper could not be found
-	 */
-	public MOIIdMapper fetchByRegistrationId_First(
-		String registrationId,
-		com.liferay.portal.kernel.util.OrderByComparator<MOIIdMapper>
-			orderByComparator);
-
-	/**
-	 * Returns the last moi ID mapper in the ordered set where registrationId = &#63;.
-	 *
-	 * @param registrationId the registration ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching moi ID mapper
-	 * @throws NoSuchMOIIdMapperException if a matching moi ID mapper could not be found
-	 */
-	public MOIIdMapper findByRegistrationId_Last(
-			String registrationId,
-			com.liferay.portal.kernel.util.OrderByComparator<MOIIdMapper>
-				orderByComparator)
-		throws NoSuchMOIIdMapperException;
-
-	/**
-	 * Returns the last moi ID mapper in the ordered set where registrationId = &#63;.
-	 *
-	 * @param registrationId the registration ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching moi ID mapper, or <code>null</code> if a matching moi ID mapper could not be found
-	 */
-	public MOIIdMapper fetchByRegistrationId_Last(
-		String registrationId,
-		com.liferay.portal.kernel.util.OrderByComparator<MOIIdMapper>
-			orderByComparator);
-
-	/**
-	 * Returns the moi ID mappers before and after the current moi ID mapper in the ordered set where registrationId = &#63;.
-	 *
-	 * @param mapperId the primary key of the current moi ID mapper
-	 * @param registrationId the registration ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next moi ID mapper
-	 * @throws NoSuchMOIIdMapperException if a moi ID mapper with the primary key could not be found
-	 */
-	public MOIIdMapper[] findByRegistrationId_PrevAndNext(
-			long mapperId, String registrationId,
-			com.liferay.portal.kernel.util.OrderByComparator<MOIIdMapper>
-				orderByComparator)
-		throws NoSuchMOIIdMapperException;
-
-	/**
-	 * Removes all the moi ID mappers where registrationId = &#63; from the database.
-	 *
-	 * @param registrationId the registration ID
-	 */
-	public void removeByRegistrationId(String registrationId);
 
 	/**
 	 * Returns the number of moi ID mappers where registrationId = &#63;.

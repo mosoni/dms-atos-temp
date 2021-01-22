@@ -58,7 +58,7 @@ public class JiraUtil {
 	 * @param result
 	 * @param moiTraceRequest :
 	 */
-	public static void updateTraceRequest(String result,
+	public static void updateTraceRequest1(String result,
 			MOITraceRequest moiTraceRequest) {
 
 		if (Validator.isNotNull(moiTraceRequest)) {

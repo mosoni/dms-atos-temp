@@ -133,7 +133,7 @@ public class JiraAPIHandlerResourceImpl extends BaseJiraAPIHandlerResourceImpl {
 		if (Validator.isNotNull(validationResult)) {
 			return GenerateDocumentResult.generateDocumentResult(
 					moiTraceRequest.getRequestId(), APIConstants.FAILURE,
-					validationResult, null);
+					validationResult, null,moiTraceRequest);
 		}
 
 		// Check Folder. If Folder not available, create new folder with
@@ -154,25 +154,19 @@ public class JiraAPIHandlerResourceImpl extends BaseJiraAPIHandlerResourceImpl {
 						metadataParam, binaryFile, uploadFolder,
 						serviceContext);
 			} else {
-				JiraUtil.updateTraceRequest(
-						MosipErrorConstants.JIRA_FILE_EXISTS_MSG,
-						moiTraceRequest);
 				return GenerateDocumentResult.generateDocumentResult(
 						moiTraceRequest.getRequestId(), APIConstants.FAILURE,
-						MosipErrorConstants.JIRA_FILE_EXISTS_MSG, null);
+						MosipErrorConstants.JIRA_FILE_EXISTS_MSG, null,moiTraceRequest);
 			}
 		} catch (PortalException | IOException e) {
-			JiraUtil.updateTraceRequest(MosipErrorConstants.JIRA_COMMON_ERROR,
-					moiTraceRequest);
+
 			return GenerateDocumentResult.generateDocumentResult(
 					moiTraceRequest.getRequestId(), APIConstants.FAILURE,
-					MosipErrorConstants.JIRA_COMMON_ERROR, null);
+					MosipErrorConstants.JIRA_COMMON_ERROR, null,moiTraceRequest);
 		}
-		JiraUtil.updateTraceRequest(MosipErrorConstants.JIRA_FILE_UPLOADED_MSG,
-				moiTraceRequest);
 		return GenerateDocumentResult.generateDocumentResult(
 				moiTraceRequest.getRequestId(), APIConstants.SUCCESS,
-				MosipErrorConstants.JIRA_FILE_UPLOADED_MSG, null);
+				MosipErrorConstants.JIRA_FILE_UPLOADED_MSG, null,moiTraceRequest);
 	}
 
 	/**

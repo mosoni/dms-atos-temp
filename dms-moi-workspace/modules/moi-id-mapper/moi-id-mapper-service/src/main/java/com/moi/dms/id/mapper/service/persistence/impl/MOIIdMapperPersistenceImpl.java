@@ -1553,132 +1553,91 @@ public class MOIIdMapperPersistenceImpl
 		_FINDER_COLUMN_MOSIPDOCUMENTTYPE_MOSIPDOCUMENTTYPE_3 =
 			"(moiIdMapper.mosipDocumentType IS NULL OR moiIdMapper.mosipDocumentType = '')";
 
-	private FinderPath _finderPathWithPaginationFindByRegistrationId;
-	private FinderPath _finderPathWithoutPaginationFindByRegistrationId;
+	private FinderPath _finderPathFetchByRegistrationId;
 	private FinderPath _finderPathCountByRegistrationId;
 
 	/**
-	 * Returns all the moi ID mappers where registrationId = &#63;.
+	 * Returns the moi ID mapper where registrationId = &#63; or throws a <code>NoSuchMOIIdMapperException</code> if it could not be found.
 	 *
 	 * @param registrationId the registration ID
-	 * @return the matching moi ID mappers
+	 * @return the matching moi ID mapper
+	 * @throws NoSuchMOIIdMapperException if a matching moi ID mapper could not be found
 	 */
 	@Override
-	public List<MOIIdMapper> findByRegistrationId(String registrationId) {
-		return findByRegistrationId(
-			registrationId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	public MOIIdMapper findByRegistrationId(String registrationId)
+		throws NoSuchMOIIdMapperException {
+
+		MOIIdMapper moiIdMapper = fetchByRegistrationId(registrationId);
+
+		if (moiIdMapper == null) {
+			StringBundler sb = new StringBundler(4);
+
+			sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			sb.append("registrationId=");
+			sb.append(registrationId);
+
+			sb.append("}");
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(sb.toString());
+			}
+
+			throw new NoSuchMOIIdMapperException(sb.toString());
+		}
+
+		return moiIdMapper;
 	}
 
 	/**
-	 * Returns a range of all the moi ID mappers where registrationId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>MOIIdMapperModelImpl</code>.
-	 * </p>
+	 * Returns the moi ID mapper where registrationId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
 	 *
 	 * @param registrationId the registration ID
-	 * @param start the lower bound of the range of moi ID mappers
-	 * @param end the upper bound of the range of moi ID mappers (not inclusive)
-	 * @return the range of matching moi ID mappers
+	 * @return the matching moi ID mapper, or <code>null</code> if a matching moi ID mapper could not be found
 	 */
 	@Override
-	public List<MOIIdMapper> findByRegistrationId(
-		String registrationId, int start, int end) {
-
-		return findByRegistrationId(registrationId, start, end, null);
+	public MOIIdMapper fetchByRegistrationId(String registrationId) {
+		return fetchByRegistrationId(registrationId, true);
 	}
 
 	/**
-	 * Returns an ordered range of all the moi ID mappers where registrationId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>MOIIdMapperModelImpl</code>.
-	 * </p>
+	 * Returns the moi ID mapper where registrationId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
 	 *
 	 * @param registrationId the registration ID
-	 * @param start the lower bound of the range of moi ID mappers
-	 * @param end the upper bound of the range of moi ID mappers (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching moi ID mappers
-	 */
-	@Override
-	public List<MOIIdMapper> findByRegistrationId(
-		String registrationId, int start, int end,
-		OrderByComparator<MOIIdMapper> orderByComparator) {
-
-		return findByRegistrationId(
-			registrationId, start, end, orderByComparator, true);
-	}
-
-	/**
-	 * Returns an ordered range of all the moi ID mappers where registrationId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>MOIIdMapperModelImpl</code>.
-	 * </p>
-	 *
-	 * @param registrationId the registration ID
-	 * @param start the lower bound of the range of moi ID mappers
-	 * @param end the upper bound of the range of moi ID mappers (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @param useFinderCache whether to use the finder cache
-	 * @return the ordered range of matching moi ID mappers
+	 * @return the matching moi ID mapper, or <code>null</code> if a matching moi ID mapper could not be found
 	 */
 	@Override
-	public List<MOIIdMapper> findByRegistrationId(
-		String registrationId, int start, int end,
-		OrderByComparator<MOIIdMapper> orderByComparator,
-		boolean useFinderCache) {
+	public MOIIdMapper fetchByRegistrationId(
+		String registrationId, boolean useFinderCache) {
 
 		registrationId = Objects.toString(registrationId, "");
 
-		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-			(orderByComparator == null)) {
-
-			if (useFinderCache) {
-				finderPath = _finderPathWithoutPaginationFindByRegistrationId;
-				finderArgs = new Object[] {registrationId};
-			}
-		}
-		else if (useFinderCache) {
-			finderPath = _finderPathWithPaginationFindByRegistrationId;
-			finderArgs = new Object[] {
-				registrationId, start, end, orderByComparator
-			};
+		if (useFinderCache) {
+			finderArgs = new Object[] {registrationId};
 		}
 
-		List<MOIIdMapper> list = null;
+		Object result = null;
 
 		if (useFinderCache) {
-			list = (List<MOIIdMapper>)finderCache.getResult(
-				finderPath, finderArgs, this);
+			result = finderCache.getResult(
+				_finderPathFetchByRegistrationId, finderArgs, this);
+		}
 
-			if ((list != null) && !list.isEmpty()) {
-				for (MOIIdMapper moiIdMapper : list) {
-					if (!registrationId.equals(
-							moiIdMapper.getRegistrationId())) {
+		if (result instanceof MOIIdMapper) {
+			MOIIdMapper moiIdMapper = (MOIIdMapper)result;
 
-						list = null;
+			if (!Objects.equals(
+					registrationId, moiIdMapper.getRegistrationId())) {
 
-						break;
-					}
-				}
+				result = null;
 			}
 		}
 
-		if (list == null) {
-			StringBundler sb = null;
-
-			if (orderByComparator != null) {
-				sb = new StringBundler(
-					3 + (orderByComparator.getOrderByFields().length * 2));
-			}
-			else {
-				sb = new StringBundler(3);
-			}
+		if (result == null) {
+			StringBundler sb = new StringBundler(3);
 
 			sb.append(_SQL_SELECT_MOIIDMAPPER_WHERE);
 
@@ -1691,14 +1650,6 @@ public class MOIIdMapperPersistenceImpl
 				bindRegistrationId = true;
 
 				sb.append(_FINDER_COLUMN_REGISTRATIONID_REGISTRATIONID_2);
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(
-					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
-			}
-			else {
-				sb.append(MOIIdMapperModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = sb.toString();
@@ -1716,18 +1667,41 @@ public class MOIIdMapperPersistenceImpl
 					queryPos.add(registrationId);
 				}
 
-				list = (List<MOIIdMapper>)QueryUtil.list(
-					query, getDialect(), start, end);
+				List<MOIIdMapper> list = query.list();
 
-				cacheResult(list);
+				if (list.isEmpty()) {
+					if (useFinderCache) {
+						finderCache.putResult(
+							_finderPathFetchByRegistrationId, finderArgs, list);
+					}
+				}
+				else {
+					if (list.size() > 1) {
+						Collections.sort(list, Collections.reverseOrder());
 
-				if (useFinderCache) {
-					finderCache.putResult(finderPath, finderArgs, list);
+						if (_log.isWarnEnabled()) {
+							if (!useFinderCache) {
+								finderArgs = new Object[] {registrationId};
+							}
+
+							_log.warn(
+								"MOIIdMapperPersistenceImpl.fetchByRegistrationId(String, boolean) with parameters (" +
+									StringUtil.merge(finderArgs) +
+										") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+						}
+					}
+
+					MOIIdMapper moiIdMapper = list.get(0);
+
+					result = moiIdMapper;
+
+					cacheResult(moiIdMapper);
 				}
 			}
 			catch (Exception exception) {
 				if (useFinderCache) {
-					finderCache.removeResult(finderPath, finderArgs);
+					finderCache.removeResult(
+						_finderPathFetchByRegistrationId, finderArgs);
 				}
 
 				throw processException(exception);
@@ -1737,302 +1711,27 @@ public class MOIIdMapperPersistenceImpl
 			}
 		}
 
-		return list;
-	}
-
-	/**
-	 * Returns the first moi ID mapper in the ordered set where registrationId = &#63;.
-	 *
-	 * @param registrationId the registration ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching moi ID mapper
-	 * @throws NoSuchMOIIdMapperException if a matching moi ID mapper could not be found
-	 */
-	@Override
-	public MOIIdMapper findByRegistrationId_First(
-			String registrationId,
-			OrderByComparator<MOIIdMapper> orderByComparator)
-		throws NoSuchMOIIdMapperException {
-
-		MOIIdMapper moiIdMapper = fetchByRegistrationId_First(
-			registrationId, orderByComparator);
-
-		if (moiIdMapper != null) {
-			return moiIdMapper;
-		}
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		sb.append("registrationId=");
-		sb.append(registrationId);
-
-		sb.append("}");
-
-		throw new NoSuchMOIIdMapperException(sb.toString());
-	}
-
-	/**
-	 * Returns the first moi ID mapper in the ordered set where registrationId = &#63;.
-	 *
-	 * @param registrationId the registration ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching moi ID mapper, or <code>null</code> if a matching moi ID mapper could not be found
-	 */
-	@Override
-	public MOIIdMapper fetchByRegistrationId_First(
-		String registrationId,
-		OrderByComparator<MOIIdMapper> orderByComparator) {
-
-		List<MOIIdMapper> list = findByRegistrationId(
-			registrationId, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last moi ID mapper in the ordered set where registrationId = &#63;.
-	 *
-	 * @param registrationId the registration ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching moi ID mapper
-	 * @throws NoSuchMOIIdMapperException if a matching moi ID mapper could not be found
-	 */
-	@Override
-	public MOIIdMapper findByRegistrationId_Last(
-			String registrationId,
-			OrderByComparator<MOIIdMapper> orderByComparator)
-		throws NoSuchMOIIdMapperException {
-
-		MOIIdMapper moiIdMapper = fetchByRegistrationId_Last(
-			registrationId, orderByComparator);
-
-		if (moiIdMapper != null) {
-			return moiIdMapper;
-		}
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		sb.append("registrationId=");
-		sb.append(registrationId);
-
-		sb.append("}");
-
-		throw new NoSuchMOIIdMapperException(sb.toString());
-	}
-
-	/**
-	 * Returns the last moi ID mapper in the ordered set where registrationId = &#63;.
-	 *
-	 * @param registrationId the registration ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching moi ID mapper, or <code>null</code> if a matching moi ID mapper could not be found
-	 */
-	@Override
-	public MOIIdMapper fetchByRegistrationId_Last(
-		String registrationId,
-		OrderByComparator<MOIIdMapper> orderByComparator) {
-
-		int count = countByRegistrationId(registrationId);
-
-		if (count == 0) {
+		if (result instanceof List<?>) {
 			return null;
 		}
-
-		List<MOIIdMapper> list = findByRegistrationId(
-			registrationId, count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
+		else {
+			return (MOIIdMapper)result;
 		}
-
-		return null;
 	}
 
 	/**
-	 * Returns the moi ID mappers before and after the current moi ID mapper in the ordered set where registrationId = &#63;.
+	 * Removes the moi ID mapper where registrationId = &#63; from the database.
 	 *
-	 * @param mapperId the primary key of the current moi ID mapper
 	 * @param registrationId the registration ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next moi ID mapper
-	 * @throws NoSuchMOIIdMapperException if a moi ID mapper with the primary key could not be found
+	 * @return the moi ID mapper that was removed
 	 */
 	@Override
-	public MOIIdMapper[] findByRegistrationId_PrevAndNext(
-			long mapperId, String registrationId,
-			OrderByComparator<MOIIdMapper> orderByComparator)
+	public MOIIdMapper removeByRegistrationId(String registrationId)
 		throws NoSuchMOIIdMapperException {
 
-		registrationId = Objects.toString(registrationId, "");
+		MOIIdMapper moiIdMapper = findByRegistrationId(registrationId);
 
-		MOIIdMapper moiIdMapper = findByPrimaryKey(mapperId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			MOIIdMapper[] array = new MOIIdMapperImpl[3];
-
-			array[0] = getByRegistrationId_PrevAndNext(
-				session, moiIdMapper, registrationId, orderByComparator, true);
-
-			array[1] = moiIdMapper;
-
-			array[2] = getByRegistrationId_PrevAndNext(
-				session, moiIdMapper, registrationId, orderByComparator, false);
-
-			return array;
-		}
-		catch (Exception exception) {
-			throw processException(exception);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	protected MOIIdMapper getByRegistrationId_PrevAndNext(
-		Session session, MOIIdMapper moiIdMapper, String registrationId,
-		OrderByComparator<MOIIdMapper> orderByComparator, boolean previous) {
-
-		StringBundler sb = null;
-
-		if (orderByComparator != null) {
-			sb = new StringBundler(
-				4 + (orderByComparator.getOrderByConditionFields().length * 3) +
-					(orderByComparator.getOrderByFields().length * 3));
-		}
-		else {
-			sb = new StringBundler(3);
-		}
-
-		sb.append(_SQL_SELECT_MOIIDMAPPER_WHERE);
-
-		boolean bindRegistrationId = false;
-
-		if (registrationId.isEmpty()) {
-			sb.append(_FINDER_COLUMN_REGISTRATIONID_REGISTRATIONID_3);
-		}
-		else {
-			bindRegistrationId = true;
-
-			sb.append(_FINDER_COLUMN_REGISTRATIONID_REGISTRATIONID_2);
-		}
-
-		if (orderByComparator != null) {
-			String[] orderByConditionFields =
-				orderByComparator.getOrderByConditionFields();
-
-			if (orderByConditionFields.length > 0) {
-				sb.append(WHERE_AND);
-			}
-
-			for (int i = 0; i < orderByConditionFields.length; i++) {
-				sb.append(_ORDER_BY_ENTITY_ALIAS);
-				sb.append(orderByConditionFields[i]);
-
-				if ((i + 1) < orderByConditionFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
-					}
-					else {
-						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						sb.append(WHERE_GREATER_THAN);
-					}
-					else {
-						sb.append(WHERE_LESSER_THAN);
-					}
-				}
-			}
-
-			sb.append(ORDER_BY_CLAUSE);
-
-			String[] orderByFields = orderByComparator.getOrderByFields();
-
-			for (int i = 0; i < orderByFields.length; i++) {
-				sb.append(_ORDER_BY_ENTITY_ALIAS);
-				sb.append(orderByFields[i]);
-
-				if ((i + 1) < orderByFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						sb.append(ORDER_BY_ASC_HAS_NEXT);
-					}
-					else {
-						sb.append(ORDER_BY_DESC_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						sb.append(ORDER_BY_ASC);
-					}
-					else {
-						sb.append(ORDER_BY_DESC);
-					}
-				}
-			}
-		}
-		else {
-			sb.append(MOIIdMapperModelImpl.ORDER_BY_JPQL);
-		}
-
-		String sql = sb.toString();
-
-		Query query = session.createQuery(sql);
-
-		query.setFirstResult(0);
-		query.setMaxResults(2);
-
-		QueryPos queryPos = QueryPos.getInstance(query);
-
-		if (bindRegistrationId) {
-			queryPos.add(registrationId);
-		}
-
-		if (orderByComparator != null) {
-			for (Object orderByConditionValue :
-					orderByComparator.getOrderByConditionValues(moiIdMapper)) {
-
-				queryPos.add(orderByConditionValue);
-			}
-		}
-
-		List<MOIIdMapper> list = query.list();
-
-		if (list.size() == 2) {
-			return list.get(1);
-		}
-		else {
-			return null;
-		}
-	}
-
-	/**
-	 * Removes all the moi ID mappers where registrationId = &#63; from the database.
-	 *
-	 * @param registrationId the registration ID
-	 */
-	@Override
-	public void removeByRegistrationId(String registrationId) {
-		for (MOIIdMapper moiIdMapper :
-				findByRegistrationId(
-					registrationId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
-					null)) {
-
-			remove(moiIdMapper);
-		}
+		return remove(moiIdMapper);
 	}
 
 	/**
@@ -5134,6 +4833,10 @@ public class MOIIdMapperPersistenceImpl
 			moiIdMapper.getPrimaryKey(), moiIdMapper);
 
 		finderCache.putResult(
+			_finderPathFetchByRegistrationId,
+			new Object[] {moiIdMapper.getRegistrationId()}, moiIdMapper);
+
+		finderCache.putResult(
 			_finderPathFetchByRegistrationIdCurrentState,
 			new Object[] {
 				moiIdMapper.getRegistrationId(),
@@ -5227,7 +4930,15 @@ public class MOIIdMapperPersistenceImpl
 	protected void cacheUniqueFindersCache(
 		MOIIdMapperModelImpl moiIdMapperModelImpl) {
 
-		Object[] args = new Object[] {
+		Object[] args = new Object[] {moiIdMapperModelImpl.getRegistrationId()};
+
+		finderCache.putResult(
+			_finderPathCountByRegistrationId, args, Long.valueOf(1), false);
+		finderCache.putResult(
+			_finderPathFetchByRegistrationId, args, moiIdMapperModelImpl,
+			false);
+
+		args = new Object[] {
 			moiIdMapperModelImpl.getRegistrationId(),
 			moiIdMapperModelImpl.getMosipCurrentState()
 		};
@@ -5242,6 +4953,26 @@ public class MOIIdMapperPersistenceImpl
 
 	protected void clearUniqueFindersCache(
 		MOIIdMapperModelImpl moiIdMapperModelImpl, boolean clearCurrent) {
+
+		if (clearCurrent) {
+			Object[] args = new Object[] {
+				moiIdMapperModelImpl.getRegistrationId()
+			};
+
+			finderCache.removeResult(_finderPathCountByRegistrationId, args);
+			finderCache.removeResult(_finderPathFetchByRegistrationId, args);
+		}
+
+		if ((moiIdMapperModelImpl.getColumnBitmask() &
+			 _finderPathFetchByRegistrationId.getColumnBitmask()) != 0) {
+
+			Object[] args = new Object[] {
+				moiIdMapperModelImpl.getOriginalRegistrationId()
+			};
+
+			finderCache.removeResult(_finderPathCountByRegistrationId, args);
+			finderCache.removeResult(_finderPathFetchByRegistrationId, args);
+		}
 
 		if (clearCurrent) {
 			Object[] args = new Object[] {
@@ -5440,12 +5171,6 @@ public class MOIIdMapperPersistenceImpl
 			finderCache.removeResult(
 				_finderPathWithoutPaginationFindByMosipDocumentType, args);
 
-			args = new Object[] {moiIdMapperModelImpl.getRegistrationId()};
-
-			finderCache.removeResult(_finderPathCountByRegistrationId, args);
-			finderCache.removeResult(
-				_finderPathWithoutPaginationFindByRegistrationId, args);
-
 			args = new Object[] {moiIdMapperModelImpl.getResourceId()};
 
 			finderCache.removeResult(_finderPathCountByResourceId, args);
@@ -5544,27 +5269,6 @@ public class MOIIdMapperPersistenceImpl
 					_finderPathCountByMosipDocumentType, args);
 				finderCache.removeResult(
 					_finderPathWithoutPaginationFindByMosipDocumentType, args);
-			}
-
-			if ((moiIdMapperModelImpl.getColumnBitmask() &
-				 _finderPathWithoutPaginationFindByRegistrationId.
-					 getColumnBitmask()) != 0) {
-
-				Object[] args = new Object[] {
-					moiIdMapperModelImpl.getOriginalRegistrationId()
-				};
-
-				finderCache.removeResult(
-					_finderPathCountByRegistrationId, args);
-				finderCache.removeResult(
-					_finderPathWithoutPaginationFindByRegistrationId, args);
-
-				args = new Object[] {moiIdMapperModelImpl.getRegistrationId()};
-
-				finderCache.removeResult(
-					_finderPathCountByRegistrationId, args);
-				finderCache.removeResult(
-					_finderPathWithoutPaginationFindByRegistrationId, args);
 			}
 
 			if ((moiIdMapperModelImpl.getColumnBitmask() &
@@ -6010,17 +5714,9 @@ public class MOIIdMapperPersistenceImpl
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 			"countByMosipDocumentType", new String[] {String.class.getName()});
 
-		_finderPathWithPaginationFindByRegistrationId = new FinderPath(
+		_finderPathFetchByRegistrationId = new FinderPath(
 			entityCacheEnabled, finderCacheEnabled, MOIIdMapperImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByRegistrationId",
-			new String[] {
-				String.class.getName(), Integer.class.getName(),
-				Integer.class.getName(), OrderByComparator.class.getName()
-			});
-
-		_finderPathWithoutPaginationFindByRegistrationId = new FinderPath(
-			entityCacheEnabled, finderCacheEnabled, MOIIdMapperImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByRegistrationId",
+			FINDER_CLASS_NAME_ENTITY, "fetchByRegistrationId",
 			new String[] {String.class.getName()},
 			MOIIdMapperModelImpl.REGISTRATIONID_COLUMN_BITMASK);
 
