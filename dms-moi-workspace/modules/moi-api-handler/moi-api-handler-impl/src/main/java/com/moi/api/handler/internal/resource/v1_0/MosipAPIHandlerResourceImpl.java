@@ -128,17 +128,11 @@ public class MosipAPIHandlerResourceImpl
 		 * Entry Point : Trace the request
 		 */
 		MOITraceRequest moiTraceRequest = null;
-		try {
-			moiTraceRequest = MOITraceRequestLocalServiceUtil
-					.addMOITraceRequest(String.valueOf(userId), new Date(),
-							ConsumerCode, null,
-							MosipUtil.getAction(DocumentType, true),
-							DocumentType, false, null, null, StringPool.BLANK);
-			MosipValidator.updateTraceComment("Mapping Initiated",
-					moiTraceRequest);
-		} catch (PortalException e) {
-			_log.error(e);
-		}
+		moiTraceRequest = MOITraceRequestLocalServiceUtil.addMOITraceRequest(
+				String.valueOf(userId), new Date(), ConsumerCode, null,
+				MosipUtil.getAction(DocumentType, true), DocumentType, false,
+				null, null, StringPool.BLANK);
+		MosipValidator.updateTraceComment("Mapping Initiated", moiTraceRequest);
 
 		
 		/* Start : Check file */
@@ -251,15 +245,10 @@ public class MosipAPIHandlerResourceImpl
 		 * Entry Point : Trace the request
 		 */
 		MOITraceRequest moiTraceRequest = null;
-		try {
-			moiTraceRequest = MOITraceRequestLocalServiceUtil
-					.addMOITraceRequest(String.valueOf(userId), new Date(),
-							ConsumerCode, null,
-							MosipUtil.getAction(DocumentType, true),
-							DocumentType, false, null, null, StringPool.BLANK);
-		} catch (PortalException e) {
-			_log.error(e);
-		}
+		moiTraceRequest = MOITraceRequestLocalServiceUtil.addMOITraceRequest(
+				String.valueOf(userId), new Date(), ConsumerCode, null,
+				MosipUtil.getAction(DocumentType, true), DocumentType, false,
+				null, null, StringPool.BLANK);
 
 		// TODO: Perform Validation:
 
@@ -327,20 +316,21 @@ public class MosipAPIHandlerResourceImpl
 		 * Entry Point : Trace the request
 		 */
 		MOITraceRequest moiTraceRequest = null;
-		try {
-			moiTraceRequest = MOITraceRequestLocalServiceUtil
-					.addMOITraceRequest(String.valueOf(userId), new Date(),
-							consumerCodeParam, null,
-							MosipUtil.getAction(DocumentType, true),
-							DocumentType, false, null, null, StringPool.BLANK);
-		} catch (PortalException e) {
-			debugLog(e);
-		}
+		moiTraceRequest = MOITraceRequestLocalServiceUtil.addMOITraceRequest(
+				String.valueOf(userId), new Date(), consumerCodeParam, null,
+				MosipUtil.getAction(DocumentType, true), DocumentType, true,
+				null, null, StringPool.BLANK);
+		MosipValidator.updateTraceComment("Delete File Upload Started",
+				moiTraceRequest);
 
 		// TODO: Perform Validation.
-		String validationResult = "";
+		String validationResult = null;
 
 		if (Validator.isNotNull(validationResult)) {
+			MosipValidator.updateTraceComment(validationResult,
+					moiTraceRequest);
+			MosipValidator.updateTraceRequest(validationResult, moiTraceRequest,
+					false);
 			return GenerateDocumentResult.generateDocumentResult(
 					moiTraceRequest.getRequestId(), APIConstants.FAILURE,
 					validationResult, null);
@@ -350,7 +340,12 @@ public class MosipAPIHandlerResourceImpl
 		// TODO: Add error string
 		String folderName = PropsUtil
 				.get(MOIProperties.MOSIP_DELETE_FOLDER_NAME);
+
 		if(Validator.isNull(folderName)) {
+			MosipValidator.updateTraceComment("Delete Folder not found",
+					moiTraceRequest);
+			MosipValidator.updateTraceRequest("Delete Folder not found",
+					moiTraceRequest, false);
 			return GenerateDocumentResult.generateDocumentResult(
 					moiTraceRequest.getRequestId(), APIConstants.FAILURE,
 					"", null);
@@ -376,6 +371,8 @@ public class MosipAPIHandlerResourceImpl
 					null, StringPool.BLANK);
 
 		} catch (PortalException | IOException e) {
+			MosipValidator.updateTraceComment(e.getMessage(),
+					moiTraceRequest);
 			MosipUtil.updateTraceRequest(MosipErrorConstants.JIRA_COMMON_ERROR,
 					moiTraceRequest);
 			return GenerateDocumentResult.generateDocumentResult(
@@ -383,6 +380,8 @@ public class MosipAPIHandlerResourceImpl
 					MosipErrorConstants.JIRA_COMMON_ERROR, null);
 		}
 
+		MosipValidator.updateTraceComment(
+				MosipErrorConstants.JIRA_FILE_UPLOADED_MSG, moiTraceRequest);
 		MosipUtil.updateTraceRequest(MosipErrorConstants.JIRA_FILE_UPLOADED_MSG,
 				moiTraceRequest);
 		return GenerateDocumentResult.generateDocumentResult(
@@ -693,7 +692,6 @@ public class MosipAPIHandlerResourceImpl
 					"Starting file upload Document Type " + documentType,
 					moiTraceRequest);
 
-			System.out.println("userId:::"+userId);
 			DLFileEntry dlFileEntry = DLFileEntryLocalServiceUtil.addFileEntry(
 					userId, groupId, groupId, folderId, documentTitle, mimeType,
 					documentTitle, documentDesc, changeLog,
@@ -899,7 +897,7 @@ public class MosipAPIHandlerResourceImpl
 	private FileEntry uploadDeleteCSVFile(BinaryFile binaryFile, long folderId,
 			ServiceContext serviceContext) throws PortalException, IOException {
 
-		SimpleDateFormat sdf = new SimpleDateFormat("ddMMMyyyy_HH:mm:ss:SSS");
+		SimpleDateFormat sdf = new SimpleDateFormat("ddMMMyyyy_HHmmssSSS");
 
 		FileEntry fileEntry = null;
 		String sourceFileName = binaryFile.getFileName();

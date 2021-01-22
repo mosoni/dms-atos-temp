@@ -116,17 +116,10 @@ public class JiraAPIHandlerResourceImpl extends BaseJiraAPIHandlerResourceImpl {
 		 */
 		MOITraceRequest moiTraceRequest = null;
 
-		try {
-			moiTraceRequest = MOITraceRequestLocalServiceUtil
-					.addMOITraceRequest(String.valueOf(userId), new Date(),
-							consumerCodeParam, null,
-							JiraUtil.getAction(documentTitle, true),
-							documentTitle, true, null, null, StringPool.BLANK);
-		} catch (PortalException e) {
-			if (_log.isErrorEnabled()) {
-				_log.error(e);
-			}
-		}
+		moiTraceRequest = MOITraceRequestLocalServiceUtil.addMOITraceRequest(
+				String.valueOf(userId), new Date(), consumerCodeParam, null,
+				JiraUtil.getAction(documentTitle, true), documentTitle, true,
+				null, null, StringPool.BLANK);
 
 		/*
 		 * validateRequest() method will Check input parameters, Consumer Code
