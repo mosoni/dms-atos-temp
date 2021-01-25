@@ -11,9 +11,11 @@
 		<field name="requestedDocumentType" type="String" />
 		<field name="requestValid" type="boolean" />
 		<field name="requestResult" type="String">
-			<hint name="max-length">100</hint>
+			<hint name="max-length">500</hint>
 		</field>
 		<field name="requestResultDate" type="Date" />
-		<field name="comment" type="String" />
+		<field name="comment" type="String">
+			<hint name="max-length">500</hint>
+		</field>
 	</model>
 </model-hints>

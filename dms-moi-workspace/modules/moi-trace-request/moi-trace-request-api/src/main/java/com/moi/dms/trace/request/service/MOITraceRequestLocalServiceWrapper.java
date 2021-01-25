@@ -65,16 +65,14 @@ public class MOITraceRequestLocalServiceWrapper
 	 * @param requestResultDate
 	 * @param requestComment
 	 * @return MOITraceRequest
-	 * @throws PortalException
 	 */
 	@Override
 	public com.moi.dms.trace.request.model.MOITraceRequest addMOITraceRequest(
-			String requestedBy, java.util.Date requestIncomingDate,
-			String requestedConsumerCode, String requestedConsumerName,
-			String requestedOperation, String requestedDocumentType,
-			Boolean requestValid, String requestResult,
-			java.util.Date requestResultDate, String requestComment)
-		throws com.liferay.portal.kernel.exception.PortalException {
+		String requestedBy, java.util.Date requestIncomingDate,
+		String requestedConsumerCode, String requestedConsumerName,
+		String requestedOperation, String requestedDocumentType,
+		Boolean requestValid, String requestResult,
+		java.util.Date requestResultDate, String requestComment) {
 
 		return _moiTraceRequestLocalService.addMOITraceRequest(
 			requestedBy, requestIncomingDate, requestedConsumerCode,

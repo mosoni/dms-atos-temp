@@ -629,169 +629,52 @@ public class MOIIdMapperUtil {
 	}
 
 	/**
-	 * Returns all the moi ID mappers where registrationId = &#63;.
+	 * Returns the moi ID mapper where registrationId = &#63; or throws a <code>NoSuchMOIIdMapperException</code> if it could not be found.
 	 *
 	 * @param registrationId the registration ID
-	 * @return the matching moi ID mappers
+	 * @return the matching moi ID mapper
+	 * @throws NoSuchMOIIdMapperException if a matching moi ID mapper could not be found
 	 */
-	public static List<MOIIdMapper> findByRegistrationId(
-		String registrationId) {
+	public static MOIIdMapper findByRegistrationId(String registrationId)
+		throws com.moi.dms.id.mapper.exception.NoSuchMOIIdMapperException {
 
 		return getPersistence().findByRegistrationId(registrationId);
 	}
 
 	/**
-	 * Returns a range of all the moi ID mappers where registrationId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>MOIIdMapperModelImpl</code>.
-	 * </p>
+	 * Returns the moi ID mapper where registrationId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
 	 *
 	 * @param registrationId the registration ID
-	 * @param start the lower bound of the range of moi ID mappers
-	 * @param end the upper bound of the range of moi ID mappers (not inclusive)
-	 * @return the range of matching moi ID mappers
+	 * @return the matching moi ID mapper, or <code>null</code> if a matching moi ID mapper could not be found
 	 */
-	public static List<MOIIdMapper> findByRegistrationId(
-		String registrationId, int start, int end) {
-
-		return getPersistence().findByRegistrationId(
-			registrationId, start, end);
+	public static MOIIdMapper fetchByRegistrationId(String registrationId) {
+		return getPersistence().fetchByRegistrationId(registrationId);
 	}
 
 	/**
-	 * Returns an ordered range of all the moi ID mappers where registrationId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>MOIIdMapperModelImpl</code>.
-	 * </p>
+	 * Returns the moi ID mapper where registrationId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
 	 *
 	 * @param registrationId the registration ID
-	 * @param start the lower bound of the range of moi ID mappers
-	 * @param end the upper bound of the range of moi ID mappers (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching moi ID mappers
-	 */
-	public static List<MOIIdMapper> findByRegistrationId(
-		String registrationId, int start, int end,
-		OrderByComparator<MOIIdMapper> orderByComparator) {
-
-		return getPersistence().findByRegistrationId(
-			registrationId, start, end, orderByComparator);
-	}
-
-	/**
-	 * Returns an ordered range of all the moi ID mappers where registrationId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>MOIIdMapperModelImpl</code>.
-	 * </p>
-	 *
-	 * @param registrationId the registration ID
-	 * @param start the lower bound of the range of moi ID mappers
-	 * @param end the upper bound of the range of moi ID mappers (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @param useFinderCache whether to use the finder cache
-	 * @return the ordered range of matching moi ID mappers
+	 * @return the matching moi ID mapper, or <code>null</code> if a matching moi ID mapper could not be found
 	 */
-	public static List<MOIIdMapper> findByRegistrationId(
-		String registrationId, int start, int end,
-		OrderByComparator<MOIIdMapper> orderByComparator,
-		boolean useFinderCache) {
+	public static MOIIdMapper fetchByRegistrationId(
+		String registrationId, boolean useFinderCache) {
 
-		return getPersistence().findByRegistrationId(
-			registrationId, start, end, orderByComparator, useFinderCache);
+		return getPersistence().fetchByRegistrationId(
+			registrationId, useFinderCache);
 	}
 
 	/**
-	 * Returns the first moi ID mapper in the ordered set where registrationId = &#63;.
+	 * Removes the moi ID mapper where registrationId = &#63; from the database.
 	 *
 	 * @param registrationId the registration ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching moi ID mapper
-	 * @throws NoSuchMOIIdMapperException if a matching moi ID mapper could not be found
+	 * @return the moi ID mapper that was removed
 	 */
-	public static MOIIdMapper findByRegistrationId_First(
-			String registrationId,
-			OrderByComparator<MOIIdMapper> orderByComparator)
+	public static MOIIdMapper removeByRegistrationId(String registrationId)
 		throws com.moi.dms.id.mapper.exception.NoSuchMOIIdMapperException {
 
-		return getPersistence().findByRegistrationId_First(
-			registrationId, orderByComparator);
-	}
-
-	/**
-	 * Returns the first moi ID mapper in the ordered set where registrationId = &#63;.
-	 *
-	 * @param registrationId the registration ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching moi ID mapper, or <code>null</code> if a matching moi ID mapper could not be found
-	 */
-	public static MOIIdMapper fetchByRegistrationId_First(
-		String registrationId,
-		OrderByComparator<MOIIdMapper> orderByComparator) {
-
-		return getPersistence().fetchByRegistrationId_First(
-			registrationId, orderByComparator);
-	}
-
-	/**
-	 * Returns the last moi ID mapper in the ordered set where registrationId = &#63;.
-	 *
-	 * @param registrationId the registration ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching moi ID mapper
-	 * @throws NoSuchMOIIdMapperException if a matching moi ID mapper could not be found
-	 */
-	public static MOIIdMapper findByRegistrationId_Last(
-			String registrationId,
-			OrderByComparator<MOIIdMapper> orderByComparator)
-		throws com.moi.dms.id.mapper.exception.NoSuchMOIIdMapperException {
-
-		return getPersistence().findByRegistrationId_Last(
-			registrationId, orderByComparator);
-	}
-
-	/**
-	 * Returns the last moi ID mapper in the ordered set where registrationId = &#63;.
-	 *
-	 * @param registrationId the registration ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching moi ID mapper, or <code>null</code> if a matching moi ID mapper could not be found
-	 */
-	public static MOIIdMapper fetchByRegistrationId_Last(
-		String registrationId,
-		OrderByComparator<MOIIdMapper> orderByComparator) {
-
-		return getPersistence().fetchByRegistrationId_Last(
-			registrationId, orderByComparator);
-	}
-
-	/**
-	 * Returns the moi ID mappers before and after the current moi ID mapper in the ordered set where registrationId = &#63;.
-	 *
-	 * @param mapperId the primary key of the current moi ID mapper
-	 * @param registrationId the registration ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next moi ID mapper
-	 * @throws NoSuchMOIIdMapperException if a moi ID mapper with the primary key could not be found
-	 */
-	public static MOIIdMapper[] findByRegistrationId_PrevAndNext(
-			long mapperId, String registrationId,
-			OrderByComparator<MOIIdMapper> orderByComparator)
-		throws com.moi.dms.id.mapper.exception.NoSuchMOIIdMapperException {
-
-		return getPersistence().findByRegistrationId_PrevAndNext(
-			mapperId, registrationId, orderByComparator);
-	}
-
-	/**
-	 * Removes all the moi ID mappers where registrationId = &#63; from the database.
-	 *
-	 * @param registrationId the registration ID
-	 */
-	public static void removeByRegistrationId(String registrationId) {
-		getPersistence().removeByRegistrationId(registrationId);
+		return getPersistence().removeByRegistrationId(registrationId);
 	}
 
 	/**

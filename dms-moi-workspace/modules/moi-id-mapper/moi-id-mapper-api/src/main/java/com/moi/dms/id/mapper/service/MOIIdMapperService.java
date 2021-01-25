@@ -108,13 +108,6 @@ public interface MOIIdMapperService extends BaseService {
 	public List<MOIIdMapper> findByMosipDocumentType(String mosipDocumentType);
 
 	/**
-	 * Finder method for MOIIdMapper by registrationId.
-	 *
-	 * @return List<MOIIdMapper>
-	 */
-	public List<MOIIdMapper> findByRegistrationId(String registrationId);
-
-	/**
 	 * Finder method for MOIIdMapper by resourceId.
 	 *
 	 * @return List<MOIIdMapper>

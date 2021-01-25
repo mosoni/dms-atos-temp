@@ -111,18 +111,6 @@ public class MOIIdMapperServiceWrapper
 	}
 
 	/**
-	 * Finder method for MOIIdMapper by registrationId.
-	 *
-	 * @return List<MOIIdMapper>
-	 */
-	@Override
-	public java.util.List<com.moi.dms.id.mapper.model.MOIIdMapper>
-		findByRegistrationId(String registrationId) {
-
-		return _moiIdMapperService.findByRegistrationId(registrationId);
-	}
-
-	/**
 	 * Finder method for MOIIdMapper by resourceId.
 	 *
 	 * @return List<MOIIdMapper>

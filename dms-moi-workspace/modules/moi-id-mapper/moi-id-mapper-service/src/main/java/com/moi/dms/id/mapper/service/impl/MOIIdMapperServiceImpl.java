@@ -159,15 +159,7 @@ public class MOIIdMapperServiceImpl extends MOIIdMapperServiceBaseImpl {
 				.findByMosipDocumentType(mosipDocumentType);
 	}
 
-	/**
-	 * Finder method for MOIIdMapper by registrationId.
-	 * 
-	 * @return List<MOIIdMapper>
-	 */
-	public List<MOIIdMapper> findByRegistrationId(String registrationId) {
-		return moiIdMapperLocalService.findByRegistrationId(registrationId);
-	}
-
+	
 	/**
 	 * Finder method for MOIIdMapper by resourceId.
 	 * 

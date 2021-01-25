@@ -91,15 +91,13 @@ public interface MOITraceRequestLocalService
 	 * @param requestResultDate
 	 * @param requestComment
 	 * @return MOITraceRequest
-	 * @throws PortalException
 	 */
 	public MOITraceRequest addMOITraceRequest(
-			String requestedBy, Date requestIncomingDate,
-			String requestedConsumerCode, String requestedConsumerName,
-			String requestedOperation, String requestedDocumentType,
-			Boolean requestValid, String requestResult, Date requestResultDate,
-			String requestComment)
-		throws PortalException;
+		String requestedBy, Date requestIncomingDate,
+		String requestedConsumerCode, String requestedConsumerName,
+		String requestedOperation, String requestedDocumentType,
+		Boolean requestValid, String requestResult, Date requestResultDate,
+		String requestComment);
 
 	/**
 	 * Creates a new moi trace request with the primary key. Does not add the moi trace request to the database.

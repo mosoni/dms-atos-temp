@@ -123,6 +123,15 @@ public class MosipErrorConstants {
 	public static final String REGISTRATION_ID_DOESNT_EXIST = "DMS Error : Incorrect Identifier - Pre Registration ID "+MosipConstants.REGISTRATION_ID_DYNAMIC_PARAMETER
 			+ " doesn not exist, please contact DMS Support with Reference Number "+MosipConstants.TRACE_REFERNCE_NUMBER_DYNAMIC_PARAMETER;
 
+	/**
+	 * Message to be displayed when Unable to proceed Mapping
+	 */
+	public static final String REGISTRATION_NUMBER_CAN_NOT_BE_BLANK = "Registration Number can not be Blank ";
+	
+	/**
+	 * Message to be displayed when Unable to proceed Mapping
+	 */
+	public static final String IDCS_NUMBER_CAN_NOT_BE_BLANK = "IDCS Number can not be Blank ";
 	
 	/**
 	 * Message to be displayed when Unable to proceed Mapping

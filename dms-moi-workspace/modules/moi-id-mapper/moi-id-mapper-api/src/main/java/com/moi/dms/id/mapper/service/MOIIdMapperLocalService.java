@@ -246,7 +246,7 @@ public interface MOIIdMapperLocalService
 	 *
 	 * @return List<MOIIdMapper>
 	 */
-	public List<MOIIdMapper> findByRegistrationId(String registrationId);
+	public MOIIdMapper findByRegistrationId(String registrationId);
 
 	/**
 	 * Finder method for MOIIdMapper by registrationId.

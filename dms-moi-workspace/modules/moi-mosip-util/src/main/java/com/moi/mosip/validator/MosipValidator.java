@@ -654,6 +654,73 @@ public class MosipValidator {
 			}
 		}
 	}
+	
+	
+	/*
+	 * This method is used to concatinate comment section of MOITraceRequest
+	 *
+	 * @param comment
+	 * @param traceRequest : 
+	 */
+	public static String processIDMapper(String registrationNumber,
+			String idcsNumber, MOITraceRequest moiTraceRequest, long userId) {
+		if (Validator.isNull(registrationNumber)) {
+			updateTraceComment("Registration Number is Blank", moiTraceRequest);
+			return MosipErrorConstants.REGISTRATION_NUMBER_CAN_NOT_BE_BLANK;
+		}
+		if (Validator.isNull(idcsNumber)) {
+			updateTraceComment("IDCS Number is Blank", moiTraceRequest);
+			return MosipErrorConstants.IDCS_NUMBER_CAN_NOT_BE_BLANK;
+		}
+
+		MOIIdMapper idMapperBasedOnRegistrationNumber = MOIIdMapperLocalServiceUtil
+				.findByRegistrationId(registrationNumber);
+
+		if (Validator.isNull(idMapperBasedOnRegistrationNumber)) {
+			updateTraceComment("Registration Number Doesn't Exist in Mapper",
+					moiTraceRequest);
+			return MosipErrorConstants.REGISTRATION_ID_DOESNT_EXIST;
+		}
+
+		MOIIdMapper idMapperBasedOnIDCSNumber = MOIIdMapperLocalServiceUtil
+				.findByRegistrationId(idcsNumber);
+
+		if (Validator.isNull(idMapperBasedOnIDCSNumber)) {
+			updateTraceComment(
+					"IDCS Number Doesn't Exist in Mapper, Start Adding it",
+					moiTraceRequest);
+
+			try {
+				MOIIdMapperLocalServiceUtil.addMOIIdMapper(
+						idMapperBasedOnRegistrationNumber.getGroupId(),
+						idMapperBasedOnRegistrationNumber.getCompanyId(),
+						MosipPhase.FREEZED_PHASE, null, idcsNumber,
+						idMapperBasedOnRegistrationNumber.getResourceId(), null,
+						1, null, new Date(), String.valueOf(userId));
+				updateTraceComment("IDCS Number Added in Mapper ",
+						moiTraceRequest);
+				updateTraceComment("Registration Number Making it Inactive ",
+						moiTraceRequest);
+
+				idMapperBasedOnRegistrationNumber.setActiveState(0);
+				idMapperBasedOnRegistrationNumber.setUpdateDate(new Date());
+				idMapperBasedOnRegistrationNumber
+						.setUpdatedBy(String.valueOf(userId));
+
+				MOIIdMapperLocalServiceUtil
+						.updateMOIIdMapper(idMapperBasedOnRegistrationNumber);
+				updateTraceComment("Registration Number Inactive Done ",
+						moiTraceRequest);
+
+			} catch (PortalException e) {
+				_log.error(e);
+			}
+
+			return MosipConstants.IDCS_NUMBER_ADDED_IN_MAPPER;
+		}
+
+		return MosipConstants.IDCS_NUMBER_IS_ALREADY_ACTIVE;
+	}
 	/**
 	 * This method is used to Update trace request with result and date
 	 *

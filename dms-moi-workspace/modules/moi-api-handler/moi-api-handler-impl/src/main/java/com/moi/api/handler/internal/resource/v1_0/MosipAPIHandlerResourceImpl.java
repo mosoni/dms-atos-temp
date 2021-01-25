@@ -94,6 +94,7 @@ public class MosipAPIHandlerResourceImpl
 	private String GROUP_NOT_FOUND="Oops !! Problem Identifying Mosip Group, Please contact DMS Administrator";		
 	private String UNABLE_TO_CREATE_FOLDER="Oops !! Problem Creating folder with Name "+FOLDER_NAME_DYNAMIC_PARAM+", Please contact DMS Administrator";	
 	private String DOCUMENT_TYPE_ALREADY_EXIST="Looks like "+MosipConstants.DOCUMENT_TYPE_DYNAMIC_PARAMETER+" Document Already Exist. Please upload another Document type or call update API";	
+	private String FOLDER_NOT_AVAILABLE="Oops !! Folder "+FOLDER_NAME_DYNAMIC_PARAM+" is not available , Please contact DMS Administrator";	
 
 	private String CURRENT_STATE_PRE_REGISTRATION="PRE_REGISTRATION";
 	
@@ -130,27 +131,18 @@ public class MosipAPIHandlerResourceImpl
 		 * Entry Point : Trace the request
 		 */
 		MOITraceRequest moiTraceRequest = null;
-		try {
-			moiTraceRequest = MOITraceRequestLocalServiceUtil
-					.addMOITraceRequest(String.valueOf(userId), new Date(),
-							ConsumerCode, null,
-							MosipUtil.getAction(DocumentType, true),
-							DocumentType, false, null, null, StringPool.BLANK);
-			MosipValidator.updateTraceComment("Mapping Initiated",
-					moiTraceRequest);
-		} catch (PortalException e) {
-			_log.error(e);
-		}
+		moiTraceRequest = MOITraceRequestLocalServiceUtil.addMOITraceRequest(
+				String.valueOf(userId), new Date(), ConsumerCode, null,
+				MosipUtil.getAction(DocumentType, true), DocumentType, false,
+				null, null, StringPool.BLANK);
+		MosipValidator.updateTraceComment("Mapping Initiated", moiTraceRequest);
 
 		
 		/* Start : Check file */
 		if(Validator.isNull(file)) {
-			MosipValidator.updateTraceComment(
-					"Document is blank/Empty" ,
-					moiTraceRequest);
 			return GenerateDocumentResult.generateDocumentResult(
 					moiTraceRequest.getRequestId(), APIConstants.FAILURE,
-					MosipErrorConstants.MOSIP_BLANK_DOCUMENT, null);
+					MosipErrorConstants.MOSIP_BLANK_DOCUMENT, null,moiTraceRequest);
 		}
 		
 		
@@ -163,7 +155,7 @@ public class MosipAPIHandlerResourceImpl
 		if (Validator.isNotNull(validationResult)) {
 			return GenerateDocumentResult.generateDocumentResult(
 					moiTraceRequest.getRequestId(), APIConstants.FAILURE,
-					validationResult, null);
+					validationResult, null,moiTraceRequest);
 		}
 
 		/* Identifier Check */
@@ -179,7 +171,7 @@ public class MosipAPIHandlerResourceImpl
 
 			return GenerateDocumentResult.generateDocumentResult(
 					moiTraceRequest.getRequestId(), APIConstants.FAILURE,
-					GROUP_NOT_FOUND, null);
+					GROUP_NOT_FOUND, null,moiTraceRequest);
 		}
 
 	
@@ -194,12 +186,10 @@ public class MosipAPIHandlerResourceImpl
 			String errorMessage = idMapperResult.get(MosipConstants.ERROR);
 			if (Validator.isNotNull(error)) {
 				MosipValidator.updateTraceComment(error, moiTraceRequest);
-				MosipValidator.updateTraceRequest(error, moiTraceRequest,
-						false);
-
+			
 				return GenerateDocumentResult.generateDocumentResult(
 						moiTraceRequest.getRequestId(), APIConstants.FAILURE,
-						errorMessage, null);
+						errorMessage, null,moiTraceRequest);
 			}
 		}
 		ServiceContext serviceContext = ServiceContextThreadLocal
@@ -253,15 +243,10 @@ public class MosipAPIHandlerResourceImpl
 		 * Entry Point : Trace the request
 		 */
 		MOITraceRequest moiTraceRequest = null;
-		try {
-			moiTraceRequest = MOITraceRequestLocalServiceUtil
-					.addMOITraceRequest(String.valueOf(userId), new Date(),
-							ConsumerCode, null,
-							MosipUtil.getAction(DocumentType, true),
-							DocumentType, false, null, null, StringPool.BLANK);
-		} catch (PortalException e) {
-			_log.error(e);
-		}
+		moiTraceRequest = MOITraceRequestLocalServiceUtil.addMOITraceRequest(
+				String.valueOf(userId), new Date(), ConsumerCode, null,
+				MosipUtil.getAction(DocumentType, true), DocumentType, false,
+				null, null, StringPool.BLANK);
 
 		// TODO: Perform Validation:
 
@@ -276,11 +261,11 @@ public class MosipAPIHandlerResourceImpl
 			return GenerateDocumentResult.generateDocumentResult(
 					moiTraceRequest.getRequestId(), APIConstants.SUCCESS,
 					"Successful",
-					FileUtil.getBytes(fileEntry.getContentStream()));
+					FileUtil.getBytes(fileEntry.getContentStream()),moiTraceRequest);
 		} else {
 			return GenerateDocumentResult.generateDocumentResult(
 					moiTraceRequest.getRequestId(), APIConstants.FAILURE,
-					"Failure", null);
+					"Failure", null,moiTraceRequest);
 		}
 	}
 
@@ -329,33 +314,35 @@ public class MosipAPIHandlerResourceImpl
 		 * Entry Point : Trace the request
 		 */
 		MOITraceRequest moiTraceRequest = null;
-		try {
-			moiTraceRequest = MOITraceRequestLocalServiceUtil
-					.addMOITraceRequest(String.valueOf(userId), new Date(),
-							consumerCodeParam, null,
-							MosipUtil.getAction(DocumentType, true),
-							DocumentType, false, null, null, StringPool.BLANK);
-		} catch (PortalException e) {
-			debugLog(e);
-		}
+		moiTraceRequest = MOITraceRequestLocalServiceUtil.addMOITraceRequest(
+				String.valueOf(userId), new Date(), consumerCodeParam, null,
+				MosipUtil.getAction(DocumentType, true), DocumentType, true,
+				null, null, StringPool.BLANK);
+		MosipValidator.updateTraceComment("Delete File Upload Started",
+				moiTraceRequest);
 
 		// TODO: Perform Validation.
-		String validationResult = "";
+		String validationResult = null;
 
 		if (Validator.isNotNull(validationResult)) {
+			MosipValidator.updateTraceComment(validationResult,
+					moiTraceRequest);
 			return GenerateDocumentResult.generateDocumentResult(
 					moiTraceRequest.getRequestId(), APIConstants.FAILURE,
-					validationResult, null);
+					validationResult, null,moiTraceRequest);
 		}
 
 		// Fetch folder name from propertiees file.
 		// TODO: Add error string
 		String folderName = PropsUtil
 				.get(MOIProperties.MOSIP_DELETE_FOLDER_NAME);
+
 		if(Validator.isNull(folderName)) {
+			MosipValidator.updateTraceComment("Delete Folder not found",
+					moiTraceRequest);
 			return GenerateDocumentResult.generateDocumentResult(
 					moiTraceRequest.getRequestId(), APIConstants.FAILURE,
-					"", null);
+					"", null,moiTraceRequest);
 		}
 
 		// Check Folder. If Folder not available, create new folder with
@@ -378,23 +365,116 @@ public class MosipAPIHandlerResourceImpl
 					null, StringPool.BLANK);
 
 		} catch (PortalException | IOException e) {
-			MosipUtil.updateTraceRequest(MosipErrorConstants.JIRA_COMMON_ERROR,
+			MosipValidator.updateTraceComment(e.getMessage(),
 					moiTraceRequest);
 			return GenerateDocumentResult.generateDocumentResult(
 					moiTraceRequest.getRequestId(), APIConstants.FAILURE,
-					MosipErrorConstants.JIRA_COMMON_ERROR, null);
+					MosipErrorConstants.JIRA_COMMON_ERROR, null,moiTraceRequest);
 		}
 
-		MosipUtil.updateTraceRequest(MosipErrorConstants.JIRA_FILE_UPLOADED_MSG,
-				moiTraceRequest);
+		MosipValidator.updateTraceComment(
+				MosipErrorConstants.JIRA_FILE_UPLOADED_MSG, moiTraceRequest);
+
 		return GenerateDocumentResult.generateDocumentResult(
 				moiTraceRequest.getRequestId(), APIConstants.SUCCESS,
-				MosipErrorConstants.JIRA_FILE_UPLOADED_MSG, null);
+				MosipErrorConstants.JIRA_FILE_UPLOADED_MSG, null,moiTraceRequest);
 	}
 
+	/**
+	 * This method will Add IDCS Number to all the document
+	 *
+	 * @param RegistrationNumber
+	 * @param IDCSNumber
+	 * @return
+	 * @throws Exception 
+	 */
 	@Override
 	public Page<DocumentResult> addIDCSNumber(String RegistrationNumber,
 			String IDCSNumber) throws Exception {
+
+		// Authorize and authenticate user - To be done by OAuth 2.0
+		// Get user id & serviceContext
+		ServiceContext serviceContext = ServiceContextThreadLocal
+				.getServiceContext();
+		long userId = serviceContext.getUserId();
+
+		// TODO: Remove in actual implementation.
+		if (0 == userId) {
+			userId = DEFAULT_USER_ID;
+		}
+
+		String consumerCode = null;
+
+		/*
+		 * Entry Point : Trace the request
+		 */
+		MOITraceRequest moiTraceRequest = null;
+		moiTraceRequest = MOITraceRequestLocalServiceUtil.addMOITraceRequest(
+				String.valueOf(userId), new Date(), consumerCode, null,
+				"ADD_IDCS_NUMBER", null, false, null, null, StringPool.BLANK);
+
+		MosipValidator.updateTraceComment("addIDCSNumber API Called ",
+				moiTraceRequest);
+		MosipValidator.updateTraceComment(
+				"Registration Number " + RegistrationNumber, moiTraceRequest);
+		MosipValidator.updateTraceComment("IDCS Number " + IDCSNumber,
+				moiTraceRequest);
+		
+		String idMapperResult  = MosipValidator.processIDMapper(RegistrationNumber, IDCSNumber, 
+				moiTraceRequest, userId);
+		
+		if (Validator.isNotNull(idMapperResult)) {
+			if (idMapperResult
+					.equals(MosipConstants.IDCS_NUMBER_ADDED_IN_MAPPER)) {
+				MosipValidator.updateTraceComment(
+						"{ Starting Process to Add IDCS Number ",
+						moiTraceRequest);
+
+				Group group = GroupLocalServiceUtil.fetchFriendlyURLGroup(
+						CompanyThreadLocal.getCompanyId(),
+						MOSIP_SITE_FRIENDLY_URL);
+
+				if (Validator.isNull(group)) {
+					MosipValidator.updateTraceComment(GROUP_NOT_FOUND,
+							moiTraceRequest);
+					MosipValidator.updateTraceRequest(GROUP_NOT_FOUND,
+							moiTraceRequest, false);
+
+					return GenerateDocumentResult.generateDocumentResult(
+							moiTraceRequest.getRequestId(),
+							APIConstants.FAILURE, GROUP_NOT_FOUND, null,moiTraceRequest);
+				}
+
+				MosipValidator.updateTraceComment(
+						"Start Fetching Folder with Title (Registration Number) "
+								+ RegistrationNumber,
+						moiTraceRequest);
+				DLFolder dlfolder = DLFolderLocalServiceUtil.fetchFolder(
+						group.getGroupId(),
+						DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
+						RegistrationNumber);
+
+				if (Validator.isNotNull(dlfolder)) {
+
+				} else {
+					MosipValidator.updateTraceComment(
+							"Folder with Registration Number "
+									+ RegistrationNumber + " Not Available",
+							moiTraceRequest);
+					return GenerateDocumentResult.generateDocumentResult(
+							moiTraceRequest.getRequestId(),
+							APIConstants.FAILURE,
+							FOLDER_NOT_AVAILABLE.replace(
+									FOLDER_NAME_DYNAMIC_PARAM,
+									RegistrationNumber),
+							null,moiTraceRequest);
+				}
+
+			}
+
+		}
+		
+
 		// TODO Auto-generated method stub
 		return super.addIDCSNumber(RegistrationNumber, IDCSNumber);
 	}
@@ -502,16 +582,12 @@ public class MosipAPIHandlerResourceImpl
 				MosipValidator.updateTraceComment(
 						"Unable to Create folderName :" + folderName,
 						moiTraceRequest);
-				MosipValidator.updateTraceRequest(
-						UNABLE_TO_CREATE_FOLDER
-								.replace(FOLDER_NAME_DYNAMIC_PARAM, folderName),
-						moiTraceRequest, false);
 				return GenerateDocumentResult
 						.generateDocumentResult(moiTraceRequest.getRequestId(),
 								APIConstants.FAILURE,
 								UNABLE_TO_CREATE_FOLDER.replace(
 										FOLDER_NAME_DYNAMIC_PARAM, folderName),
-								null);
+								null,moiTraceRequest);
 			}
 
 			newFolder = true;
@@ -533,7 +609,7 @@ public class MosipAPIHandlerResourceImpl
 						DOCUMENT_TYPE_ALREADY_EXIST.replace(
 								MosipConstants.DOCUMENT_TYPE_DYNAMIC_PARAMETER,
 								documentType),
-						null);
+						null,moiTraceRequest);
 			}
 
 		}
@@ -611,7 +687,7 @@ public class MosipAPIHandlerResourceImpl
 								APIConstants.FAILURE,
 								"File Entry Type is null " + documentType
 										+ ": Please contact DMS Administrator",
-								null);
+								null,moiTraceRequest);
 			}
 
 			List<DDMStructure> structures = mosipFileEntryType
@@ -632,7 +708,7 @@ public class MosipAPIHandlerResourceImpl
 								APIConstants.FAILURE,
 								"DMS Structure is null " + documentType
 										+ ": Please contact DMS Administrator",
-								null);
+								null,moiTraceRequest);
 			}
 
 			DDMForm ddmForm = ddmStruct.getDDMForm();
@@ -705,7 +781,6 @@ public class MosipAPIHandlerResourceImpl
 					"Starting file upload Document Type " + documentType,
 					moiTraceRequest);
 
-			System.out.println("userId:::"+userId);
 			DLFileEntry dlFileEntry = DLFileEntryLocalServiceUtil.addFileEntry(
 					userId, groupId, groupId, folderId, documentTitle, mimeType,
 					documentTitle, documentDesc, changeLog,
@@ -744,32 +819,28 @@ public class MosipAPIHandlerResourceImpl
 					moiTraceRequest, true);
 		} catch (PortalException e) {
 			_log.error(e);
-			MosipValidator.updateTraceComment(
-					"Error uploading File " + e.getMessage(), moiTraceRequest);
-			MosipValidator.updateTraceRequest(
+				MosipValidator.updateTraceComment(
 					"Error uploading File " + e.getMessage()
 							+ " and Identifier :" + identifier,
-					moiTraceRequest, true);
+					moiTraceRequest);
 			return GenerateDocumentResult
 					.generateDocumentResult(moiTraceRequest.getRequestId(),
 							APIConstants.FAILURE,
 							"DMS Portal Error uploading " + documentType
 									+ ": Please contact DMS Administrator",
-							null);
+							null,moiTraceRequest);
 		} catch (Exception e) {
 			_log.error(e);
 			MosipValidator.updateTraceComment(
-					"Error uploading File " + e.getMessage(), moiTraceRequest);
-			MosipValidator.updateTraceRequest(
 					"Error uploading File " + e.getMessage()
 							+ " and Identifier :" + identifier,
-					moiTraceRequest, true);
+					moiTraceRequest);
 			return GenerateDocumentResult
 					.generateDocumentResult(moiTraceRequest.getRequestId(),
 							APIConstants.FAILURE,
 							"DMS File Error uploading " + documentType
 									+ ": Please contact DMS Administrator",
-							null);
+							null,moiTraceRequest);
 		} finally {
 			if (is != null) {
 				try {
@@ -788,7 +859,7 @@ public class MosipAPIHandlerResourceImpl
 		return GenerateDocumentResult.generateDocumentResult(
 				moiTraceRequest.getRequestId(), APIConstants.SUCCESS,
 				"Document Type :" + documentType + " Successfully uploaded ",
-				null);
+				null,moiTraceRequest);
 	}
 	
 	
@@ -922,7 +993,7 @@ public class MosipAPIHandlerResourceImpl
 	private FileEntry uploadDeleteCSVFile(BinaryFile binaryFile, long folderId,
 			ServiceContext serviceContext) throws PortalException, IOException {
 
-		SimpleDateFormat sdf = new SimpleDateFormat("ddMMMyyyy_HH:mm:ss:SSS");
+		SimpleDateFormat sdf = new SimpleDateFormat("ddMMMyyyy_HHmmssSSS");
 
 		FileEntry fileEntry = null;
 		String sourceFileName = binaryFile.getFileName();
@@ -966,6 +1037,9 @@ public class MosipAPIHandlerResourceImpl
 		}
 		return value;
 	}
+
+	
+	
 
 	private static void debugLog(Object msg) {
 		// if(_log.isDebugEnabled()) {
