@@ -762,7 +762,6 @@ public class MosipAPIHandlerResourceImpl
 
 			is = file.getInputStream();
 			File file_temp = FileUtil.createTempFile(is);
-			System.out.println("Debug test 2====>");
 			
 			
 			//System.out.println("FileUtil--->"+FileUtil.createTempFile(is));
