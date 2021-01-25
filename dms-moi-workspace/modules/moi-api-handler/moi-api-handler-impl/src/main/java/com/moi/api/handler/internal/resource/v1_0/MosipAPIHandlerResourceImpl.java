@@ -38,6 +38,7 @@ import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.vulcan.multipart.BinaryFile;
 import com.liferay.portal.vulcan.multipart.MultipartBody;
@@ -59,6 +60,7 @@ import com.moi.dms.trace.request.service.MOITraceRequestLocalServiceUtil;
 import com.moi.mosip.validator.MosipUtil;
 import com.moi.mosip.validator.MosipValidator;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -457,9 +459,16 @@ public class MosipAPIHandlerResourceImpl
 
 	}
 	private static String METADATA_SETS_NAME = "RNP";
-	private static String PRE_REG_ID = "Pre Registration Number";
-	private static String REG_ID = "Registration Number";
-	private static String IDCS_ID = "IDCS Number";
+	/*
+	 * private static String PRE_REG_ID = "Pre Registration Number"; private
+	 * static String REG_ID = "Registration Number"; private static String
+	 * IDCS_ID = "IDCS Number";
+	 */
+
+	 private static String PRE_REG_ID = "PreReg No"; 
+	 private static String REG_ID = "RegNo"; 
+	 private static String IDCS_ID = "IDCS No";
+	 
 	/**
 	 * This method is used to Process Document
 	 *
@@ -676,8 +685,11 @@ public class MosipAPIHandlerResourceImpl
 			String mimeType = fileTypeMap.getContentType(file.getFileName());
 
 			is = file.getInputStream();
-
-
+			File file_temp = FileUtil.createTempFile(is);
+			System.out.println("Debug test 2====>");
+			
+			
+			//System.out.println("FileUtil--->"+FileUtil.createTempFile(is));
 			MosipValidator.updateTraceComment(
 					"Starting file upload for Module type  " + moduleType
 							+ " and Identifier :" + identifier,
@@ -698,17 +710,28 @@ public class MosipAPIHandlerResourceImpl
 					userId, groupId, groupId, folderId, documentTitle, mimeType,
 					documentTitle, documentDesc, changeLog,
 					mosipFileEntryType.getFileEntryTypeId(), ddmFormValuesMap,
-					null, is, file.getSize(), serviceContext);
+					file_temp, is, file.getSize(), serviceContext);
+			System.out.println("Temp Path===>"+SystemProperties.get(SystemProperties.TMP_DIR));
+			System.out.println("Debug 1===>");
+			
+			System.out.println("Here===");
 			MosipValidator
 					.updateTraceComment(
 							"File Added Draft Status with File Entry ID "
 									+ dlFileEntry.getFileEntryId()
 									+ " and Identifier :" + identifier,
 							moiTraceRequest);
-
-			DLAppServiceUtil.updateFileEntry(dlFileEntry.getFileEntryId(),dlFileEntry.getFileName(),dlFileEntry.getMimeType(),
-					dlFileEntry.getTitle(),dlFileEntry.getDescription(),null,DLVersionNumberIncrease.NONE,is,file.getSize(),serviceContext);
-
+			System.out.println("Debug 2===>");
+			/*
+			 * DLAppServiceUtil.updateFileEntry(dlFileEntry.getFileEntryId(),
+			 * dlFileEntry.getFileName(),dlFileEntry.getMimeType(),
+			 * dlFileEntry.getTitle(),dlFileEntry.getDescription(),null,
+			 * DLVersionNumberIncrease.NONE,is,file.getSize(),serviceContext);
+			 */
+			DLAppServiceUtil.updateFileEntry(dlFileEntry.getFileEntryId(),
+					dlFileEntry.getFileName(), mimeType, dlFileEntry.getTitle(), dlFileEntry.getDescription(),
+					changeLog, DLVersionNumberIncrease.NONE, file_temp, serviceContext);
+			System.out.println("Debug 3===>");
 			MosipValidator
 					.updateTraceComment(
 							"File Updated Published Status with File Entry ID "
